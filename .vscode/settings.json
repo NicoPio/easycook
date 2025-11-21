@@ -1,0 +1,68 @@
+{
+    "workbench.colorCustomizations": {
+        "activityBar.activeBackground": "#d6d0c2",
+        "activityBar.background": "#d6d0c2",
+        "activityBar.foreground": "#15202b",
+        "activityBar.inactiveForeground": "#15202b99",
+        "activityBarBadge.background": "#679889",
+        "activityBarBadge.foreground": "#15202b",
+        "commandCenter.border": "#15202b99",
+        "sash.hoverBorder": "#d6d0c2",
+        "statusBar.background": "#c2b8a3",
+        "statusBar.foreground": "#15202b",
+        "statusBarItem.hoverBackground": "#aea084",
+        "statusBarItem.remoteBackground": "#c2b8a3",
+        "statusBarItem.remoteForeground": "#15202b",
+        "titleBar.activeBackground": "#c2b8a3",
+        "titleBar.activeForeground": "#15202b",
+        "titleBar.inactiveBackground": "#c2b8a399",
+        "titleBar.inactiveForeground": "#15202b99"
+    },
+    "peacock.color": "#c2b8a3",
+    "files.associations": {
+        "*.css": "tailwindcss"
+    },
+    "editor.quickSuggestions": {
+        "strings": "on"
+    },
+    "tailwindCSS.classAttributes": ["class", "ui"],
+    "tailwindCSS.experimental.classRegex": [
+        ["ui:\\s*{([^)]*)\\s*}", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
+    ],
+
+    // ESLint and formatting settings
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit"
+    },
+    "eslint.validate": [
+        "javascript",
+        "javascriptreact",
+        "typescript",
+        "typescriptreact",
+        "vue"
+    ],
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "[vue]": {
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    },
+    "[javascriptreact]": {
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    },
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    },
+
+    // Vitest extension configuration
+    "vitest.enable": true,
+    "vitest.configFile": "vitest.config.ts",
+    "vitest.include": ["tests/**/*.{test,spec}.ts"],
+    "vitest.exclude": ["**/node_modules/**", "**/dist/**", "**/.nuxt/**"]
+
+}
