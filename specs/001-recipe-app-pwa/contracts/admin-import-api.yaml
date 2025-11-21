@@ -1,0 +1,497 @@
+openapi: 3.1.0
+info:
+  title: Admin Import API
+  description: API d'administration pour importer et gérer les recettes
+  version: 1.0.0
+  contact:
+    name: API Support
+
+servers:
+  - url: http://localhost:3000/api/admin
+    description: Development server
+  - url: https://app.example.com/api/admin
+    description: Production server
+
+tags:
+  - name: Import
+    description: Import et parsing de recettes via IA
+  - name: Recipes Management
+    description: CRUD des recettes (admin)
+
+security:
+  - cookieAuth: []
+
+paths:
+  /import:
+    post:
+      summary: Importer une recette depuis du texte brut
+      description: |
+        Déclenche le parsing IA d'une recette via n8n + Ollama.
+        Retourne un preview de la recette parsée pour validation manuelle.
+      tags:
+        - Import
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - text
+              properties:
+                text:
+                  type: string
+                  description: Texte brut de la recette (format libre)
+                  example: |
+                    Poulet Basquaise
+
+                    Pour 4 personnes
+                    Temps de préparation : 15 min
+                    Temps de cuisson : 45 min
+
+                    Ingrédients :
+                    - 800g de poulet
+                    - 3 poivrons rouges
+                    - 2 tomates
+                    - 1 oignon
+                    - 2 gousses d'ail
+
+                    Étapes :
+                    1. Couper le poulet en morceaux
+                    2. Faire revenir l'oignon et l'ail...
+      responses:
+        '200':
+          description: Parsing réussi
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParsedRecipe'
+        '202':
+          description: Parsing en cours (webhook n8n déclenché)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "processing"
+                  message:
+                    type: string
+                    example: "Recipe parsing in progress"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /recipes:
+    get:
+      summary: Liste toutes les recettes (admin)
+      description: Retourne toutes les recettes incluant les drafts
+      tags:
+        - Recipes Management
+      parameters:
+        - name: status
+          in: query
+          description: Filtrer par statut
+          required: false
+          schema:
+            type: string
+            enum: [draft, published, all]
+            default: all
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+      responses:
+        '200':
+          description: Liste des recettes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AdminRecipeSummary'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    post:
+      summary: Créer une nouvelle recette
+      description: Créer une recette manuellement ou depuis un parsing validé
+      tags:
+        - Recipes Management
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateRecipeRequest'
+      responses:
+        '201':
+          description: Recette créée avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /recipes/{id}:
+    put:
+      summary: Modifier une recette existante
+      description: Mise à jour complète d'une recette
+      tags:
+        - Recipes Management
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRecipeRequest'
+      responses:
+        '200':
+          description: Recette mise à jour
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    delete:
+      summary: Supprimer une recette
+      description: Suppression définitive (cascade sur ingrédients et étapes)
+      tags:
+        - Recipes Management
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Recette supprimée avec succès
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: auth_token
+      description: JWT stocké dans un cookie httpOnly
+
+  schemas:
+    ParsedRecipe:
+      type: object
+      description: Résultat du parsing IA avec validation status
+      required:
+        - status
+        - data
+      properties:
+        status:
+          type: string
+          enum: [success, partial, error]
+          description: |
+            - success: Parsing complet, tous les champs extraits
+            - partial: Parsing réussi avec des champs manquants/incertains
+            - error: Échec du parsing
+        data:
+          $ref: '#/components/schemas/RecipeData'
+        errors:
+          type: array
+          description: Erreurs ou warnings de parsing
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                example: "ingredients[2].quantity"
+              message:
+                type: string
+                example: "Quantité non reconnue: 'une poignée'"
+              severity:
+                type: string
+                enum: [error, warning, info]
+
+    RecipeData:
+      type: object
+      description: Données structurées de la recette
+      required:
+        - title
+        - difficulty
+        - servings
+        - robotType
+        - ingredients
+        - steps
+      properties:
+        title:
+          type: string
+          example: "Poulet Basquaise"
+        description:
+          type: string
+          nullable: true
+          example: "Un classique de la cuisine du Sud-Ouest"
+        prepTime:
+          type: integer
+          description: Minutes
+          example: 15
+        cookTime:
+          type: integer
+          description: Minutes
+          example: 45
+        difficulty:
+          type: string
+          enum: [facile, moyen, difficile]
+          example: "moyen"
+        servings:
+          type: integer
+          minimum: 1
+          maximum: 20
+          example: 4
+        robotType:
+          type: string
+          enum: [thermomix, cookeo, monsieur-cuisine, manuel, tous-robots]
+          example: "thermomix"
+        imageUrl:
+          type: string
+          nullable: true
+          example: "https://example.com/image.jpg"
+        ingredients:
+          type: array
+          items:
+            $ref: '#/components/schemas/IngredientInput'
+        steps:
+          type: array
+          items:
+            $ref: '#/components/schemas/StepInput'
+
+    IngredientInput:
+      type: object
+      required:
+        - name
+        - quantity
+        - unit
+      properties:
+        name:
+          type: string
+          example: "Poulet"
+        quantity:
+          type: number
+          format: float
+          example: 800
+        unit:
+          type: string
+          enum: [g, kg, ml, l, c.à.s, c.à.c, pincée, pièce, tranche, botte, gousse]
+          example: "g"
+        optional:
+          type: boolean
+          default: false
+
+    StepInput:
+      type: object
+      required:
+        - description
+      properties:
+        description:
+          type: string
+          example: "Couper le poulet en morceaux"
+        duration:
+          type: integer
+          nullable: true
+          example: 5
+        temperature:
+          type: integer
+          nullable: true
+          example: 120
+        speed:
+          type: string
+          nullable: true
+          example: "1"
+        ingredients:
+          type: array
+          nullable: true
+          items:
+            type: string
+          example: ["poulet"]
+
+    CreateRecipeRequest:
+      allOf:
+        - $ref: '#/components/schemas/RecipeData'
+        - type: object
+          properties:
+            status:
+              type: string
+              enum: [draft, published]
+              default: draft
+              description: Statut initial de la recette
+
+    UpdateRecipeRequest:
+      allOf:
+        - $ref: '#/components/schemas/CreateRecipeRequest'
+        - type: object
+          description: Tous les champs sont optionnels pour un update partiel
+
+    RecipeResponse:
+      allOf:
+        - $ref: '#/components/schemas/RecipeData'
+        - type: object
+          required:
+            - id
+            - slug
+            - status
+            - createdAt
+            - updatedAt
+          properties:
+            id:
+              type: integer
+              example: 42
+            slug:
+              type: string
+              example: "poulet-basquaise"
+            status:
+              type: string
+              enum: [draft, published]
+            createdAt:
+              type: string
+              format: date-time
+            updatedAt:
+              type: string
+              format: date-time
+
+    AdminRecipeSummary:
+      type: object
+      description: Vue résumée pour l'admin (inclut drafts et métadonnées)
+      required:
+        - id
+        - title
+        - slug
+        - status
+        - robotType
+        - createdAt
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        slug:
+          type: string
+        status:
+          type: string
+          enum: [draft, published]
+        difficulty:
+          type: string
+          enum: [facile, moyen, difficile]
+        servings:
+          type: integer
+        robotType:
+          type: object
+          properties:
+            name:
+              type: string
+            slug:
+              type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    Pagination:
+      type: object
+      required:
+        - page
+        - limit
+        - total
+        - totalPages
+      properties:
+        page:
+          type: integer
+        limit:
+          type: integer
+        total:
+          type: integer
+        totalPages:
+          type: integer
+
+    Error:
+      type: object
+      required:
+        - statusCode
+        - message
+      properties:
+        statusCode:
+          type: integer
+        message:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+
+  responses:
+    BadRequest:
+      description: Requête invalide
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Non authentifié
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            statusCode: 401
+            message: "Authentication required"
+    NotFound:
+      description: Ressource non trouvée
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ServerError:
+      description: Erreur serveur
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'

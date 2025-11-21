@@ -1,0 +1,416 @@
+openapi: 3.1.0
+info:
+  title: Recipes API (User Endpoints)
+  description: API publique pour les utilisateurs de l'application PWA de recettes
+  version: 1.0.0
+  contact:
+    name: API Support
+
+servers:
+  - url: http://localhost:3000/api
+    description: Development server
+  - url: https://app.example.com/api
+    description: Production server
+
+tags:
+  - name: Recipes
+    description: Endpoints publics pour consulter les recettes
+  - name: Search
+    description: Endpoints de recherche et filtrage
+
+paths:
+  /recipes:
+    get:
+      summary: Liste paginée des recettes publiées
+      description: Retourne la liste des recettes disponibles avec pagination et filtres de base
+      tags:
+        - Recipes
+      parameters:
+        - name: page
+          in: query
+          description: Numéro de page (commence à 1)
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: limit
+          in: query
+          description: Nombre de recettes par page
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: robotType
+          in: query
+          description: Filtrer par type de robot (slug)
+          required: false
+          schema:
+            type: string
+            enum: [thermomix, cookeo, monsieur-cuisine, manuel, tous-robots]
+        - name: difficulty
+          in: query
+          description: Filtrer par difficulté
+          required: false
+          schema:
+            type: string
+            enum: [facile, moyen, difficile]
+      responses:
+        '200':
+          description: Liste des recettes récupérée avec succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/RecipeSummary'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /recipes/{id}:
+    get:
+      summary: Détail d'une recette
+      description: Retourne une recette complète avec ingrédients et étapes
+      tags:
+        - Recipes
+      parameters:
+        - name: id
+          in: path
+          description: ID ou slug de la recette
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Recette récupérée avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeDetail'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /recipes/search:
+    post:
+      summary: Recherche avancée de recettes
+      description: Recherche avec filtres multiples et full-text
+      tags:
+        - Search
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchRequest'
+      responses:
+        '200':
+          description: Résultats de recherche
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/RecipeSummary'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+                  filters:
+                    type: object
+                    description: Filtres appliqués pour cette recherche
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+components:
+  schemas:
+    RecipeSummary:
+      type: object
+      description: Vue résumée d'une recette (pour le listing)
+      required:
+        - id
+        - title
+        - slug
+        - difficulty
+        - totalTime
+        - servings
+        - robotType
+        - imageUrl
+      properties:
+        id:
+          type: integer
+          example: 42
+        title:
+          type: string
+          example: "Poulet Basquaise"
+        slug:
+          type: string
+          example: "poulet-basquaise"
+        description:
+          type: string
+          nullable: true
+          example: "Un classique de la cuisine du Sud-Ouest"
+        difficulty:
+          type: string
+          enum: [facile, moyen, difficile]
+          example: "moyen"
+        prepTime:
+          type: integer
+          description: Temps de préparation en minutes
+          example: 15
+        cookTime:
+          type: integer
+          description: Temps de cuisson en minutes
+          example: 45
+        totalTime:
+          type: integer
+          description: Temps total (prep + cook) en minutes
+          example: 60
+        servings:
+          type: integer
+          minimum: 1
+          maximum: 20
+          example: 4
+        robotType:
+          $ref: '#/components/schemas/RobotType'
+        imageUrl:
+          type: string
+          nullable: true
+          example: "/uploads/recipes/abc123.webp"
+
+    RecipeDetail:
+      allOf:
+        - $ref: '#/components/schemas/RecipeSummary'
+        - type: object
+          required:
+            - ingredients
+            - steps
+          properties:
+            ingredients:
+              type: array
+              items:
+                $ref: '#/components/schemas/Ingredient'
+            steps:
+              type: array
+              items:
+                $ref: '#/components/schemas/Step'
+            createdAt:
+              type: string
+              format: date-time
+              example: "2025-01-15T10:30:00Z"
+            updatedAt:
+              type: string
+              format: date-time
+              example: "2025-01-20T14:22:00Z"
+
+    RobotType:
+      type: object
+      required:
+        - id
+        - name
+        - slug
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Thermomix"
+        manufacturer:
+          type: string
+          example: "Vorwerk"
+        slug:
+          type: string
+          example: "thermomix"
+
+    Ingredient:
+      type: object
+      required:
+        - id
+        - name
+        - quantity
+        - unit
+        - order
+        - optional
+      properties:
+        id:
+          type: integer
+          example: 101
+        name:
+          type: string
+          example: "Poulet"
+        quantity:
+          type: number
+          format: float
+          description: Quantité pour le nombre de personnes de base
+          example: 800
+        unit:
+          type: string
+          enum: [g, kg, ml, l, c.à.s, c.à.c, pincée, pièce, tranche, botte, gousse]
+          example: "g"
+        order:
+          type: integer
+          description: Ordre d'affichage
+          example: 1
+        optional:
+          type: boolean
+          example: false
+
+    Step:
+      type: object
+      required:
+        - id
+        - order
+        - description
+      properties:
+        id:
+          type: integer
+          example: 201
+        order:
+          type: integer
+          minimum: 1
+          example: 1
+        description:
+          type: string
+          example: "Couper le poulet en morceaux et le faire dorer 5 min à 120°C vitesse 1"
+        duration:
+          type: integer
+          nullable: true
+          description: Durée estimée en minutes
+          example: 5
+        temperature:
+          type: integer
+          nullable: true
+          description: Température en °C
+          example: 120
+        speed:
+          type: string
+          nullable: true
+          description: Vitesse du robot
+          example: "1"
+        ingredients:
+          type: array
+          nullable: true
+          description: Ingrédients utilisés dans cette étape
+          items:
+            type: string
+          example: ["poulet", "huile d'olive"]
+
+    SearchRequest:
+      type: object
+      properties:
+        query:
+          type: string
+          description: Recherche textuelle dans titre et description
+          example: "poulet"
+        robotType:
+          type: string
+          enum: [thermomix, cookeo, monsieur-cuisine, manuel, tous-robots]
+          nullable: true
+        difficulty:
+          type: string
+          enum: [facile, moyen, difficile]
+          nullable: true
+        maxTotalTime:
+          type: integer
+          description: Temps total maximum en minutes
+          nullable: true
+          example: 30
+        page:
+          type: integer
+          minimum: 1
+          default: 1
+        limit:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+
+    Pagination:
+      type: object
+      required:
+        - page
+        - limit
+        - total
+        - totalPages
+      properties:
+        page:
+          type: integer
+          description: Page actuelle
+          example: 1
+        limit:
+          type: integer
+          description: Nombre d'éléments par page
+          example: 20
+        total:
+          type: integer
+          description: Nombre total d'éléments
+          example: 156
+        totalPages:
+          type: integer
+          description: Nombre total de pages
+          example: 8
+
+    Error:
+      type: object
+      required:
+        - statusCode
+        - message
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: "Invalid request parameters"
+        errors:
+          type: array
+          description: Détails des erreurs de validation
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                example: "servings"
+              message:
+                type: string
+                example: "Must be between 1 and 20"
+
+  responses:
+    BadRequest:
+      description: Requête invalide
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Ressource non trouvée
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            statusCode: 404
+            message: "Recipe not found"
+    ServerError:
+      description: Erreur serveur
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            statusCode: 500
+            message: "Internal server error"
