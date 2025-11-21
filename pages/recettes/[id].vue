@@ -21,6 +21,18 @@
     <div v-else-if="recipe" class="max-w-4xl mx-auto">
       <RecipeDetail :recipe="recipe" />
 
+      <!-- Start step-by-step mode button -->
+      <div class="my-8 flex justify-center">
+        <UButton
+          size="xl"
+          @click="startStepByStep"
+          class="shadow-lg hover:shadow-xl transition-shadow"
+        >
+          <Icon name="heroicons:play-circle" class="w-6 h-6 mr-2" />
+          Démarrer le mode pas-à-pas
+        </UButton>
+      </div>
+
       <div class="grid md:grid-cols-2 gap-8 mt-8">
         <div>
           <PortionAdjuster
@@ -74,6 +86,7 @@
 
 <script setup lang="ts">
 const route = useRoute()
+const router = useRouter()
 const recipeId = route.params.id
 
 const {
@@ -89,4 +102,12 @@ const {
 onMounted(() => {
   fetchRecipe()
 })
+
+/**
+ * Navigate to step-by-step cooking mode
+ * FR-007: Le système DOIT permettre de déclencher un mode pas-à-pas depuis la page de détail
+ */
+function startStepByStep() {
+  router.push(`/recettes/${recipeId}/pas-a-pas`)
+}
 </script>

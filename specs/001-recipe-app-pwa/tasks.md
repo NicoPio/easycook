@@ -118,7 +118,7 @@ This is a **fullstack Nuxt.js web application**. All paths are relative to repos
 
 ---
 
-## Phase 4: User Story 2 - Mode Pas-à-Pas Guidé (Priority: P2)
+## Phase 4: User Story 2 - Mode Pas-à-Pas Guidé (Priority: P2) ✅ COMPLETED
 
 **Goal**: Provide a fullscreen step-by-step cooking mode with large touch zones, clear navigation, progress indicator, and Wake Lock API to prevent screen sleep.
 
@@ -126,18 +126,18 @@ This is a **fullstack Nuxt.js web application**. All paths are relative to repos
 
 ### Composables (User Story 2)
 
-- [ ] T042 [P] [US2] Create useWakeLock composable in composables/useWakeLock.ts to manage Wake Lock API (request, release, isSupported)
-- [ ] T043 [P] [US2] Create useStepByStep composable in composables/useStepByStep.ts to manage step navigation state (currentStep, next, previous, progress)
+- [x] T042 [P] [US2] Create useWakeLock composable in composables/useWakeLock.ts to manage Wake Lock API (request, release, isSupported)
+- [x] T043 [P] [US2] Create useStepByStep composable in composables/useStepByStep.ts to manage step navigation state (currentStep, next, previous, progress)
 
 ### Components (User Story 2)
 
-- [ ] T044 [US2] Create StepByStepView component in components/recipe/StepByStepView.vue with fullscreen display, large navigation buttons (≥44x44px), step description, ingredients for step, robot parameters (temperature, speed, duration), and progress indicator
+- [x] T044 [US2] Create StepByStepView component in components/recipe/StepByStepView.vue with fullscreen display, large navigation buttons (≥44x44px), step description, ingredients for step, robot parameters (temperature, speed, duration), and progress indicator
 
 ### Pages (User Story 2)
 
-- [ ] T045 [US2] Create step-by-step page in pages/recettes/[id]/pas-a-pas.vue using StepByStepView, useStepByStep, and useWakeLock composables
-- [ ] T046 [US2] Add "Start step-by-step mode" button in pages/recettes/[id].vue linking to pas-a-pas route
-- [ ] T047 [US2] Handle Wake Lock fallback UI for unsupported browsers (display persistent message with instructions for iOS < 16.4)
+- [x] T045 [US2] Create step-by-step page in pages/recettes/[id]/pas-a-pas.vue using StepByStepView, useStepByStep, and useWakeLock composables
+- [x] T046 [US2] Add "Start step-by-step mode" button in pages/recettes/[id].vue linking to pas-a-pas route
+- [x] T047 [US2] Handle Wake Lock fallback UI for unsupported browsers (display persistent message with instructions for iOS < 16.4)
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work - users can browse, adjust portions, AND use step-by-step cooking mode
 
