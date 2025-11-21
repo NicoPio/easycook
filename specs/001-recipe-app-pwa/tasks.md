@@ -35,17 +35,17 @@ This is a **fullstack Nuxt.js web application**. All paths are relative to repos
 
 **Purpose**: Project initialization and basic structure
 
-- [x] T001 Create project structure: nuxt.config.ts, package.json, tsconfig.json, tailwind.config.js
-- [ ] T002 Initialize Nuxt 3 project with dependencies (nuxt, @nuxt/ui, tailwindcss, drizzle-orm, better-sqlite3, @vite-pwa/nuxt) **⚠️ RUN: `pnpm install`**
-- [x] T003 [P] Configure TypeScript strict mode in tsconfig.json
-- [x] T004 [P] Configure Tailwind CSS 4 in tailwind.config.js
-- [x] T005 [P] Configure ESLint and Prettier in .eslintrc.js and .prettierrc
-- [x] T006 Configure Nuxt UI module in nuxt.config.ts
-- [x] T007 [P] Configure PWA module (@vite-pwa/nuxt) in nuxt.config.ts with manifest and service worker settings
-- [x] T008 [P] Create .env.example with all required environment variables (DATABASE_PATH, ADMIN_EMAIL, ADMIN_PASSWORD_HASH, JWT_SECRET, OLLAMA_BASE_URL)
-- [x] T009 [P] Create assets/css/main.css with Tailwind directives and custom styles
-- [x] T010 [P] Create app/app.vue as root component with NuxtPage
-- [x] T011 Create directory structure: pages/, components/, composables/, server/, types/, workflows/
+- [ ] T001 Create project structure: nuxt.config.ts, package.json, tsconfig.json, tailwind.config.js
+- [ ] T002 Initialize Nuxt 4 project with dependencies (nuxt, @nuxt/ui, tailwindcss, drizzle-orm, better-sqlite3, @vite-pwa/nuxt)
+- [ ] T003 [P] Configure TypeScript strict mode in tsconfig.json
+- [ ] T004 [P] Configure Tailwind CSS 4 in tailwind.config.js
+- [ ] T005 [P] Configure ESLint and Prettier in .eslintrc.js and .prettierrc
+- [ ] T006 Configure Nuxt UI module in nuxt.config.ts
+- [ ] T007 [P] Configure PWA module (@vite-pwa/nuxt) in nuxt.config.ts with manifest and service worker settings
+- [ ] T008 [P] Create .env.example with all required environment variables (DATABASE_PATH, ADMIN_EMAIL, ADMIN_PASSWORD_HASH, JWT_SECRET, OLLAMA_BASE_URL)
+- [ ] T009 [P] Create assets/css/main.css with Tailwind directives and custom styles
+- [ ] T010 [P] Create app/app.vue as root component with NuxtPage
+- [ ] T011 Create directory structure: pages/, components/, composables/, server/, types/, workflows/
 
 ---
 
