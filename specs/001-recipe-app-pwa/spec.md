@@ -5,6 +5,12 @@
 **Status**: Draft
 **Input**: User description: "J'aimerai créer une petite application pour mobile (genre pwa) qui proposerait des recettes de cuisine pas-à-pas pour les robots cuisinier du marché style thermomix, cookeo, monsieur cuisine etc. fais l'analyse du site https://www.cookomix.com car il reprend la plupart des fonctionnalités que je souhaites développer. on aurait un écran de listing des recettes, quand on sélectionne une recette, on a un récapitulatif des ingrédients, des proportions et un aperçu global de la recette. on peut ajuster la quantité de personne et les proportions s'ajustent automatiquement. Ensuite, on peut déclencher la recette pas-à-pas. on a alors un affichage simplifié en fullscreen qui nous guide au fur et à mesure. côté backend, il faudrait pouvoir gérer l'import de recette dans un champ via copier/coller. Ensuite on traite le texte pour le découper en étapes pas à pas pour l'afficher côté front. pourquoi ne pas utiliser n8n pour parser la recette importée avec IA locale (ollama avec un llm léger) puis la traiter pour avoir un format défini. Voici les grandes lignes de l'app."
 
+## Clarifications
+
+### Session 2025-11-21
+
+- Q: Admin authentication mechanism (affects backend security architecture and session management) → A: JWT tokens issued after login, stored in localStorage, verified via middleware
+
 ## User Scenarios & Testing
 
 ### User Story 1 - Consulter et Ajuster une Recette (Priority: P1)
@@ -133,6 +139,13 @@ Un administrateur souhaite enrichir le catalogue de recettes en important rapide
 - **FR-025**: Le système DOIT permettre à l'administrateur de visualiser et corriger le résultat du parsing avant validation
 - **FR-026**: Le système DOIT enregistrer la recette validée et la rendre immédiatement disponible dans le catalogue utilisateur
 
+**Administration et Sécurité**
+
+- **FR-027**: Le système DOIT protéger toutes les routes d'administration (/api/admin/*) par authentification JWT
+- **FR-028**: Le système DOIT fournir un endpoint de login (/api/auth/login) qui retourne un JWT token valide après validation des identifiants
+- **FR-029**: Le JWT token DOIT être stocké dans le localStorage côté client et inclus dans les headers des requêtes API admin
+- **FR-030**: Le JWT token DOIT avoir une durée de validité de 24 heures et être vérifié par un middleware côté serveur
+
 ### Key Entities
 
 - **Recette**: Représente une recette de cuisine complète. Attributs principaux : identifiant unique, titre, description courte, description complète, temps de préparation (minutes), temps de cuisson (minutes), difficulté (facile/moyen/difficile), nombre de personnes par défaut, type de robot compatible (Thermomix/Cookeo/Monsieur Cuisine/Manuel/Tous), image principale, date de création. Relations : contient plusieurs Ingrédients et plusieurs Étapes.
@@ -162,7 +175,7 @@ Un administrateur souhaite enrichir le catalogue de recettes en important rapide
 
 1. **Format des recettes sources** : Les recettes importées proviennent de sources francophones avec un format texte relativement standard (section ingrédients suivie de section étapes).
 
-2. **Authentification** : Le MVP ne nécessite pas d'authentification utilisateur. Les fonctionnalités comme les favoris ou l'historique pourront être ajoutées dans une version ultérieure. L'interface d'administration est protégée par authentification basique.
+2. **Authentification** : Le MVP ne nécessite pas d'authentification utilisateur. Les fonctionnalités comme les favoris ou l'historique pourront être ajoutées dans une version ultérieure. L'interface d'administration est protégée par JWT tokens (stateless, stockés dans localStorage, validité 24h).
 
 3. **Hébergement IA** : Le parsing des recettes utilise un modèle IA hébergé localement (Ollama avec un LLM léger) pour garantir la confidentialité des données et réduire les coûts. L'orchestration se fait via n8n.
 
