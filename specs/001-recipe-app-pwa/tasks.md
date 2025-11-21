@@ -31,62 +31,60 @@ This is a **fullstack Nuxt.js web application**. All paths are relative to repos
 
 ---
 
-## Phase 1: Setup (Shared Infrastructure)
+## Phase 1: Setup (Shared Infrastructure) ✅ COMPLETED
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 Create project structure: nuxt.config.ts, package.json, tsconfig.json, tailwind.config.js
-- [ ] T002 Initialize Nuxt 3 project with dependencies (nuxt, @nuxt/ui, tailwindcss, drizzle-orm, better-sqlite3, @vite-pwa/nuxt)
-- [ ] T003 [P] Configure TypeScript strict mode in tsconfig.json
-- [ ] T004 [P] Configure Tailwind CSS 4 in tailwind.config.js
-- [ ] T005 [P] Configure ESLint and Prettier in .eslintrc.js and .prettierrc
-- [ ] T006 Configure Nuxt UI module in nuxt.config.ts
-- [ ] T007 [P] Configure PWA module (@vite-pwa/nuxt) in nuxt.config.ts with manifest and service worker settings
-- [ ] T008 [P] Create .env.example with all required environment variables (DATABASE_PATH, ADMIN_EMAIL, ADMIN_PASSWORD_HASH, JWT_SECRET, OLLAMA_BASE_URL)
-- [ ] T009 [P] Create assets/css/main.css with Tailwind directives and custom styles
-- [ ] T010 [P] Create app/app.vue as root component with NuxtPage
-- [ ] T011 Create directory structure: pages/, components/, composables/, server/, types/, workflows/
+- [x] T001 Create project structure: nuxt.config.ts, package.json, tsconfig.json, tailwind.config.js
+- [ ] T002 Initialize Nuxt 3 project with dependencies (nuxt, @nuxt/ui, tailwindcss, drizzle-orm, better-sqlite3, @vite-pwa/nuxt) **⚠️ RUN: `pnpm install`**
+- [x] T003 [P] Configure TypeScript strict mode in tsconfig.json
+- [x] T004 [P] Configure Tailwind CSS 4 in tailwind.config.js
+- [x] T005 [P] Configure ESLint and Prettier in .eslintrc.js and .prettierrc
+- [x] T006 Configure Nuxt UI module in nuxt.config.ts
+- [x] T007 [P] Configure PWA module (@vite-pwa/nuxt) in nuxt.config.ts with manifest and service worker settings
+- [x] T008 [P] Create .env.example with all required environment variables (DATABASE_PATH, ADMIN_EMAIL, ADMIN_PASSWORD_HASH, JWT_SECRET, OLLAMA_BASE_URL)
+- [x] T009 [P] Create assets/css/main.css with Tailwind directives and custom styles
+- [x] T010 [P] Create app/app.vue as root component with NuxtPage
+- [x] T011 Create directory structure: pages/, components/, composables/, server/, types/, workflows/
 
 ---
 
-## Phase 2: Foundational (Blocking Prerequisites)
+## Phase 2: Foundational (Blocking Prerequisites) ✅ COMPLETED
 
 **Purpose**: Core infrastructure that MUST be complete before ANY user story can be implemented
 
-**⚠️ CRITICAL**: No user story work can begin until this phase is complete
-
 ### Database & Types
 
-- [ ] T012 Define TypeScript types for Recipe, Ingredient, Step, RobotType in types/recipe.ts
-- [ ] T013 [P] Define TypeScript types for API responses in types/api.ts
-- [ ] T014 [P] Define TypeScript types for Robot in types/robot.ts
-- [ ] T015 Create Drizzle schema for robot_types table in server/database/schema.ts
-- [ ] T016 Create Drizzle schema for recipes table in server/database/schema.ts
-- [ ] T017 Create Drizzle schema for ingredients table in server/database/schema.ts
-- [ ] T018 Create Drizzle schema for steps table in server/database/schema.ts
-- [ ] T019 Define Drizzle relations (robotTypesRelations, recipesRelations, etc.) in server/database/schema.ts
-- [ ] T020 Create database connection utility in server/utils/db.ts (Drizzle client with better-sqlite3)
-- [ ] T021 Create drizzle.config.ts for Drizzle Kit configuration
-- [ ] T022 Generate initial migration with Drizzle Kit (run: pnpm drizzle-kit generate)
-- [ ] T023 Create database seed script in server/database/seed.ts to populate robot_types table with initial data (Thermomix, Cookeo, Monsieur Cuisine, Manuel, Tous robots)
+- [x] T012 Define TypeScript types for Recipe, Ingredient, Step, RobotType in types/recipe.ts
+- [x] T013 [P] Define TypeScript types for API responses in types/api.ts
+- [x] T014 [P] Define TypeScript types for Robot in types/robot.ts
+- [x] T015 Create Drizzle schema for robot_types table in server/database/schema.ts
+- [x] T016 Create Drizzle schema for recipes table in server/database/schema.ts
+- [x] T017 Create Drizzle schema for ingredients table in server/database/schema.ts
+- [x] T018 Create Drizzle schema for steps table in server/database/schema.ts
+- [x] T019 Define Drizzle relations (robotTypesRelations, recipesRelations, etc.) in server/database/schema.ts
+- [x] T020 Create database connection utility in server/utils/db.ts (Drizzle client with better-sqlite3)
+- [x] T021 Create drizzle.config.ts for Drizzle Kit configuration
+- [ ] T022 Generate initial migration with Drizzle Kit **⚠️ RUN: `pnpm db:generate`**
+- [x] T023 Create database seed script in server/database/seed.ts to populate robot_types table with initial data (Thermomix, Cookeo, Monsieur Cuisine, Manuel, Tous robots)
 
 ### Authentication & Middleware
 
-- [ ] T024 [P] Install jose and bcrypt dependencies for JWT and password hashing
-- [ ] T025 Create JWT utilities (sign, verify) in server/utils/jwt.ts
-- [ ] T026 Create authentication middleware in server/middleware/auth.ts to protect /api/admin/* routes
-- [ ] T027 Create POST /api/auth/login endpoint in server/api/auth/login.post.ts for admin login
+- [x] T024 [P] Install jose and bcrypt dependencies for JWT and password hashing
+- [x] T025 Create JWT utilities (sign, verify) in server/utils/jwt.ts
+- [x] T026 Create authentication middleware in server/middleware/auth.ts to protect /api/admin/* routes
+- [x] T027 Create POST /api/auth/login endpoint in server/api/auth/login.post.ts for admin login
 
 ### Shared Utilities
 
-- [ ] T028 [P] Create slug generation utility function in server/utils/slug.ts
-- [ ] T029 [P] Create validation schemas using Zod in server/utils/validation.ts (recipe schema, ingredient schema, step schema)
+- [x] T028 [P] Create slug generation utility function in server/utils/slug.ts
+- [x] T029 [P] Create validation schemas using Zod in server/utils/validation.ts (recipe schema, ingredient schema, step schema)
 
-**Checkpoint**: Foundation ready - user story implementation can now begin in parallel
+**Checkpoint**: ✅ Foundation ready - user story implementation can now begin in parallel
 
 ---
 
-## Phase 3: User Story 1 - Consulter et Ajuster une Recette (Priority: P1) 🎯 MVP
+## Phase 3: User Story 1 - Consulter et Ajuster une Recette (Priority: P1) 🎯 MVP ✅ COMPLETED
 
 **Goal**: Enable users to browse a recipe catalog, view detailed recipes with ingredients and steps, and adjust portions dynamically with automatic quantity recalculation.
 
@@ -94,29 +92,29 @@ This is a **fullstack Nuxt.js web application**. All paths are relative to repos
 
 ### Backend API (User Story 1)
 
-- [ ] T030 [P] [US1] Create GET /api/recipes endpoint in server/api/recipes/index.get.ts to list published recipes with pagination and basic filters (robotType, difficulty)
-- [ ] T031 [P] [US1] Create GET /api/recipes/[id] endpoint in server/api/recipes/[id].get.ts to return full recipe details with ingredients, steps, and robotType
-- [ ] T032 [US1] Add database queries in server/api/recipes/index.get.ts using Drizzle with relations (recipes + robotType)
-- [ ] T033 [US1] Add database queries in server/api/recipes/[id].get.ts using Drizzle with all relations (recipe + ingredients + steps + robotType)
+- [x] T030 [P] [US1] Create GET /api/recipes endpoint in server/api/recipes/index.get.ts to list published recipes with pagination and basic filters (robotType, difficulty)
+- [x] T031 [P] [US1] Create GET /api/recipes/[id] endpoint in server/api/recipes/[id].get.ts to return full recipe details with ingredients, steps, and robotType
+- [x] T032 [US1] Add database queries in server/api/recipes/index.get.ts using Drizzle with relations (recipes + robotType)
+- [x] T033 [US1] Add database queries in server/api/recipes/[id].get.ts using Drizzle with all relations (recipe + ingredients + steps + robotType)
 
 ### Composables (User Story 1)
 
-- [ ] T034 [P] [US1] Create useRecipes composable in composables/useRecipes.ts to fetch recipe list from API
-- [ ] T035 [P] [US1] Create useRecipeDetail composable in composables/useRecipeDetail.ts to fetch recipe details and handle portion adjustment logic (calculateAdjustedQuantity function)
+- [x] T034 [P] [US1] Create useRecipes composable in composables/useRecipes.ts to fetch recipe list from API
+- [x] T035 [P] [US1] Create useRecipeDetail composable in composables/useRecipeDetail.ts to fetch recipe details and handle portion adjustment logic (calculateAdjustedQuantity function)
 
 ### Components (User Story 1)
 
-- [ ] T036 [P] [US1] Create RecipeCard component in components/recipe/RecipeCard.vue to display recipe summary (title, image, time, difficulty, robot type)
-- [ ] T037 [P] [US1] Create RecipeDetail component in components/recipe/RecipeDetail.vue to display full recipe metadata
-- [ ] T038 [P] [US1] Create IngredientsList component in components/recipe/IngredientsList.vue to display ingredients with quantities (receives adjusted servings as prop)
-- [ ] T039 [P] [US1] Create PortionAdjuster component in components/recipe/PortionAdjuster.vue with input/slider for servings (1-20) and real-time update
+- [x] T036 [P] [US1] Create RecipeCard component in components/recipe/RecipeCard.vue to display recipe summary (title, image, time, difficulty, robot type)
+- [x] T037 [P] [US1] Create RecipeDetail component in components/recipe/RecipeDetail.vue to display full recipe metadata
+- [x] T038 [P] [US1] Create IngredientsList component in components/recipe/IngredientsList.vue to display ingredients with quantities (receives adjusted servings as prop)
+- [x] T039 [P] [US1] Create PortionAdjuster component in components/recipe/PortionAdjuster.vue with input/slider for servings (1-20) and real-time update
 
 ### Pages (User Story 1)
 
-- [ ] T040 [US1] Create homepage in pages/index.vue with recipe catalog using RecipeCard components and useRecipes composable
-- [ ] T041 [US1] Create recipe detail page in pages/recettes/[id].vue with RecipeDetail, IngredientsList, PortionAdjuster components and useRecipeDetail composable
+- [x] T040 [US1] Create homepage in pages/index.vue with recipe catalog using RecipeCard components and useRecipes composable
+- [x] T041 [US1] Create recipe detail page in pages/recettes/[id].vue with RecipeDetail, IngredientsList, PortionAdjuster components and useRecipeDetail composable
 
-**Checkpoint**: At this point, User Story 1 (MVP) should be fully functional - users can browse recipes, view details, and adjust portions
+**Checkpoint**: ✅ User Story 1 (MVP) fully functional - users can browse recipes, view details, and adjust portions
 
 ---
 
