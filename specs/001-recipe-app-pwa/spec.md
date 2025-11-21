@@ -11,6 +11,7 @@
 
 - Q: Admin authentication mechanism (affects backend security architecture and session management) → A: JWT tokens issued after login, stored in localStorage, verified via middleware
 - Q: AI parsing failure handling when Ollama/n8n is unavailable or times out (affects reliability and admin workflow) → A: Retry up to 3 times with 30s timeout per attempt, then show error with manual fallback
+- Q: Recipe-to-robot relationship cardinality (affects database schema and filtering logic) → A: Many-to-many: Recipes can be tagged for multiple robot types
 
 ## User Scenarios & Testing
 
@@ -104,10 +105,11 @@ Un administrateur souhaite enrichir le catalogue de recettes en important rapide
 
 - **FR-001**: Le système DOIT afficher une liste de toutes les recettes disponibles avec pour chaque recette : titre, image, temps de préparation total, difficulté et type(s) de robot(s) compatible(s)
 - **FR-002**: Le système DOIT permettre à l'utilisateur de sélectionner une recette pour voir son détail complet
-- **FR-003**: Le système DOIT afficher pour chaque recette détaillée : titre, description, temps de préparation, temps de cuisson, difficulté, nombre de personnes par défaut, type de robot, liste des ingrédients avec quantités et unités, aperçu global des étapes
+- **FR-003**: Le système DOIT afficher pour chaque recette détaillée : titre, description, temps de préparation, temps de cuisson, difficulté, nombre de personnes par défaut, liste des types de robots compatibles, liste des ingrédients avec quantités et unités, aperçu global des étapes
 - **FR-004**: Le système DOIT permettre à l'utilisateur de modifier le nombre de personnes pour une recette (entre 1 et 20 personnes)
 - **FR-005**: Le système DOIT recalculer automatiquement toutes les quantités d'ingrédients proportionnellement au nombre de personnes sélectionné
 - **FR-006**: Le système DOIT afficher les quantités d'ingrédients avec leur unité appropriée (g, ml, c.à.s, pincée, etc.)
+- **FR-034**: Le système DOIT permettre qu'une recette soit associée à plusieurs types de robots cuisiniers simultanément (relation many-to-many)
 
 **Mode Pas-à-Pas**
 
@@ -153,13 +155,13 @@ Un administrateur souhaite enrichir le catalogue de recettes en important rapide
 
 ### Key Entities
 
-- **Recette**: Représente une recette de cuisine complète. Attributs principaux : identifiant unique, titre, description courte, description complète, temps de préparation (minutes), temps de cuisson (minutes), difficulté (facile/moyen/difficile), nombre de personnes par défaut, type de robot compatible (Thermomix/Cookeo/Monsieur Cuisine/Manuel/Tous), image principale, date de création. Relations : contient plusieurs Ingrédients et plusieurs Étapes.
+- **Recette**: Représente une recette de cuisine complète. Attributs principaux : identifiant unique, titre, description courte, description complète, temps de préparation (minutes), temps de cuisson (minutes), difficulté (facile/moyen/difficile), nombre de personnes par défaut, image principale, date de création, statut (brouillon/publié). Relations : contient plusieurs Ingrédients, contient plusieurs Étapes, est compatible avec plusieurs RobotsCuisiniers (many-to-many via table de jointure).
 
 - **Ingrédient**: Représente un ingrédient nécessaire pour une recette. Attributs principaux : nom de l'ingrédient, quantité de base (pour le nombre de personnes par défaut de la recette), unité de mesure (g, ml, pièce, c.à.s, c.à.c, pincée, etc.), ordre d'affichage, optionnel (oui/non). Relations : appartient à une Recette, peut être associé à plusieurs Étapes.
 
 - **Étape**: Représente une étape de préparation dans une recette. Attributs principaux : numéro de l'étape (ordre), description textuelle complète, durée estimée (minutes), température (°C), vitesse du robot, paramètres spécifiques au robot, ingrédients utilisés dans cette étape. Relations : appartient à une Recette, utilise plusieurs Ingrédients.
 
-- **Robot Cuisinier**: Représente un type de robot cuisinier supporté. Attributs principaux : nom (Thermomix, Cookeo, Monsieur Cuisine), fabricant, paramètres supportés (température, vitesse, modes spécifiques). Relations : associé à plusieurs Recettes.
+- **Robot Cuisinier**: Représente un type de robot cuisinier supporté. Attributs principaux : nom (Thermomix, Cookeo, Monsieur Cuisine, Manuel, Tous), fabricant, paramètres supportés (température, vitesse, modes spécifiques). Relations : est compatible avec plusieurs Recettes (many-to-many via table de jointure).
 
 ## Success Criteria
 
