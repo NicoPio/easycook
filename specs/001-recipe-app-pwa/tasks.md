@@ -36,7 +36,7 @@ This is a **fullstack Nuxt.js web application**. All paths are relative to repos
 **Purpose**: Project initialization and basic structure
 
 - [ ] T001 Create project structure: nuxt.config.ts, package.json, tsconfig.json, tailwind.config.js
-- [ ] T002 Initialize Nuxt 3 project with dependencies (nuxt, @nuxt/ui, tailwindcss, drizzle-orm, better-sqlite3, @vite-pwa/nuxt)
+- [ ] T002 Initialize Nuxt 4 project with dependencies (nuxt, @nuxt/ui, tailwindcss, drizzle-orm, better-sqlite3, @vite-pwa/nuxt)
 - [ ] T003 [P] Configure TypeScript strict mode in tsconfig.json
 - [ ] T004 [P] Configure Tailwind CSS 4 in tailwind.config.js
 - [ ] T005 [P] Configure ESLint and Prettier in .eslintrc.js and .prettierrc
