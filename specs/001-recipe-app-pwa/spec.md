@@ -13,6 +13,7 @@
 - Q: AI parsing failure handling when Ollama/n8n is unavailable or times out (affects reliability and admin workflow) → A: Retry up to 3 times with 30s timeout per attempt, then show error with manual fallback
 - Q: Recipe-to-robot relationship cardinality (affects database schema and filtering logic) → A: Many-to-many: Recipes can be tagged for multiple robot types
 - Q: Rounding logic for non-divisible ingredients during portion adjustment (affects UX and calculation implementation) → A: Round to nearest whole number for discrete items (≥0.5 rounds up), keep decimals for measurable ingredients
+- Q: Recipe publication workflow and visibility rules (affects database schema, API filtering, and admin UX) → A: Two-state: Draft (admin-only) → Published (public). Explicit publish action required
 
 ## User Scenarios & Testing
 
@@ -81,8 +82,9 @@ Un administrateur souhaite enrichir le catalogue de recettes en important rapide
 1. **Given** un administrateur est sur l'interface d'import, **When** il colle le texte d'une recette formatée, **Then** le système identifie automatiquement les sections (ingrédients, étapes, infos générales)
 2. **Given** le système a parsé une recette, **When** l'administrateur visualise le résultat, **Then** il voit les ingrédients structurés avec quantités et unités, les étapes numérotées, et les métadonnées extraites
 3. **Given** le système a parsé une recette, **When** l'administrateur corrige manuellement des erreurs de parsing, **Then** il peut éditer chaque champ individuellement avant validation
-4. **Given** une recette parsée est validée, **When** l'administrateur enregistre la recette, **Then** elle apparaît immédiatement dans le catalogue utilisateur
-5. **Given** le système parse une recette ambiguë ou mal formatée, **When** le parsing échoue, **Then** l'administrateur reçoit un message clair indiquant les sections problématiques
+4. **Given** une recette parsée est validée, **When** l'administrateur enregistre la recette, **Then** elle est créée avec le statut "draft" et visible uniquement dans l'interface admin
+5. **Given** une recette en statut "draft", **When** l'administrateur clique sur "Publier", **Then** le statut passe à "published" et la recette apparaît immédiatement dans le catalogue utilisateur public
+6. **Given** le système parse une recette ambiguë ou mal formatée, **When** le parsing échoue, **Then** l'administrateur reçoit un message clair indiquant les sections problématiques
 
 ---
 
@@ -154,6 +156,15 @@ Un administrateur souhaite enrichir le catalogue de recettes en important rapide
 - **FR-028**: Le système DOIT fournir un endpoint de login (/api/auth/login) qui retourne un JWT token valide après validation des identifiants
 - **FR-029**: Le JWT token DOIT être stocké dans le localStorage côté client et inclus dans les headers des requêtes API admin
 - **FR-030**: Le JWT token DOIT avoir une durée de validité de 24 heures et être vérifié par un middleware côté serveur
+
+**Publication de Recettes**
+
+- **FR-036**: Les recettes DOIVENT avoir un statut "draft" (brouillon) ou "published" (publié)
+- **FR-037**: Les recettes avec statut "draft" DOIVENT être visibles uniquement dans l'interface d'administration
+- **FR-038**: Les recettes avec statut "published" DOIVENT être visibles dans le catalogue utilisateur public
+- **FR-039**: Les API publiques (/api/recipes) DOIVENT filtrer automatiquement pour ne retourner que les recettes avec statut "published"
+- **FR-040**: L'interface d'administration DOIT fournir un bouton "Publier" pour changer le statut d'une recette de "draft" à "published"
+- **FR-041**: L'administrateur DOIT pouvoir dépublier une recette (passer de "published" à "draft") via l'interface d'administration
 
 ### Key Entities
 
