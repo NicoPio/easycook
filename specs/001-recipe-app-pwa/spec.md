@@ -12,6 +12,7 @@
 - Q: Admin authentication mechanism (affects backend security architecture and session management) → A: JWT tokens issued after login, stored in localStorage, verified via middleware
 - Q: AI parsing failure handling when Ollama/n8n is unavailable or times out (affects reliability and admin workflow) → A: Retry up to 3 times with 30s timeout per attempt, then show error with manual fallback
 - Q: Recipe-to-robot relationship cardinality (affects database schema and filtering logic) → A: Many-to-many: Recipes can be tagged for multiple robot types
+- Q: Rounding logic for non-divisible ingredients during portion adjustment (affects UX and calculation implementation) → A: Round to nearest whole number for discrete items (≥0.5 rounds up), keep decimals for measurable ingredients
 
 ## User Scenarios & Testing
 
@@ -89,7 +90,7 @@ Un administrateur souhaite enrichir le catalogue de recettes en important rapide
 
 - **Proportions zéro ou négatives** : Que se passe-t-il si l'utilisateur entre 0 ou un nombre négatif de personnes ? Le système doit bloquer la saisie ou afficher un message d'erreur.
 - **Recette sans robot spécifique** : Comment gérer les recettes compatibles avec tous les robots ou aucun robot en particulier ? Afficher un tag "Tous robots" ou "Manuel".
-- **Ingrédients non divisibles** : Comment ajuster "1 œuf" pour 1,5 personne ? Arrondir intelligemment (1 œuf pour 1-2 personnes, 2 œufs pour 3-4, etc.).
+- **Ingrédients non divisibles** : Comment ajuster "1 œuf" pour 1,5 personne ? Le système arrondit à l'entier le plus proche (≥0.5 vers le haut) pour les ingrédients discrets (œufs, pièces), et conserve 1 décimale pour les ingrédients mesurables (grammes, millilitres).
 - **Étapes longues en mode pas-à-pas** : Comment afficher une étape avec beaucoup de texte en fullscreen ? Permettre le scroll ou découper en sous-étapes.
 - **Navigation pendant la cuisson** : Que se passe-t-il si l'utilisateur quitte le mode pas-à-pas en plein milieu ? Proposer de reprendre où il en était.
 - **Mode offline** : Les recettes doivent-elles être disponibles sans connexion internet ? Le système doit mettre en cache les recettes consultées récemment.
@@ -110,6 +111,7 @@ Un administrateur souhaite enrichir le catalogue de recettes en important rapide
 - **FR-005**: Le système DOIT recalculer automatiquement toutes les quantités d'ingrédients proportionnellement au nombre de personnes sélectionné
 - **FR-006**: Le système DOIT afficher les quantités d'ingrédients avec leur unité appropriée (g, ml, c.à.s, pincée, etc.)
 - **FR-034**: Le système DOIT permettre qu'une recette soit associée à plusieurs types de robots cuisiniers simultanément (relation many-to-many)
+- **FR-035**: Le système DOIT arrondir les quantités d'ingrédients selon leur type : pour les ingrédients discrets (œufs, pièces), arrondir à l'entier le plus proche (≥0.5 arrondi vers le haut) ; pour les ingrédients mesurables (g, ml, c.à.s), conserver les décimales (1 chiffre après la virgule)
 
 **Mode Pas-à-Pas**
 
