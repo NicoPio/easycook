@@ -11,8 +11,8 @@
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate",
+    "db:generate": "drizzle-kit generate:sqlite",
+    "db:push": "drizzle-kit push:sqlite",
     "db:seed": "tsx server/database/seed.ts"
   },
   "dependencies": {
@@ -38,6 +38,7 @@
     "prettier": "^3.2.5",
     "tailwindcss": "^3.4.1",
     "tsx": "^4.7.1",
-    "typescript": "^5.4.2"
+    "typescript": "^5.4.2",
+    "vue-tsc": "^3.1.4"
   }
 }
