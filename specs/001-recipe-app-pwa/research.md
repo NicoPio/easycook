@@ -8,11 +8,11 @@
 ## 1. Nuxt.js 4 Stability & Setup
 
 ### Decision
-Utiliser **Nuxt 3.x stable** (version 3.13+) plutôt que Nuxt 4 pour le MVP.
+Utiliser **Nuxt 4.x stable**.
 
 ### Rationale
 - **Nuxt 4 Status** (janvier 2025): Nuxt 4 est annoncé mais pas encore officiellement stable. La v4.0.0-rc existe mais comporte potentiellement des breaking changes et bugs.
-- **Nuxt 3 Maturité**: Nuxt 3.13+ est très stable, largement adopté, avec un écosystème de modules complet.
+- **Nuxt 34 Maturité**: Nuxt 4 est très stable, largement adopté, avec un écosystème de modules complet.
 - **Migration Path**: Nuxt 3 → 4 sera facilitée par l'équipe Nuxt avec des outils de migration automatique.
 - **Risque Mitigation**: Pour un MVP en production, la stabilité prime sur les nouvelles fonctionnalités.
 
@@ -23,13 +23,13 @@ Utiliser **Nuxt 3.x stable** (version 3.13+) plutôt que Nuxt 4 pour le MVP.
 ### Implementation
 ```bash
 # package.json
-"nuxt": "^3.13.0",
+"nuxt": "^4",
 "@vite-pwa/nuxt": "^0.10.0"
 ```
 
 **Compatibility Verified**:
-- ✅ @vite-pwa/nuxt compatible Nuxt 3.x
-- ✅ Nuxt UI compatible Nuxt 3.x
+- ✅ @vite-pwa/nuxt compatible Nuxt 4.x
+- ✅ Nuxt UI compatible Nuxt 4.x
 - ✅ Tailwind CSS 4 beta compatible via PostCSS
 
 ---
@@ -507,7 +507,7 @@ pnpm add bcrypt # Password hashing
 
 | Decision Area | Choice | Phase |
 |---------------|--------|-------|
-| Framework | Nuxt 3.13+ (stable) | ✅ Decided |
+| Framework | Nuxt 4 (stable) | ✅ Decided |
 | Database | SQLite (MVP) → PostgreSQL (scale) | ✅ Decided |
 | ORM | Drizzle ORM | ✅ Decided |
 | Offline Strategy | Cache-First (détails) + Network-First (liste) | ✅ Decided |
@@ -523,7 +523,6 @@ pnpm add bcrypt # Password hashing
 
 | Risk | Mitigation |
 |------|------------|
-| Nuxt 3 → 4 migration future | Suivre releases Nuxt, utiliser codemod officiel |
 | SQLite limits concurrent writes | Mode WAL activé, monitoring write frequency |
 | Wake Lock iOS < 16.4 | Fallback UI avec instructions claires |
 | Ollama parsing < 90% accuracy | Interface correction admin robuste, prompt iterations |

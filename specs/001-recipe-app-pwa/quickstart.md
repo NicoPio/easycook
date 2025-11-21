@@ -81,7 +81,7 @@ pnpm install
 ```
 
 Cette commande installe toutes les dépendances définies dans `package.json` :
-- Nuxt 3 + modules
+- Nuxt 4 + modules
 - Drizzle ORM + better-sqlite3
 - Nuxt UI + Tailwind CSS 4
 - @vite-pwa/nuxt
@@ -170,7 +170,7 @@ pnpm dev
 **Sorties attendues** :
 
 ```
-Nuxt 3.13.0 with Nitro 2.9.0
+Nuxt 4 with Nitro 2.9.0
 
   ➜ Local:    http://localhost:3000/
   ➜ Network:  http://192.168.x.x:3000/
