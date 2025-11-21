@@ -10,6 +10,7 @@
 ### Session 2025-11-21
 
 - Q: Admin authentication mechanism (affects backend security architecture and session management) → A: JWT tokens issued after login, stored in localStorage, verified via middleware
+- Q: AI parsing failure handling when Ollama/n8n is unavailable or times out (affects reliability and admin workflow) → A: Retry up to 3 times with 30s timeout per attempt, then show error with manual fallback
 
 ## User Scenarios & Testing
 
@@ -92,6 +93,7 @@ Un administrateur souhaite enrichir le catalogue de recettes en important rapide
 - **Navigation pendant la cuisson** : Que se passe-t-il si l'utilisateur quitte le mode pas-à-pas en plein milieu ? Proposer de reprendre où il en était.
 - **Mode offline** : Les recettes doivent-elles être disponibles sans connexion internet ? Le système doit mettre en cache les recettes consultées récemment.
 - **Import de formats variés** : Comment gérer des recettes avec des formats très différents (listes à puces, paragraphes, tableaux) ? Le système IA doit être assez robuste pour s'adapter.
+- **Indisponibilité du service IA** : Que se passe-t-il si Ollama/n8n est inaccessible ou ne répond pas ? Le système retry jusqu'à 3 fois avec timeout de 30s, puis propose la saisie manuelle.
 - **Unités de mesure multiples** : Comment gérer les conversions entre grammes, millilitres, cuillères à soupe, etc. ? Standardiser en unités métriques ou permettre le choix de l'utilisateur.
 
 ## Requirements
@@ -138,6 +140,9 @@ Un administrateur souhaite enrichir le catalogue de recettes en important rapide
 - **FR-024**: Le système DOIT utiliser un modèle d'IA pour structurer le texte importé selon un schéma défini
 - **FR-025**: Le système DOIT permettre à l'administrateur de visualiser et corriger le résultat du parsing avant validation
 - **FR-026**: Le système DOIT enregistrer la recette validée et la rendre immédiatement disponible dans le catalogue utilisateur
+- **FR-031**: Le système DOIT implémenter une logique de retry pour le parsing IA : maximum 3 tentatives avec timeout de 30 secondes par tentative
+- **FR-032**: En cas d'échec après 3 tentatives, le système DOIT afficher un message d'erreur clair et proposer une saisie manuelle complète comme solution de secours
+- **FR-033**: Le système DOIT indiquer visuellement la progression et les tentatives de retry pendant le parsing (ex: "Tentative 2/3...")
 
 **Administration et Sécurité**
 
