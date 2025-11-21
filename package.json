@@ -1,0 +1,43 @@
+{
+  "name": "easycook",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:seed": "tsx server/database/seed.ts"
+  },
+  "dependencies": {
+    "@nuxt/ui": "^2.14.0",
+    "@vite-pwa/nuxt": "^0.5.0",
+    "@vueuse/core": "^10.9.0",
+    "better-sqlite3": "^9.4.3",
+    "drizzle-orm": "^0.30.5",
+    "h3": "^1.11.1",
+    "jose": "^5.2.3",
+    "localforage": "^1.10.0",
+    "nuxt": "^3.11.1",
+    "vue": "^3.4.21",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@nuxt/eslint-config": "^0.3.0",
+    "@types/better-sqlite3": "^7.6.9",
+    "@typescript-eslint/eslint-plugin": "^7.3.1",
+    "@typescript-eslint/parser": "^7.3.1",
+    "drizzle-kit": "^0.20.14",
+    "eslint": "^8.57.0",
+    "prettier": "^3.2.5",
+    "tailwindcss": "^3.4.1",
+    "tsx": "^4.7.1",
+    "typescript": "^5.4.2"
+  }
+}
