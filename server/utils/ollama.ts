@@ -33,17 +33,32 @@ export class OllamaClient {
   private model: string
   private timeout: number
   private maxRetries: number
+  private numPredict: number
+  private defaultTemperature: number
 
   constructor(
     baseUrl: string = process.env.OLLAMA_BASE_URL || 'http://localhost:11434',
     model: string = process.env.OLLAMA_MODEL || 'mistral',
-    timeout: number = 180000, // 180 seconds (3 minutes) - increased for CPU mode and model loading
-    maxRetries: number = 3
+    timeout: number = parseInt(process.env.OLLAMA_TIMEOUT || '180000'), // 180 seconds (3 minutes)
+    maxRetries: number = parseInt(process.env.OLLAMA_MAX_RETRIES || '3'),
+    numPredict: number = parseInt(process.env.OLLAMA_NUM_PREDICT || '4096'),
+    defaultTemperature: number = parseFloat(process.env.OLLAMA_TEMPERATURE || '0.1')
   ) {
     this.baseUrl = baseUrl
     this.model = model
     this.timeout = timeout
     this.maxRetries = maxRetries
+    this.numPredict = numPredict
+    this.defaultTemperature = defaultTemperature
+
+    console.log('[Ollama] Configuration:', {
+      baseUrl: this.baseUrl,
+      model: this.model,
+      timeout: `${this.timeout}ms`,
+      maxRetries: this.maxRetries,
+      numPredict: this.numPredict,
+      defaultTemperature: this.defaultTemperature
+    })
   }
 
   /**
@@ -67,8 +82,8 @@ export class OllamaClient {
           prompt,
           stream: false,
           options: {
-            temperature: options?.temperature || 0.1, // Low temperature for deterministic parsing
-            num_predict: 4096 // Max tokens
+            temperature: options?.temperature || this.defaultTemperature,
+            num_predict: this.numPredict
           }
         } as OllamaGenerateRequest
 
