@@ -53,32 +53,62 @@ export class OllamaClient {
   async generate(prompt: string, options?: { temperature?: number }): Promise<string> {
     let lastError: Error | null = null
 
+    // Log the model being used
+    console.log(`[Ollama] Generating with model: ${this.model}`)
+    console.log(`[Ollama] Prompt length: ${prompt.length} chars`)
+
     for (let attempt = 1; attempt <= this.maxRetries; attempt++) {
       try {
         const controller = new AbortController()
         const timeoutId = setTimeout(() => controller.abort(), this.timeout)
+
+        const requestBody = {
+          model: this.model,
+          prompt,
+          stream: false,
+          options: {
+            temperature: options?.temperature || 0.1, // Low temperature for deterministic parsing
+            num_predict: 4096 // Max tokens
+          }
+        } as OllamaGenerateRequest
+
+        console.log(`[Ollama] Request attempt ${attempt}/${this.maxRetries}`, {
+          model: requestBody.model,
+          promptLength: prompt.length,
+          options: requestBody.options
+        })
 
         const response = await fetch(`${this.baseUrl}/api/generate`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({
-            model: this.model,
-            prompt,
-            stream: false,
-            options: {
-              temperature: options?.temperature || 0.1, // Low temperature for deterministic parsing
-              num_predict: 4096 // Max tokens
-            }
-          } as OllamaGenerateRequest),
+          body: JSON.stringify(requestBody),
           signal: controller.signal
         })
 
         clearTimeout(timeoutId)
 
         if (!response.ok) {
-          throw new Error(`Ollama API error: ${response.status} ${response.statusText}`)
+          // Try to get detailed error message from Ollama
+          let errorDetails = response.statusText
+          try {
+            const errorBody = await response.json()
+            errorDetails = errorBody.error || errorBody.message || response.statusText
+            console.error(`[Ollama] Error details:`, errorBody)
+          } catch (e) {
+            // If JSON parsing fails, try text
+            try {
+              const errorText = await response.text()
+              if (errorText) {
+                errorDetails = errorText
+                console.error(`[Ollama] Error text:`, errorText)
+              }
+            } catch (e2) {
+              // Keep default statusText
+            }
+          }
+          throw new Error(`Ollama API error: ${response.status} - ${errorDetails}`)
         }
 
         const data = (await response.json()) as OllamaGenerateResponse
