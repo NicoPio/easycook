@@ -26,6 +26,7 @@ const IngredientSchema = z.object({
     'kg',
     // Variations anglophones courantes
     'egg',
+    'eggs',
     'unit',
     'piece',
     'tbsp',
@@ -38,8 +39,13 @@ const IngredientSchema = z.object({
     'dl',
     'mg',
     'gousse',
+    'gousses',
     'tranche',
+    'tranches',
     'botte',
+    'bottes',
+    'œuf',
+    'œufs',
   ]),
   isOptional: z.boolean().default(false)
 })
