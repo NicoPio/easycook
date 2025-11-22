@@ -334,14 +334,18 @@ const parsingErrors = ref<string[]>([])
 const parsedRecipe = ref<any>(null)
 const saving = ref(false)
 
-// Check authentication
+// Check authentication and reset state on page load
 onMounted(() => {
   if (process.client) {
     const token = localStorage.getItem('admin_token')
     if (!token) {
       router.push('/admin/login')
+      return
     }
   }
+
+  // Reset state to ensure clean start when navigating back to this page
+  reset()
 })
 
 async function handleParse() {
