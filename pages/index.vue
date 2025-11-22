@@ -16,24 +16,14 @@
         />
 
         <!-- Robot type filter -->
-        <RobotFilter
-          v-model="filters.robotType.value"
-          @change="handleRobotFilter"
-        />
+        <RobotFilter v-model="filters.robotType.value" @change="handleRobotFilter" />
 
         <!-- Time filter -->
-        <TimeFilter
-          v-model="filters.maxTotalTime.value"
-          @change="handleTimeFilter"
-        />
+        <TimeFilter v-model="filters.maxTotalTime.value" @change="handleTimeFilter" />
 
         <!-- Reset filters button -->
         <div v-if="filters.hasActiveFilters.value" class="flex justify-end">
-          <UButton
-            color="gray"
-            variant="soft"
-            @click="handleResetFilters"
-          >
+          <UButton color="gray" variant="soft" @click="handleResetFilters">
             <Icon name="heroicons:x-mark" class="w-4 h-4 mr-2" />
             Réinitialiser les filtres
           </UButton>
@@ -52,7 +42,10 @@
     </div>
 
     <!-- Error state -->
-    <div v-else-if="filters.error.value" class="bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-700 text-red-800 dark:text-red-200 px-4 py-3 rounded-lg">
+    <div
+      v-else-if="filters.error.value"
+      class="bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-700 text-red-800 dark:text-red-200 px-4 py-3 rounded-lg"
+    >
       <p class="font-semibold">Erreur lors du chargement des recettes</p>
       <p class="text-sm">{{ filters.error.value.message }}</p>
     </div>
@@ -61,9 +54,16 @@
     <div v-else>
       <!-- No results message -->
       <div v-if="filters.recipes.value.length === 0" class="text-center py-12">
-        <Icon name="heroicons:magnifying-glass" class="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+        <Icon
+          name="heroicons:magnifying-glass"
+          class="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4"
+        />
         <p class="text-gray-500 dark:text-gray-400 text-lg mb-2">
-          {{ filters.hasActiveFilters.value ? 'Aucune recette ne correspond à vos critères' : 'Aucune recette disponible pour le moment' }}
+          {{
+            filters.hasActiveFilters.value
+              ? 'Aucune recette ne correspond à vos critères'
+              : 'Aucune recette disponible pour le moment'
+          }}
         </p>
         <p v-if="filters.hasActiveFilters.value" class="text-gray-400 dark:text-gray-500 text-sm">
           Essayez de modifier vos filtres de recherche
@@ -74,15 +74,14 @@
       <div v-else>
         <!-- Results count -->
         <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-          {{ filters.pagination.value.total }} recette{{ filters.pagination.value.total > 1 ? 's' : '' }} trouvée{{ filters.pagination.value.total > 1 ? 's' : '' }}
+          {{ filters.pagination.value.total }} recette{{
+            filters.pagination.value.total > 1 ? 's' : ''
+          }}
+          trouvée{{ filters.pagination.value.total > 1 ? 's' : '' }}
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          <RecipeCard
-            v-for="recipe in filters.recipes.value"
-            :key="recipe.id"
-            :recipe="recipe"
-          />
+          <RecipeCard v-for="recipe in filters.recipes.value" :key="recipe.id" :recipe="recipe" />
         </div>
 
         <!-- Pagination -->

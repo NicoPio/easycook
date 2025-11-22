@@ -53,27 +53,32 @@ This file provides guidance to Claude Code when working with code in this reposi
 ## Development Commands
 
 ### Core Commands
+
 - `pnpm dev` - Start development server
 - `pnpm build` - Build all packages
 - `pnpm lint` - Run ESLint with specific config
 - `pnpm test` - Run tests (specify exact test command)
 
 ### [Specific Application Commands]
+
 - `pnpm dev:web` - Start Next.js with Turbo
 - **ALWAYS run `pnpm ts` after modifying TypeScript files**
 
 ## Architecture Overview
 
 **Tech Stack**: [Specific versions and configurations]
+
 - Next.js 15 with App Router
 - TypeScript with strict mode enabled
 - Prisma with PostgreSQL
 
 ### Key Applications/Packages
+
 - **apps/web** - Next.js application (main product)
 - **packages/database** - Prisma client and schemas
 
 ### [Framework-Specific Patterns]
+
 - **API Routes**: Always use @src/lib/safe-route.ts pattern
 - **Server Actions**: Use @src/lib/safe-action.ts with ACTION_NAME.action.ts naming
 
@@ -117,6 +122,7 @@ This file provides guidance to Claude Code when working with code in this reposi
 ## Emphasis and Priority Patterns (Critical for CLAUDE.md Effectiveness)
 
 ### High-Impact Emphasis Techniques
+
 - **CRITICAL**: Use for non-negotiable requirements that break functionality if ignored
 - **ALWAYS**: For mandatory actions that must happen every time
 - **NEVER**: For actions that will cause problems or break patterns
@@ -124,18 +130,21 @@ This file provides guidance to Claude Code when working with code in this reposi
 - **AFTER [action]**: For required follow-up steps
 
 ### Formatting for Maximum Impact
+
 - **Bold text**: For commands, file paths, and key concepts
 - `Code blocks`: For exact commands and file paths
 - **ALL CAPS keywords**: CRITICAL, ALWAYS, NEVER, MUST, REQUIRED
 - Bullet points with emphasis: **ALWAYS run `pnpm ts` after TypeScript changes**
 
 ### Priority Structure (Most to Least Important)
+
 1. **Commands that break builds/deployments** - Mark as CRITICAL
 2. **Required workflow steps** - Mark as ALWAYS/MUST
 3. **File patterns and conventions** - Use bold and examples
 4. **Helpful guidelines** - Standard bullet points
 
 ### Examples of Effective Emphasis
+
 ```markdown
 - **CRITICAL**: Always use @src/lib/safe-route.ts for API routes
 - **NEVER** import from internal package folders directly
@@ -146,6 +155,7 @@ This file provides guidance to Claude Code when working with code in this reposi
 ## Content Gathering Strategy
 
 ### For Global CLAUDE.md:
+
 - **Commands**: Extract from package.json scripts, Makefile, CI files
 - **Architecture**: Analyze folder structure, main dependencies
 - **Tech Stack**: Read package.json, import patterns, config files
@@ -153,6 +163,7 @@ This file provides guidance to Claude Code when working with code in this reposi
 - **Environment**: Scan for .env files, config patterns
 
 ### For Folder CLAUDE.md:
+
 - **Patterns**: Analyze existing files in folder for conventions
 - **Imports**: Common import patterns and library usage
 - **File Types**: API routes, components, utilities patterns
@@ -161,6 +172,7 @@ This file provides guidance to Claude Code when working with code in this reposi
 ## Update Strategy
 
 When updating existing CLAUDE.md:
+
 1. **PRESERVE**: Keep existing structure and working content
 2. **ENHANCE**: Add new patterns found in the update request
 3. **ORGANIZE**: Place new content in appropriate sections
@@ -178,6 +190,7 @@ When updating existing CLAUDE.md:
 ## CLAUDE.md Effectiveness Checklist
 
 Before saving any CLAUDE.md:
+
 - ☐ **Commands are tested and work**
 - ☐ **Critical items use proper emphasis** (CRITICAL, ALWAYS, NEVER)
 - ☐ **File paths use @ syntax** and exist

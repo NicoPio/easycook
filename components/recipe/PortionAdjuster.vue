@@ -29,7 +29,7 @@
         aria-describedby="servings-hint"
         @input="handleInput"
         @blur="validateOnBlur"
-      >
+      />
 
       <button
         type="button"
@@ -46,9 +46,7 @@
       <span v-if="modelValue !== originalServings">
         Recette originale : {{ originalServings }} personne{{ originalServings > 1 ? 's' : '' }}
       </span>
-      <span v-else class="text-gray-400 dark:text-gray-500">
-        Entre 1 et 20 personnes
-      </span>
+      <span v-else class="text-gray-400 dark:text-gray-500"> Entre 1 et 20 personnes </span>
     </div>
 
     <!-- Validation warning -->

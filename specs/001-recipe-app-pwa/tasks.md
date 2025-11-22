@@ -22,6 +22,7 @@ description: 'Task list for PWA Recipe Application implementation'
 ## Path Conventions
 
 This is a **fullstack Nuxt.js web application**. All paths are relative to repository root:
+
 - **Pages**: `pages/`
 - **Components**: `components/`
 - **Composables**: `composables/`
@@ -72,7 +73,7 @@ This is a **fullstack Nuxt.js web application**. All paths are relative to repos
 
 - [x] T024 [P] Install jose and bcrypt dependencies for JWT and password hashing
 - [x] T025 Create JWT utilities (sign, verify) in server/utils/jwt.ts
-- [x] T026 Create authentication middleware in server/middleware/auth.ts to protect /api/admin/* routes
+- [x] T026 Create authentication middleware in server/middleware/auth.ts to protect /api/admin/\* routes
 - [x] T027 Create POST /api/auth/login endpoint in server/api/auth/login.post.ts for admin login
 
 ### Shared Utilities
@@ -278,32 +279,39 @@ This is a **fullstack Nuxt.js web application**. All paths are relative to repos
 ### Parallel Opportunities
 
 **Phase 1 Setup** (11 parallel tasks):
+
 - T003, T004, T005, T007, T008, T009, T010 can all run in parallel
 
 **Phase 2 Foundational**:
+
 - Database: T012-T014 (types) can run in parallel
 - Schemas: T015-T018 (tables) can run after types, in parallel
 - Auth: T024-T027 (auth system) can run in parallel with database work
 - Utils: T028-T029 can run in parallel
 
 **Phase 3 US1**:
+
 - Backend: T030, T031 can run in parallel (different endpoints)
 - Composables: T034, T035 can run in parallel after backend
 - Components: T036, T037, T038, T039 can all run in parallel after composables
 
 **Phase 4 US2**:
+
 - Composables: T042, T043 can run in parallel
 - Component T044 needs composables done
 
 **Phase 5 US3**:
+
 - Components: T050, T051, T052 can all run in parallel after backend
 
 **Phase 6 US4**:
+
 - Utils: T056, T057 can run in parallel
 - Endpoints: T060, T061, T062, T063 can all run in parallel after T059
 - Pages: T064, T065 can run in parallel
 
 **Phase 7 Polish**:
+
 - Most tasks (T070-T087) can run in parallel as they touch different areas
 
 ---
@@ -373,6 +381,7 @@ Each sprint delivers a testable, deployable increment.
 - **Developer C**: User Story 2 (T042-T047) - Extends US1
 
 Once all complete:
+
 - **All devs**: User Story 3 together (quick), then Polish
 
 **Time saved**: ~40% compared to sequential

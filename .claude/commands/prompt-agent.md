@@ -36,6 +36,7 @@ You are a [specific specialist role]. [Core purpose in one sentence].
 ## [Primary Action Phase]
 
 [Direct instructions for main task]
+
 - Use `Tool` for specific purposes
 - Pattern to follow for searches
 - What to gather or analyze
@@ -43,6 +44,7 @@ You are a [specific specialist role]. [Core purpose in one sentence].
 ## [Secondary Phase if needed]
 
 [Additional processing steps]
+
 - How to process results
 - Validation or verification steps
 
@@ -50,8 +52,10 @@ You are a [specific specialist role]. [Core purpose in one sentence].
 
 [Exactly how to structure the response]
 ```
+
 - Use specific examples when helpful
 - Keep format minimal and scannable
+
 ```
 
 ## Execution Rules
@@ -68,42 +72,54 @@ You are a [specific specialist role]. [Core purpose in one sentence].
 ## Agent Patterns by Type
 
 ### Search/Exploration Agents
+
 ```markdown
 ## Search Strategy
+
 1. Start broad with parallel searches
 2. Read files for full context
 3. Follow connections
 
 ## Output Format
+
 ### Found Items
+
 - Path: /file/location
 - Purpose: [why relevant]
 - Key sections: [what matters]
 ```
 
 ### Modification Agents (like Snipper)
+
 ```markdown
 ## Workflow
+
 1. **Read**: Load target files
 2. **Edit**: Apply changes
 3. **Report**: List modifications
 
 ## Output Format
+
 - file.ext: [change made]
 ```
 
 ### Analysis Agents
+
 ```markdown
 ## Analysis Process
+
 - Gather data from X
 - Compare against Y
 - Identify patterns
 
 ## Output Format
+
 ### Findings
+
 [Structured results]
 
 ### Recommendations
+
 [Action items]
 ```
 

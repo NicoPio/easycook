@@ -15,22 +15,26 @@ Cette application PWA mobile permet aux utilisateurs de robots cuisiniers (Therm
 
 **Language/Version**: TypeScript avec Nuxt.js 4 (Vue 3 Composition API + script setup)
 **Primary Dependencies**:
+
 - Frontend: Nuxt UI (composants), Tailwind CSS 4 (styles), @vueuse/core (composables utilitaires)
 - Backend: Nuxt server routes, h3 (HTTP server), Drizzle ORM ou Prisma (base de données)
 - PWA: @vite-pwa/nuxt (service workers, manifest, caching)
 - Parsing: n8n (orchestration workflows), Ollama (LLM local pour extraction)
 
 **Storage**:
+
 - Base de données: SQLite (développement/petit catalogue) ou PostgreSQL (production à grande échelle)
 - Client: IndexedDB via localForage (cache offline des recettes)
 - Fichiers: Système de fichiers local pour images ou CDN externe (Cloudflare R2, S3)
 
 **Testing**:
+
 - Vitest (tests unitaires et intégration)
 - Playwright (tests E2E)
 - @nuxt/test-utils (helpers de test Nuxt)
 
 **Target Platform**:
+
 - Mobile: iOS 15+ et Android 9+ (PWA installable)
 - Desktop: Chrome, Firefox, Safari dernières versions (support secondaire)
 - Mode offline obligatoire pour les recettes consultées
@@ -38,6 +42,7 @@ Cette application PWA mobile permet aux utilisateurs de robots cuisiniers (Therm
 **Project Type**: Web application (frontend + backend intégré Nuxt)
 
 **Performance Goals**:
+
 - Time to Interactive (TTI) < 3 secondes sur 3G
 - Lighthouse PWA score > 90
 - Recalcul des proportions < 500ms
@@ -45,6 +50,7 @@ Cette application PWA mobile permet aux utilisateurs de robots cuisiniers (Therm
 - Parsing IA d'une recette < 10 secondes
 
 **Constraints**:
+
 - Support offline obligatoire (Service Worker)
 - Mode pas-à-pas fullscreen sans mise en veille automatique (Wake Lock API)
 - Interface utilisable avec mains mouillées (zones tactiles ≥ 44x44px)
@@ -52,6 +58,7 @@ Cette application PWA mobile permet aux utilisateurs de robots cuisiniers (Therm
 - Fonctionnement sur smartphones 2Go RAM minimum
 
 **Scale/Scope**:
+
 - MVP: 50-500 recettes
 - Cible: jusqu'à 5000 recettes
 - Utilisateurs concurrents: 100-1000 (petit à moyen trafic)
@@ -72,6 +79,7 @@ La constitution du projet est actuellement vide (template par défaut). Aucune c
 5. **Security**: Validation des inputs côté serveur, sanitization des recettes importées, CSP headers
 
 **Gates to verify**:
+
 - [x] Nuxt.js 4 est stable et compatible avec les dépendances choisies
 - [x] PWA est un choix approprié (pas besoin d'app native pour ce cas d'usage)
 - [x] Stack technique permet d'atteindre les critères de succès définis
@@ -206,6 +214,7 @@ workflows/
 ```
 
 **Structure Decision**: Application web fullstack avec Nuxt.js. Le frontend et le backend sont dans le même projet Nuxt (pattern server routes). Le workflow de parsing n8n est soit déployé séparément, soit inclus dans `/workflows` pour versioning. Cette approche permet :
+
 - SSR pour le SEO et performances initiales
 - API endpoints backend intégrés (pas de CORS)
 - PWA native avec @vite-pwa/nuxt
@@ -281,24 +290,28 @@ _Status: Pending Phase 0 completion_
 Extraire les entités de la spec et définir le schéma :
 
 **Entities**:
+
 - Recipe (Recette)
 - Ingredient (Ingrédient)
 - Step (Étape)
 - RobotType (Type de robot)
 
 **Relationships**:
+
 - Recipe hasMany Ingredients
 - Recipe hasMany Steps
 - Recipe belongsTo RobotType (ou many-to-many si recette compatible plusieurs robots)
 - Step hasMany Ingredients (ingrédients utilisés dans cette étape)
 
 **Validation Rules**:
+
 - Temps de préparation/cuisson: entiers positifs
 - Nombre de personnes: 1-20
 - Quantités d'ingrédients: nombres positifs ou fractions
 - Unités: enum défini (g, ml, c.à.s, c.à.c, pincée, pièce, etc.)
 
 **State Transitions**:
+
 - Recipe: draft → validated → published
 - Admin peut edit/delete à tout moment
 
@@ -307,11 +320,13 @@ Extraire les entités de la spec et définir le schéma :
 Générer les contrats OpenAPI pour :
 
 **User API** (`recipes-api.yaml`):
+
 - `GET /api/recipes` - Liste paginée avec filtres
 - `GET /api/recipes/:id` - Détail d'une recette
 - `POST /api/recipes/search` - Recherche avec filtres multiples
 
 **Admin API** (`admin-import-api.yaml`):
+
 - `POST /api/admin/import` - Import texte brut → parsing IA → preview
 - `POST /api/admin/recipes` - Créer recette validée
 - `PUT /api/admin/recipes/:id` - Modifier recette
@@ -334,6 +349,7 @@ Guide pour démarrer le projet :
 ### 1.4 Agent Context Update
 
 Exécuter `.specify/scripts/bash/update-agent-context.sh claude` pour ajouter :
+
 - Nuxt.js 4 (Vue 3 Composition API)
 - Tailwind CSS 4
 - Nuxt UI
@@ -351,6 +367,7 @@ _Status: Not started (handled by `/speckit.tasks` command)_
 Le découpage en tâches sera généré par la commande `/speckit.tasks` après validation du plan.
 
 **Groupes de tâches attendus**:
+
 1. Setup projet Nuxt + configuration PWA
 2. Modèle de données + migrations
 3. API backend (recettes + admin)
@@ -367,31 +384,31 @@ Le découpage en tâches sera généré par la commande `/speckit.tasks` après 
 
 Traçabilité entre les critères de succès de la spec et le plan d'implémentation :
 
-| Critère | Implémentation |
-|---------|----------------|
-| SC-001: Consultation < 10s | SSR + lazy loading images + API optimisée |
-| SC-002: Ajustement < 500ms | Calcul réactif côté client (computed Vue) |
-| SC-003: Zones tactiles 44x44px | Tailwind utilities + Nuxt UI buttons (accessibilité) |
-| SC-004: Offline 10 dernières | Service Worker + IndexedDB cache (composable useOfflineCache) |
-| SC-005: Installation < 3s | PWA optimisée, bundle split, code splitting |
-| SC-006: 90% parsing réussi | Prompt engineering Ollama + validation + corrections admin |
-| SC-007: Réduction 80% temps import | Parsing automatique vs saisie manuelle complète |
-| SC-008: Recherche < 1s (500+ recettes) | Index base de données + recherche full-text |
-| SC-009: Écran allumé (Wake Lock) | Wake Lock API + fallback message si non supporté |
-| SC-010: 95% complètent sans retour | UX pas-à-pas optimisée (contrôles clairs, progression visible) |
+| Critère                                | Implémentation                                                 |
+| -------------------------------------- | -------------------------------------------------------------- |
+| SC-001: Consultation < 10s             | SSR + lazy loading images + API optimisée                      |
+| SC-002: Ajustement < 500ms             | Calcul réactif côté client (computed Vue)                      |
+| SC-003: Zones tactiles 44x44px         | Tailwind utilities + Nuxt UI buttons (accessibilité)           |
+| SC-004: Offline 10 dernières           | Service Worker + IndexedDB cache (composable useOfflineCache)  |
+| SC-005: Installation < 3s              | PWA optimisée, bundle split, code splitting                    |
+| SC-006: 90% parsing réussi             | Prompt engineering Ollama + validation + corrections admin     |
+| SC-007: Réduction 80% temps import     | Parsing automatique vs saisie manuelle complète                |
+| SC-008: Recherche < 1s (500+ recettes) | Index base de données + recherche full-text                    |
+| SC-009: Écran allumé (Wake Lock)       | Wake Lock API + fallback message si non supporté               |
+| SC-010: 95% complètent sans retour     | UX pas-à-pas optimisée (contrôles clairs, progression visible) |
 
 ---
 
 ## Risks & Mitigations
 
-| Risque | Impact | Mitigation |
-|--------|--------|------------|
-| Nuxt 4 instable/breaking changes | Bloquant | Vérifier stabilité en Phase 0, utiliser Nuxt 3 si nécessaire |
-| Wake Lock non supporté iOS Safari | Moyen | Fallback : message utilisateur + réglages manuels |
-| Parsing IA imprécis (<90%) | Moyen | Interface correction admin robuste + prompt tuning |
-| Ollama trop lent (>10s) | Moyen | Optimiser prompt, utiliser modèle plus petit, feedback utilisateur |
-| Offline sync conflits | Faible | MVP sans sync multi-devices, read-only offline |
-| Performance mobile 2Go RAM | Moyen | Tests sur vraies devices, optimisation bundle, lazy loading |
+| Risque                            | Impact   | Mitigation                                                         |
+| --------------------------------- | -------- | ------------------------------------------------------------------ |
+| Nuxt 4 instable/breaking changes  | Bloquant | Vérifier stabilité en Phase 0, utiliser Nuxt 3 si nécessaire       |
+| Wake Lock non supporté iOS Safari | Moyen    | Fallback : message utilisateur + réglages manuels                  |
+| Parsing IA imprécis (<90%)        | Moyen    | Interface correction admin robuste + prompt tuning                 |
+| Ollama trop lent (>10s)           | Moyen    | Optimiser prompt, utiliser modèle plus petit, feedback utilisateur |
+| Offline sync conflits             | Faible   | MVP sans sync multi-devices, read-only offline                     |
+| Performance mobile 2Go RAM        | Moyen    | Tests sur vraies devices, optimisation bundle, lazy loading        |
 
 ---
 

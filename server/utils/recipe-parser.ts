@@ -61,7 +61,10 @@ export class RecipeParser {
     }
 
     try {
-      const promptPath = join(process.cwd(), 'workflows/recipe-parser/prompts/recipe-extraction.txt')
+      const promptPath = join(
+        process.cwd(),
+        'workflows/recipe-parser/prompts/recipe-extraction.txt'
+      )
       this.promptTemplate = await readFile(promptPath, 'utf-8')
       return this.promptTemplate
     } catch (error) {
@@ -103,7 +106,7 @@ export class RecipeParser {
     if (!isAvailable) {
       return {
         success: false,
-        errors: ['Service d\'IA non disponible. Veuillez vérifier qu\'Ollama est démarré.'],
+        errors: ["Service d'IA non disponible. Veuillez vérifier qu'Ollama est démarré."],
         attempts: 0
       }
     }
@@ -144,7 +147,7 @@ export class RecipeParser {
         // Continue to next attempt
         if (attempt < maxAttempts) {
           // Wait before retry (1s, 2s)
-          await new Promise(resolve => setTimeout(resolve, attempt * 1000))
+          await new Promise((resolve) => setTimeout(resolve, attempt * 1000))
         }
       }
     }
@@ -172,7 +175,7 @@ export class RecipeParser {
       if (error instanceof z.ZodError) {
         return {
           valid: false,
-          errors: error.errors.map(e => `${e.path.join('.')}: ${e.message}`)
+          errors: error.errors.map((e) => `${e.path.join('.')}: ${e.message}`)
         }
       }
 

@@ -27,7 +27,10 @@
       Appuyez sur Entrée pour rechercher
     </p>
 
-    <div v-if="searching" class="mt-2 flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+    <div
+      v-if="searching"
+      class="mt-2 flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400"
+    >
       <Icon name="heroicons:arrow-path" class="w-4 h-4 animate-spin" />
       <span>Recherche en cours...</span>
     </div>
@@ -53,15 +56,18 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<{
   'update:modelValue': [value: string]
-  'search': [query: string]
+  search: [query: string]
 }>()
 
 const localQuery = ref(props.modelValue)
 
 // Watch for external changes
-watch(() => props.modelValue, (newValue) => {
-  localQuery.value = newValue
-})
+watch(
+  () => props.modelValue,
+  (newValue) => {
+    localQuery.value = newValue
+  }
+)
 
 // Debounced input handler (optional - can be used for real-time search)
 let debounceTimer: ReturnType<typeof setTimeout> | null = null

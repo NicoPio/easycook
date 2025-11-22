@@ -101,7 +101,7 @@ export class OllamaClient {
         // Wait before retry (exponential backoff: 1s, 2s, 4s)
         if (attempt < this.maxRetries) {
           const delay = Math.pow(2, attempt - 1) * 1000
-          await new Promise(resolve => setTimeout(resolve, delay))
+          await new Promise((resolve) => setTimeout(resolve, delay))
         }
       }
     }

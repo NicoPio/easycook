@@ -37,7 +37,8 @@ export default defineEventHandler(async (event) => {
         status: 'error',
         errors: result.errors || ['Échec du parsing'],
         attempts: result.attempts,
-        message: 'Impossible de parser la recette automatiquement. Veuillez saisir les informations manuellement.'
+        message:
+          'Impossible de parser la recette automatiquement. Veuillez saisir les informations manuellement.'
       }
     }
   } catch (error) {
@@ -45,7 +46,7 @@ export default defineEventHandler(async (event) => {
 
     throw createError({
       statusCode: 500,
-      message: error instanceof Error ? error.message : 'Erreur lors de l\'import de la recette'
+      message: error instanceof Error ? error.message : "Erreur lors de l'import de la recette"
     })
   }
 })

@@ -16,20 +16,24 @@ async function seedRecipe() {
 
   // Create recipe
   const now = new Date()
-  const recipe = await db.insert(recipes).values({
-    title: 'Soupe de tomates',
-    slug: 'soupe-de-tomates',
-    descriptionShort: 'Une délicieuse soupe de tomates maison',
-    descriptionFull: 'Cette soupe de tomates crémeuse est parfaite pour un repas réconfortant. Simple et rapide à préparer avec votre robot cuisinier.',
-    prepTime: 10,
-    cookTime: 20,
-    difficulty: 'facile',
-    servings: 4,
-    imageUrl: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=800',
-    status: 'published',
-    createdAt: now,
-    updatedAt: now
-  }).returning()
+  const recipe = await db
+    .insert(recipes)
+    .values({
+      title: 'Soupe de tomates',
+      slug: 'soupe-de-tomates',
+      descriptionShort: 'Une délicieuse soupe de tomates maison',
+      descriptionFull:
+        'Cette soupe de tomates crémeuse est parfaite pour un repas réconfortant. Simple et rapide à préparer avec votre robot cuisinier.',
+      prepTime: 10,
+      cookTime: 20,
+      difficulty: 'facile',
+      servings: 4,
+      imageUrl: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=800',
+      status: 'published',
+      createdAt: now,
+      updatedAt: now
+    })
+    .returning()
 
   console.log(`✓ Created recipe: ${recipe[0].title}`)
 
@@ -57,7 +61,7 @@ async function seedRecipe() {
   const stepsList = [
     {
       stepNumber: 1,
-      description: 'Épluchez et émincez l\'oignon et l\'ail. Placez-les dans le bol de votre robot.',
+      description: "Épluchez et émincez l'oignon et l'ail. Placez-les dans le bol de votre robot.",
       duration: 2,
       speed: '5',
       temperature: null
@@ -78,7 +82,8 @@ async function seedRecipe() {
     },
     {
       stepNumber: 4,
-      description: 'Ajoutez la crème fraîche (optionnel) et mixez 30 secondes pour obtenir une texture crémeuse.',
+      description:
+        'Ajoutez la crème fraîche (optionnel) et mixez 30 secondes pour obtenir une texture crémeuse.',
       duration: 1,
       speed: '8',
       temperature: null

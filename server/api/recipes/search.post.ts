@@ -49,9 +49,7 @@ export default defineEventHandler(async (event): Promise<RecipeListResponse> => 
 
     // Total time filter (prep_time + cook_time)
     if (maxTotalTime && typeof maxTotalTime === 'number' && maxTotalTime > 0) {
-      conditions.push(
-        sql`${recipes.prepTime} + ${recipes.cookTime} <= ${maxTotalTime}`
-      )
+      conditions.push(sql`${recipes.prepTime} + ${recipes.cookTime} <= ${maxTotalTime}`)
     }
 
     // Build base query

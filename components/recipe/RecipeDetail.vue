@@ -1,11 +1,7 @@
 <template>
   <div class="recipe-detail">
     <div v-if="recipe.imageUrl" class="w-full aspect-video overflow-hidden rounded-lg mb-6">
-      <img
-        :src="recipe.imageUrl"
-        :alt="recipe.title"
-        class="w-full h-full object-cover"
-      >
+      <img :src="recipe.imageUrl" :alt="recipe.title" class="w-full h-full object-cover" />
     </div>
 
     <h1 class="text-3xl font-bold mb-4">

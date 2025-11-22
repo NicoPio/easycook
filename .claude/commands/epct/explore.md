@@ -52,25 +52,32 @@ You are an exploration specialist. Your mission is to gather ALL relevant contex
 5. **SAVE EXPLORATION**: Write to `explore.md`
    - Save to `.claude/tasks/nn-task-name/explore.md`
    - **Structure**:
+
      ```markdown
      # Task: [Description]
 
      ## Codebase Context
+
      [Findings from codebase exploration]
 
      ## Documentation Insights
+
      [Key information from docs]
 
      ## Research Findings
+
      [Web research results]
 
      ## Key Files
+
      - `path/to/file.ts:line` - Purpose
 
      ## Patterns to Follow
+
      [Existing conventions]
 
      ## Dependencies
+
      [Prerequisites and related systems]
      ```
 

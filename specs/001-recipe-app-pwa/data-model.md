@@ -56,18 +56,20 @@
 
 **Attributes**:
 
-| Field | Type | Constraints | Description |
-|-------|------|-------------|-------------|
-| `id` | INTEGER | PRIMARY KEY, AUTO_INCREMENT | Identifiant unique |
-| `name` | TEXT | NOT NULL, UNIQUE | Nom du robot (ex: "Thermomix") |
-| `manufacturer` | TEXT | NOT NULL | Fabricant (ex: "Vorwerk") |
-| `slug` | TEXT | NOT NULL, UNIQUE | Slug URL (ex: "thermomix") |
+| Field          | Type    | Constraints                 | Description                    |
+| -------------- | ------- | --------------------------- | ------------------------------ |
+| `id`           | INTEGER | PRIMARY KEY, AUTO_INCREMENT | Identifiant unique             |
+| `name`         | TEXT    | NOT NULL, UNIQUE            | Nom du robot (ex: "Thermomix") |
+| `manufacturer` | TEXT    | NOT NULL                    | Fabricant (ex: "Vorwerk")      |
+| `slug`         | TEXT    | NOT NULL, UNIQUE            | Slug URL (ex: "thermomix")     |
 
 **Validation Rules**:
+
 - `name`: 2-50 caractères, lettres et chiffres uniquement
 - `slug`: lowercase, alphanumeric + hyphens, auto-généré depuis `name`
 
 **Initial Data** (seeded):
+
 ```sql
 INSERT INTO robot_types (name, manufacturer, slug) VALUES
   ('Thermomix', 'Vorwerk', 'thermomix'),
@@ -85,23 +87,24 @@ INSERT INTO robot_types (name, manufacturer, slug) VALUES
 
 **Attributes**:
 
-| Field | Type | Constraints | Description |
-|-------|------|-------------|-------------|
-| `id` | INTEGER | PRIMARY KEY, AUTO_INCREMENT | Identifiant unique |
-| `title` | TEXT | NOT NULL | Titre de la recette |
-| `slug` | TEXT | NOT NULL, UNIQUE | Slug URL (généré depuis title) |
-| `description` | TEXT | NULL | Description courte (résumé) |
-| `prepTime` | INTEGER | NOT NULL, DEFAULT 0 | Temps de préparation (minutes) |
-| `cookTime` | INTEGER | NOT NULL, DEFAULT 0 | Temps de cuisson (minutes) |
-| `difficulty` | TEXT | NOT NULL, CHECK IN ('facile', 'moyen', 'difficile') | Niveau de difficulté |
-| `servings` | INTEGER | NOT NULL, DEFAULT 4, CHECK >= 1 AND <= 20 | Nombre de personnes |
-| `robotTypeId` | INTEGER | NOT NULL, FOREIGN KEY → robot_types(id) | Type de robot compatible |
-| `imageUrl` | TEXT | NULL | URL ou path de l'image principale |
-| `status` | TEXT | NOT NULL, DEFAULT 'draft', CHECK IN ('draft', 'published') | Statut de publication |
-| `createdAt` | INTEGER | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Date de création (Unix timestamp) |
-| `updatedAt` | INTEGER | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Date de dernière modification |
+| Field         | Type    | Constraints                                                | Description                       |
+| ------------- | ------- | ---------------------------------------------------------- | --------------------------------- |
+| `id`          | INTEGER | PRIMARY KEY, AUTO_INCREMENT                                | Identifiant unique                |
+| `title`       | TEXT    | NOT NULL                                                   | Titre de la recette               |
+| `slug`        | TEXT    | NOT NULL, UNIQUE                                           | Slug URL (généré depuis title)    |
+| `description` | TEXT    | NULL                                                       | Description courte (résumé)       |
+| `prepTime`    | INTEGER | NOT NULL, DEFAULT 0                                        | Temps de préparation (minutes)    |
+| `cookTime`    | INTEGER | NOT NULL, DEFAULT 0                                        | Temps de cuisson (minutes)        |
+| `difficulty`  | TEXT    | NOT NULL, CHECK IN ('facile', 'moyen', 'difficile')        | Niveau de difficulté              |
+| `servings`    | INTEGER | NOT NULL, DEFAULT 4, CHECK >= 1 AND <= 20                  | Nombre de personnes               |
+| `robotTypeId` | INTEGER | NOT NULL, FOREIGN KEY → robot_types(id)                    | Type de robot compatible          |
+| `imageUrl`    | TEXT    | NULL                                                       | URL ou path de l'image principale |
+| `status`      | TEXT    | NOT NULL, DEFAULT 'draft', CHECK IN ('draft', 'published') | Statut de publication             |
+| `createdAt`   | INTEGER | NOT NULL, DEFAULT CURRENT_TIMESTAMP                        | Date de création (Unix timestamp) |
+| `updatedAt`   | INTEGER | NOT NULL, DEFAULT CURRENT_TIMESTAMP                        | Date de dernière modification     |
 
 **Validation Rules**:
+
 - `title`: 5-200 caractères, requis
 - `slug`: Auto-généré depuis title, unique, lowercase
 - `description`: 0-500 caractères, optionnel
@@ -111,11 +114,13 @@ INSERT INTO robot_types (name, manufacturer, slug) VALUES
 - `status`: Enum strict ('draft' | 'published')
 
 **Indexes**:
+
 - `idx_recipes_slug` : UNIQUE index sur `slug` (recherche par URL)
 - `idx_recipes_status_robot` : Index composite sur (`status`, `robotTypeId`) (filtrage catalogue)
 - `idx_recipes_created` : Index sur `createdAt` DESC (tri par date)
 
 **State Transitions**:
+
 ```
 draft ──(admin validates)──> published
   ↑                             │
@@ -130,17 +135,18 @@ draft ──(admin validates)──> published
 
 **Attributes**:
 
-| Field | Type | Constraints | Description |
-|-------|------|-------------|-------------|
-| `id` | INTEGER | PRIMARY KEY, AUTO_INCREMENT | Identifiant unique |
-| `recipeId` | INTEGER | NOT NULL, FOREIGN KEY → recipes(id) ON DELETE CASCADE | Recette parente |
-| `name` | TEXT | NOT NULL | Nom de l'ingrédient |
-| `quantity` | REAL | NOT NULL, CHECK > 0 | Quantité (peut être décimal) |
-| `unit` | TEXT | NOT NULL, CHECK IN (enum) | Unité de mesure |
-| `order` | INTEGER | NOT NULL, DEFAULT 0 | Ordre d'affichage (1, 2, 3...) |
-| `optional` | INTEGER | NOT NULL, DEFAULT 0 | Booléen (0=requis, 1=optionnel) |
+| Field      | Type    | Constraints                                           | Description                     |
+| ---------- | ------- | ----------------------------------------------------- | ------------------------------- |
+| `id`       | INTEGER | PRIMARY KEY, AUTO_INCREMENT                           | Identifiant unique              |
+| `recipeId` | INTEGER | NOT NULL, FOREIGN KEY → recipes(id) ON DELETE CASCADE | Recette parente                 |
+| `name`     | TEXT    | NOT NULL                                              | Nom de l'ingrédient             |
+| `quantity` | REAL    | NOT NULL, CHECK > 0                                   | Quantité (peut être décimal)    |
+| `unit`     | TEXT    | NOT NULL, CHECK IN (enum)                             | Unité de mesure                 |
+| `order`    | INTEGER | NOT NULL, DEFAULT 0                                   | Ordre d'affichage (1, 2, 3...)  |
+| `optional` | INTEGER | NOT NULL, DEFAULT 0                                   | Booléen (0=requis, 1=optionnel) |
 
 **Validation Rules**:
+
 - `name`: 2-100 caractères, requis
 - `quantity`: Nombre positif, peut être décimal (0.5, 1.5, etc.)
 - `unit`: Enum strict (voir ci-dessous)
@@ -148,27 +154,30 @@ draft ──(admin validates)──> published
 - `optional`: Boolean (SQLite utilise INTEGER 0/1)
 
 **Unités de Mesure** (Enum `unit`):
+
 ```typescript
 export const UNITS = [
-  'g',        // grammes
-  'kg',       // kilogrammes
-  'ml',       // millilitres
-  'l',        // litres
-  'c.à.s',    // cuillère à soupe
-  'c.à.c',    // cuillère à café
-  'pincée',   // pincée
-  'pièce',    // pièce(s)
-  'tranche',  // tranche(s)
-  'botte',    // botte(s)
-  'gousse',   // gousse(s)
+  'g', // grammes
+  'kg', // kilogrammes
+  'ml', // millilitres
+  'l', // litres
+  'c.à.s', // cuillère à soupe
+  'c.à.c', // cuillère à café
+  'pincée', // pincée
+  'pièce', // pièce(s)
+  'tranche', // tranche(s)
+  'botte', // botte(s)
+  'gousse' // gousse(s)
 ] as const
 ```
 
 **Indexes**:
+
 - `idx_ingredients_recipe` : Index sur `recipeId` (jointures)
 - `idx_ingredients_order` : Index composite (`recipeId`, `order`) (tri)
 
 **Business Logic** (Calcul des proportions):
+
 ```typescript
 // Frontend: Ajustement des quantités
 function adjustQuantity(
@@ -191,18 +200,19 @@ function adjustQuantity(
 
 **Attributes**:
 
-| Field | Type | Constraints | Description |
-|-------|------|-------------|-------------|
-| `id` | INTEGER | PRIMARY KEY, AUTO_INCREMENT | Identifiant unique |
-| `recipeId` | INTEGER | NOT NULL, FOREIGN KEY → recipes(id) ON DELETE CASCADE | Recette parente |
-| `order` | INTEGER | NOT NULL, CHECK > 0 | Numéro de l'étape (1, 2, 3...) |
-| `description` | TEXT | NOT NULL | Description textuelle de l'étape |
-| `duration` | INTEGER | NULL | Durée estimée (minutes) |
-| `temperature` | INTEGER | NULL | Température (°C) |
-| `speed` | TEXT | NULL | Vitesse du robot (ex: "3", "turbo") |
-| `ingredients` | TEXT | NULL | JSON array des ingrédients utilisés |
+| Field         | Type    | Constraints                                           | Description                         |
+| ------------- | ------- | ----------------------------------------------------- | ----------------------------------- |
+| `id`          | INTEGER | PRIMARY KEY, AUTO_INCREMENT                           | Identifiant unique                  |
+| `recipeId`    | INTEGER | NOT NULL, FOREIGN KEY → recipes(id) ON DELETE CASCADE | Recette parente                     |
+| `order`       | INTEGER | NOT NULL, CHECK > 0                                   | Numéro de l'étape (1, 2, 3...)      |
+| `description` | TEXT    | NOT NULL                                              | Description textuelle de l'étape    |
+| `duration`    | INTEGER | NULL                                                  | Durée estimée (minutes)             |
+| `temperature` | INTEGER | NULL                                                  | Température (°C)                    |
+| `speed`       | TEXT    | NULL                                                  | Vitesse du robot (ex: "3", "turbo") |
+| `ingredients` | TEXT    | NULL                                                  | JSON array des ingrédients utilisés |
 
 **Validation Rules**:
+
 - `order`: >= 1, unique par recette (contrainte UNIQUE composite)
 - `description`: 10-1000 caractères, requis
 - `duration`: >= 0 si présent, NULL si pas applicable
@@ -211,14 +221,17 @@ function adjustQuantity(
 - `ingredients`: JSON array de noms d'ingrédients (ex: `["poulet", "oignon"]`)
 
 **Indexes**:
+
 - `idx_steps_recipe_order` : UNIQUE composite (`recipeId`, `order`)
 
 **JSON Field Example** (`ingredients`):
+
 ```json
 ["poulet", "oignon", "ail"]
 ```
 
 **Business Logic**:
+
 - Tri toujours par `order` ASC dans les requêtes
 - Validation JSON côté serveur (Zod schema)
 
@@ -263,12 +276,12 @@ export const robotTypes = sqliteTable('robot_types', {
   id: integer('id').primaryKey({ autoIncrement: true }),
   name: text('name').notNull().unique(),
   manufacturer: text('manufacturer').notNull(),
-  slug: text('slug').notNull().unique(),
+  slug: text('slug').notNull().unique()
 })
 
 // Relations
 export const robotTypesRelations = relations(robotTypes, ({ many }) => ({
-  recipes: many(recipes),
+  recipes: many(recipes)
 }))
 
 // ─────────────────────────────────────────────────────────────
@@ -297,12 +310,12 @@ export const recipes = sqliteTable(
       .default(sql`CURRENT_TIMESTAMP`),
     updatedAt: integer('updated_at', { mode: 'timestamp' })
       .notNull()
-      .default(sql`CURRENT_TIMESTAMP`),
+      .default(sql`CURRENT_TIMESTAMP`)
   },
   (table) => ({
     slugIdx: uniqueIndex('idx_recipes_slug').on(table.slug),
     statusRobotIdx: index('idx_recipes_status_robot').on(table.status, table.robotTypeId),
-    createdIdx: index('idx_recipes_created').on(table.createdAt),
+    createdIdx: index('idx_recipes_created').on(table.createdAt)
   })
 )
 
@@ -310,10 +323,10 @@ export const recipes = sqliteTable(
 export const recipesRelations = relations(recipes, ({ one, many }) => ({
   robotType: one(robotTypes, {
     fields: [recipes.robotTypeId],
-    references: [robotTypes.id],
+    references: [robotTypes.id]
   }),
   ingredients: many(ingredients),
-  steps: many(steps),
+  steps: many(steps)
 }))
 
 // ─────────────────────────────────────────────────────────────
@@ -329,14 +342,26 @@ export const ingredients = sqliteTable(
     name: text('name').notNull(),
     quantity: real('quantity').notNull(),
     unit: text('unit', {
-      enum: ['g', 'kg', 'ml', 'l', 'c.à.s', 'c.à.c', 'pincée', 'pièce', 'tranche', 'botte', 'gousse'],
+      enum: [
+        'g',
+        'kg',
+        'ml',
+        'l',
+        'c.à.s',
+        'c.à.c',
+        'pincée',
+        'pièce',
+        'tranche',
+        'botte',
+        'gousse'
+      ]
     }).notNull(),
     order: integer('order').notNull().default(0),
-    optional: integer('optional', { mode: 'boolean' }).notNull().default(false),
+    optional: integer('optional', { mode: 'boolean' }).notNull().default(false)
   },
   (table) => ({
     recipeIdx: index('idx_ingredients_recipe').on(table.recipeId),
-    orderIdx: index('idx_ingredients_order').on(table.recipeId, table.order),
+    orderIdx: index('idx_ingredients_order').on(table.recipeId, table.order)
   })
 )
 
@@ -344,8 +369,8 @@ export const ingredients = sqliteTable(
 export const ingredientsRelations = relations(ingredients, ({ one }) => ({
   recipe: one(recipes, {
     fields: [ingredients.recipeId],
-    references: [recipes.id],
-  }),
+    references: [recipes.id]
+  })
 }))
 
 // ─────────────────────────────────────────────────────────────
@@ -363,10 +388,10 @@ export const steps = sqliteTable(
     duration: integer('duration'),
     temperature: integer('temperature'),
     speed: text('speed'),
-    ingredients: text('ingredients', { mode: 'json' }).$type<string[]>(),
+    ingredients: text('ingredients', { mode: 'json' }).$type<string[]>()
   },
   (table) => ({
-    recipeOrderIdx: uniqueIndex('idx_steps_recipe_order').on(table.recipeId, table.order),
+    recipeOrderIdx: uniqueIndex('idx_steps_recipe_order').on(table.recipeId, table.order)
   })
 )
 
@@ -374,8 +399,8 @@ export const steps = sqliteTable(
 export const stepsRelations = relations(steps, ({ one }) => ({
   recipe: one(recipes, {
     fields: [steps.recipeId],
-    references: [recipes.id],
-  }),
+    references: [recipes.id]
+  })
 }))
 
 // ─────────────────────────────────────────────────────────────
@@ -407,12 +432,12 @@ const recipe = await db.query.recipes.findFirst({
   with: {
     robotType: true,
     ingredients: {
-      orderBy: [asc(ingredients.order)],
+      orderBy: [asc(ingredients.order)]
     },
     steps: {
-      orderBy: [asc(steps.order)],
-    },
-  },
+      orderBy: [asc(steps.order)]
+    }
+  }
 })
 ```
 
@@ -427,11 +452,11 @@ const publishedRecipes = await db.query.recipes.findMany({
     eq(recipes.difficulty, 'facile')
   ),
   with: {
-    robotType: true,
+    robotType: true
   },
   orderBy: [desc(recipes.createdAt)],
   limit: 20,
-  offset: 0,
+  offset: 0
 })
 ```
 
@@ -451,21 +476,24 @@ LIMIT 20;
 ```typescript
 await db.transaction(async (tx) => {
   // 1. Insert recipe
-  const [newRecipe] = await tx.insert(recipes).values({
-    title: 'Poulet Basquaise',
-    slug: 'poulet-basquaise',
-    difficulty: 'moyen',
-    servings: 4,
-    prepTime: 15,
-    cookTime: 45,
-    robotTypeId: thermomixId,
-    status: 'published',
-  }).returning()
+  const [newRecipe] = await tx
+    .insert(recipes)
+    .values({
+      title: 'Poulet Basquaise',
+      slug: 'poulet-basquaise',
+      difficulty: 'moyen',
+      servings: 4,
+      prepTime: 15,
+      cookTime: 45,
+      robotTypeId: thermomixId,
+      status: 'published'
+    })
+    .returning()
 
   // 2. Insert ingredients
   await tx.insert(ingredients).values([
     { recipeId: newRecipe.id, name: 'Poulet', quantity: 800, unit: 'g', order: 1 },
-    { recipeId: newRecipe.id, name: 'Poivrons', quantity: 3, unit: 'pièce', order: 2 },
+    { recipeId: newRecipe.id, name: 'Poivrons', quantity: 3, unit: 'pièce', order: 2 }
     // ...
   ])
 
@@ -476,8 +504,8 @@ await db.transaction(async (tx) => {
       order: 1,
       description: 'Couper le poulet en morceaux',
       duration: 5,
-      ingredients: ['poulet'],
-    },
+      ingredients: ['poulet']
+    }
     // ...
   ])
 })

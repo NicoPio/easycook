@@ -36,9 +36,7 @@ export default defineEventHandler(async (event) => {
       .offset(offset)
 
     // Get total count
-    const [{ count }] = await db
-      .select({ count: sql<number>`count(*)` })
-      .from(recipes)
+    const [{ count }] = await db.select({ count: sql<number>`count(*)` }).from(recipes)
 
     return {
       recipes: allRecipes,

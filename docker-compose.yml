@@ -1,0 +1,80 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: easycook-ollama
+    ports:
+      - '11434:11434'
+    volumes:
+      - ollama_data:/root/.ollama
+    environment:
+      - OLLAMA_NUM_PARALLEL=2
+      - OLLAMA_MAX_LOADED_MODELS=1
+    healthcheck:
+      test: ['CMD', 'ollama', 'list']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+    networks:
+      - easycook-network
+
+  ollama-gpu:
+    image: ollama/ollama:latest
+    container_name: easycook-ollama-gpu
+    ports:
+      - '11434:11434'
+    volumes:
+      - ollama_data:/root/.ollama
+    environment:
+      - OLLAMA_NUM_PARALLEL=4
+      - OLLAMA_MAX_LOADED_MODELS=2
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    healthcheck:
+      test: ['CMD', 'ollama', 'list']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+    networks:
+      - easycook-network
+    profiles:
+      - gpu
+
+  easycook:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: easycook-app
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./data:/app/data
+    environment:
+      - DATABASE_PATH=/app/data/easycook.db
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - OLLAMA_MODEL=mistral
+      - JWT_SECRET=${JWT_SECRET:-change-me-in-production}
+      - ADMIN_EMAIL=${ADMIN_EMAIL:-admin@easycook.app}
+      - ADMIN_PASSWORD_HASH=${ADMIN_PASSWORD_HASH}
+    depends_on:
+      ollama:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - easycook-network
+
+volumes:
+  ollama_data:
+    driver: local
+
+networks:
+  easycook-network:
+    driver: bridge

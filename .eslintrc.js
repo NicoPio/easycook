@@ -1,9 +1,6 @@
 module.exports = {
   root: true,
-  extends: [
-    '@nuxt/eslint-config',
-    'plugin:@typescript-eslint/recommended'
-  ],
+  extends: ['@nuxt/eslint-config', 'plugin:@typescript-eslint/recommended'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 'latest',

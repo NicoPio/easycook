@@ -57,15 +57,18 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<{
   'update:modelValue': [value: number | null]
-  'change': [value: number | null]
+  change: [value: number | null]
 }>()
 
 const selectedTime = ref<number | null>(props.modelValue)
 
 // Watch for external changes
-watch(() => props.modelValue, (newValue) => {
-  selectedTime.value = newValue
-})
+watch(
+  () => props.modelValue,
+  (newValue) => {
+    selectedTime.value = newValue
+  }
+)
 
 // Time range options (in minutes)
 const timeOptions: TimeOption[] = [
