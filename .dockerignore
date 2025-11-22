@@ -27,6 +27,6 @@ docker-compose.yml
 Dockerfile
 .dockerignore
 
-workflows
 .claude
 documentation
+specs

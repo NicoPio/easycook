@@ -29,6 +29,9 @@ RUN npm ci --only=production
 # Copy built application from builder stage
 COPY --from=builder /app/.output ./.output
 
+# Copy workflows directory (needed for AI prompts at runtime)
+COPY --from=builder /app/workflows ./workflows
+
 # Create data directory
 RUN mkdir -p /app/data
 
