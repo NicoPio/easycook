@@ -4,27 +4,15 @@
     <header class="bg-white dark:bg-gray-800 shadow">
       <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
         <div>
-          <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
-            Dashboard Admin
-          </h1>
-          <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
-            Gestion des recettes EasyCook
-          </p>
+          <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Dashboard Admin</h1>
+          <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Gestion des recettes EasyCook</p>
         </div>
         <div class="flex gap-4">
-          <UButton
-            @click="navigateTo('/admin/import')"
-            size="lg"
-          >
+          <UButton @click="navigateTo('/admin/import')" size="lg">
             <Icon name="heroicons:plus-circle" class="w-5 h-5 mr-2" />
             Importer une recette
           </UButton>
-          <UButton
-            @click="handleLogout"
-            color="gray"
-            variant="soft"
-            size="lg"
-          >
+          <UButton @click="handleLogout" color="gray" variant="soft" size="lg">
             <Icon name="heroicons:arrow-right-on-rectangle" class="w-5 h-5 mr-2" />
             Déconnexion
           </UButton>
@@ -35,12 +23,18 @@
     <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
       <!-- Loading state -->
       <div v-if="loading" class="text-center py-12">
-        <Icon name="heroicons:arrow-path" class="w-12 h-12 text-primary-500 animate-spin mx-auto mb-4" />
+        <Icon
+          name="heroicons:arrow-path"
+          class="w-12 h-12 text-primary-500 animate-spin mx-auto mb-4"
+        />
         <p class="text-gray-600 dark:text-gray-400">Chargement des recettes...</p>
       </div>
 
       <!-- Error state -->
-      <div v-else-if="error" class="bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-700 text-red-800 dark:text-red-200 px-4 py-3 rounded-lg">
+      <div
+        v-else-if="error"
+        class="bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-700 text-red-800 dark:text-red-200 px-4 py-3 rounded-lg"
+      >
         <p class="font-semibold">Erreur</p>
         <p class="text-sm">{{ error.message }}</p>
       </div>
@@ -57,12 +51,12 @@
         </div>
 
         <div v-if="recipes.length === 0" class="text-center py-12">
-          <Icon name="heroicons:document-text" class="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+          <Icon
+            name="heroicons:document-text"
+            class="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4"
+          />
           <p class="text-gray-500 dark:text-gray-400">Aucune recette pour le moment</p>
-          <UButton
-            @click="navigateTo('/admin/import')"
-            class="mt-4"
-          >
+          <UButton @click="navigateTo('/admin/import')" class="mt-4">
             Importer votre première recette
           </UButton>
         </div>
@@ -70,19 +64,34 @@
         <table v-else class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
           <thead class="bg-gray-50 dark:bg-gray-700">
             <tr>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+              <th
+                scope="col"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+              >
                 Titre
               </th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+              <th
+                scope="col"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+              >
                 Statut
               </th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+              <th
+                scope="col"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+              >
                 Difficulté
               </th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+              <th
+                scope="col"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+              >
                 Temps total
               </th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+              <th
+                scope="col"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+              >
                 Mis à jour
               </th>
               <th scope="col" class="relative px-6 py-3">

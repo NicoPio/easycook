@@ -1,14 +1,7 @@
 <template>
-  <NuxtLink
-    :to="`/recettes/${recipe.id}`"
-    class="recipe-card block"
-  >
+  <NuxtLink :to="`/recettes/${recipe.id}`" class="recipe-card block">
     <div v-if="recipe.imageUrl" class="aspect-video overflow-hidden">
-      <img
-        :src="recipe.imageUrl"
-        :alt="recipe.title"
-        class="w-full h-full object-cover"
-      >
+      <img :src="recipe.imageUrl" :alt="recipe.title" class="w-full h-full object-cover" />
     </div>
     <div v-else class="aspect-video bg-gray-200 flex items-center justify-center">
       <span class="text-gray-400">Pas d'image</span>

@@ -38,11 +38,7 @@ export default defineEventHandler(async (event) => {
 
   try {
     // Check if recipe exists
-    const existingRecipe = await db
-      .select()
-      .from(recipes)
-      .where(eq(recipes.id, recipeId))
-      .get()
+    const existingRecipe = await db.select().from(recipes).where(eq(recipes.id, recipeId)).get()
 
     if (!existingRecipe) {
       throw createError({
@@ -117,10 +113,15 @@ export default defineEventHandler(async (event) => {
         const robotTypeRecords = await db
           .select()
           .from(robotTypes)
-          .where(sql`${robotTypes.slug} IN (${sql.join(robotTypeSlugs.map((s: string) => sql`${s}`), sql`, `)})`)
+          .where(
+            sql`${robotTypes.slug} IN (${sql.join(
+              robotTypeSlugs.map((s: string) => sql`${s}`),
+              sql`, `
+            )})`
+          )
 
         if (robotTypeRecords.length > 0) {
-          const robotTypeLinks = robotTypeRecords.map(rt => ({
+          const robotTypeLinks = robotTypeRecords.map((rt) => ({
             recipeId,
             robotTypeId: rt.id
           }))
@@ -139,7 +140,8 @@ export default defineEventHandler(async (event) => {
 
     throw createError({
       statusCode: 500,
-      message: error instanceof Error ? error.message : 'Erreur lors de la mise à jour de la recette'
+      message:
+        error instanceof Error ? error.message : 'Erreur lors de la mise à jour de la recette'
     })
   }
 })

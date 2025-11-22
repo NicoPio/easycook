@@ -21,9 +21,15 @@ export const recipes = sqliteTable('recipes', {
   difficulty: text('difficulty', { enum: ['facile', 'moyen', 'difficile'] }).notNull(),
   servings: integer('servings').notNull().default(4),
   imageUrl: text('image_url'),
-  status: text('status', { enum: ['draft', 'published'] }).notNull().default('draft'),
-  createdAt: integer('created_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date())
+  status: text('status', { enum: ['draft', 'published'] })
+    .notNull()
+    .default('draft'),
+  createdAt: integer('created_at', { mode: 'timestamp' })
+    .notNull()
+    .$defaultFn(() => new Date()),
+  updatedAt: integer('updated_at', { mode: 'timestamp' })
+    .notNull()
+    .$defaultFn(() => new Date())
 })
 
 // Ingredients Table

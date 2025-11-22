@@ -1,11 +1,7 @@
 <template>
   <div
     class="animate-pulse bg-gray-200 dark:bg-gray-700 rounded"
-    :class="[
-      heightClass,
-      widthClass,
-      customClass
-    ]"
+    :class="[heightClass, widthClass, customClass]"
   />
 </template>
 

@@ -75,10 +75,10 @@ paths:
                 properties:
                   status:
                     type: string
-                    example: "processing"
+                    example: 'processing'
                   message:
                     type: string
-                    example: "Recipe parsing in progress"
+                    example: 'Recipe parsing in progress'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -238,7 +238,7 @@ components:
             properties:
               field:
                 type: string
-                example: "ingredients[2].quantity"
+                example: 'ingredients[2].quantity'
               message:
                 type: string
                 example: "Quantité non reconnue: 'une poignée'"
@@ -259,11 +259,11 @@ components:
       properties:
         title:
           type: string
-          example: "Poulet Basquaise"
+          example: 'Poulet Basquaise'
         description:
           type: string
           nullable: true
-          example: "Un classique de la cuisine du Sud-Ouest"
+          example: 'Un classique de la cuisine du Sud-Ouest'
         prepTime:
           type: integer
           description: Minutes
@@ -275,7 +275,7 @@ components:
         difficulty:
           type: string
           enum: [facile, moyen, difficile]
-          example: "moyen"
+          example: 'moyen'
         servings:
           type: integer
           minimum: 1
@@ -284,11 +284,11 @@ components:
         robotType:
           type: string
           enum: [thermomix, cookeo, monsieur-cuisine, manuel, tous-robots]
-          example: "thermomix"
+          example: 'thermomix'
         imageUrl:
           type: string
           nullable: true
-          example: "https://example.com/image.jpg"
+          example: 'https://example.com/image.jpg'
         ingredients:
           type: array
           items:
@@ -307,7 +307,7 @@ components:
       properties:
         name:
           type: string
-          example: "Poulet"
+          example: 'Poulet'
         quantity:
           type: number
           format: float
@@ -315,7 +315,7 @@ components:
         unit:
           type: string
           enum: [g, kg, ml, l, c.à.s, c.à.c, pincée, pièce, tranche, botte, gousse]
-          example: "g"
+          example: 'g'
         optional:
           type: boolean
           default: false
@@ -327,7 +327,7 @@ components:
       properties:
         description:
           type: string
-          example: "Couper le poulet en morceaux"
+          example: 'Couper le poulet en morceaux'
         duration:
           type: integer
           nullable: true
@@ -339,13 +339,13 @@ components:
         speed:
           type: string
           nullable: true
-          example: "1"
+          example: '1'
         ingredients:
           type: array
           nullable: true
           items:
             type: string
-          example: ["poulet"]
+          example: ['poulet']
 
     CreateRecipeRequest:
       allOf:
@@ -380,7 +380,7 @@ components:
               example: 42
             slug:
               type: string
-              example: "poulet-basquaise"
+              example: 'poulet-basquaise'
             status:
               type: string
               enum: [draft, published]
@@ -482,7 +482,7 @@ components:
             $ref: '#/components/schemas/Error'
           example:
             statusCode: 401
-            message: "Authentication required"
+            message: 'Authentication required'
     NotFound:
       description: Ressource non trouvée
       content:

@@ -44,7 +44,9 @@
               <UIcon name="i-lucide-alert-triangle" class="w-5 h-5 flex-shrink-0" />
               <div>
                 <div class="font-medium">{{ globalError.message }}</div>
-                <div v-if="globalError.details" class="text-sm opacity-90">{{ globalError.details }}</div>
+                <div v-if="globalError.details" class="text-sm opacity-90">
+                  {{ globalError.details }}
+                </div>
               </div>
             </div>
             <button
@@ -79,7 +81,7 @@ onErrorCaptured((error, instance, info) => {
 
   // Display user-friendly error message
   globalError.value = {
-    message: 'Une erreur inattendue s\'est produite',
+    message: "Une erreur inattendue s'est produite",
     details: error.message
   }
 

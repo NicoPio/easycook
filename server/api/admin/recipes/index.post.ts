@@ -58,20 +58,23 @@ export default defineEventHandler(async (event) => {
     const now = new Date()
 
     // Create recipe (transaction for atomicity)
-    const [recipe] = await db.insert(recipes).values({
-      title,
-      slug,
-      descriptionShort,
-      descriptionFull,
-      prepTime,
-      cookTime,
-      difficulty,
-      servings,
-      imageUrl,
-      status,
-      createdAt: now,
-      updatedAt: now
-    }).returning()
+    const [recipe] = await db
+      .insert(recipes)
+      .values({
+        title,
+        slug,
+        descriptionShort,
+        descriptionFull,
+        prepTime,
+        cookTime,
+        difficulty,
+        servings,
+        imageUrl,
+        status,
+        createdAt: now,
+        updatedAt: now
+      })
+      .returning()
 
     // Insert ingredients
     const ingredientInserts = recipeIngredients.map((ing: any, index: number) => ({
@@ -103,10 +106,15 @@ export default defineEventHandler(async (event) => {
       const robotTypeRecords = await db
         .select()
         .from(robotTypes)
-        .where(sql`${robotTypes.slug} IN (${sql.join(robotTypeSlugs.map((s: string) => sql`${s}`), sql`, `)})`)
+        .where(
+          sql`${robotTypes.slug} IN (${sql.join(
+            robotTypeSlugs.map((s: string) => sql`${s}`),
+            sql`, `
+          )})`
+        )
 
       if (robotTypeRecords.length > 0) {
-        const robotTypeLinks = robotTypeRecords.map(rt => ({
+        const robotTypeLinks = robotTypeRecords.map((rt) => ({
           recipeId: recipe.id,
           robotTypeId: rt.id
         }))

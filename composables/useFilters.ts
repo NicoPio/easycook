@@ -34,12 +34,7 @@ export function useFilters() {
    * Check if any filter is active
    */
   const hasActiveFilters = computed(() => {
-    return !!(
-      searchQuery.value ||
-      robotType.value ||
-      difficulty.value ||
-      maxTotalTime.value
-    )
+    return !!(searchQuery.value || robotType.value || difficulty.value || maxTotalTime.value)
   })
 
   /**

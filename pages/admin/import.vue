@@ -4,18 +4,12 @@
     <header class="bg-white dark:bg-gray-800 shadow">
       <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
         <div>
-          <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
-            Importer une recette
-          </h1>
+          <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Importer une recette</h1>
           <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
             Collez le texte d'une recette et laissez l'IA la structurer
           </p>
         </div>
-        <UButton
-          @click="navigateTo('/admin')"
-          color="gray"
-          variant="soft"
-        >
+        <UButton @click="navigateTo('/admin')" color="gray" variant="soft">
           <Icon name="heroicons:arrow-left" class="w-5 h-5 mr-2" />
           Retour
         </UButton>
@@ -37,9 +31,15 @@
         ></textarea>
 
         <!-- Parsing progress -->
-        <div v-if="parsing" class="mt-4 bg-blue-50 dark:bg-blue-900 border border-blue-200 dark:border-blue-700 rounded-lg p-4">
+        <div
+          v-if="parsing"
+          class="mt-4 bg-blue-50 dark:bg-blue-900 border border-blue-200 dark:border-blue-700 rounded-lg p-4"
+        >
           <div class="flex items-center gap-3">
-            <Icon name="heroicons:arrow-path" class="w-5 h-5 text-blue-600 dark:text-blue-400 animate-spin flex-shrink-0" />
+            <Icon
+              name="heroicons:arrow-path"
+              class="w-5 h-5 text-blue-600 dark:text-blue-400 animate-spin flex-shrink-0"
+            />
             <div class="flex-1">
               <p class="text-sm font-medium text-blue-800 dark:text-blue-200">
                 Parsing en cours... (Tentative {{ parsingAttempt }}/3)
@@ -52,9 +52,15 @@
         </div>
 
         <!-- Parsing errors -->
-        <div v-if="parsingErrors.length > 0" class="mt-4 bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-700 rounded-lg p-4">
+        <div
+          v-if="parsingErrors.length > 0"
+          class="mt-4 bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-700 rounded-lg p-4"
+        >
           <div class="flex items-start gap-3">
-            <Icon name="heroicons:exclamation-triangle" class="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
+            <Icon
+              name="heroicons:exclamation-triangle"
+              class="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5"
+            />
             <div class="flex-1">
               <p class="text-sm font-medium text-red-800 dark:text-red-200 mb-2">
                 Échec du parsing automatique
@@ -222,12 +228,10 @@
                 <option value="L">L</option>
                 <option value="kg">kg</option>
               </select>
-              <label class="col-span-2 flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
-                <input
-                  v-model="ingredient.isOptional"
-                  type="checkbox"
-                  class="rounded"
-                />
+              <label
+                class="col-span-2 flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300"
+              >
+                <input v-model="ingredient.isOptional" type="checkbox" class="rounded" />
                 Optionnel
               </label>
               <button
@@ -252,7 +256,9 @@
               class="border border-gray-200 dark:border-gray-700 rounded-lg p-4"
             >
               <div class="flex items-center gap-2 mb-3">
-                <span class="inline-flex items-center justify-center w-8 h-8 bg-primary-500 text-white rounded-full font-bold text-sm">
+                <span
+                  class="inline-flex items-center justify-center w-8 h-8 bg-primary-500 text-white rounded-full font-bold text-sm"
+                >
                   {{ step.stepNumber }}
                 </span>
                 <input
@@ -294,29 +300,13 @@
         <!-- Actions -->
         <div class="bg-white dark:bg-gray-800 shadow sm:rounded-lg p-6">
           <div class="flex justify-between items-center">
-            <UButton
-              @click="reset"
-              color="gray"
-              variant="soft"
-              size="lg"
-            >
-              Recommencer
-            </UButton>
+            <UButton @click="reset" color="gray" variant="soft" size="lg"> Recommencer </UButton>
 
             <div class="flex gap-4">
-              <UButton
-                @click="saveRecipe('draft')"
-                :loading="saving"
-                color="gray"
-                size="lg"
-              >
+              <UButton @click="saveRecipe('draft')" :loading="saving" color="gray" size="lg">
                 Enregistrer en brouillon
               </UButton>
-              <UButton
-                @click="saveRecipe('published')"
-                :loading="saving"
-                size="lg"
-              >
+              <UButton @click="saveRecipe('published')" :loading="saving" size="lg">
                 <Icon name="heroicons:check-circle" class="w-5 h-5 mr-2" />
                 Publier la recette
               </UButton>
@@ -380,7 +370,7 @@ async function handleParse() {
       parsingAttempt.value = response.attempts
     }
   } catch (err: any) {
-    parsingErrors.value = [err.data?.message || 'Erreur de connexion au service d\'IA']
+    parsingErrors.value = [err.data?.message || "Erreur de connexion au service d'IA"]
   } finally {
     parsing.value = false
   }
@@ -403,10 +393,12 @@ async function saveRecipe(status: 'draft' | 'published') {
       }
     })
 
-    alert(status === 'published' ? 'Recette publiée avec succès !' : 'Recette enregistrée en brouillon')
+    alert(
+      status === 'published' ? 'Recette publiée avec succès !' : 'Recette enregistrée en brouillon'
+    )
     router.push('/admin')
   } catch (err: any) {
-    alert('Erreur lors de l\'enregistrement : ' + (err.data?.message || 'Erreur inconnue'))
+    alert("Erreur lors de l'enregistrement : " + (err.data?.message || 'Erreur inconnue'))
   } finally {
     saving.value = false
   }

@@ -56,15 +56,18 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<{
   'update:modelValue': [value: string]
-  'change': [value: string]
+  change: [value: string]
 }>()
 
 const selectedRobot = ref(props.modelValue)
 
 // Watch for external changes
-watch(() => props.modelValue, (newValue) => {
-  selectedRobot.value = newValue
-})
+watch(
+  () => props.modelValue,
+  (newValue) => {
+    selectedRobot.value = newValue
+  }
+)
 
 // Common robot types
 const robotTypes: RobotType[] = [

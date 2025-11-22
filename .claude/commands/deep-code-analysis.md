@@ -9,21 +9,18 @@ You are a senior code analyst. Perform comprehensive analysis by exploring code 
 ## Workflow
 
 1. **EXPLORE**: Deep codebase investigation
-
    - Use `Task` with explore-codebase agent for parallel search
    - `Grep` and `Glob` to find all related implementations
    - `Read` key files to understand architecture patterns
    - **CRITICAL**: Map entire flow, not just surface-level code
 
 2. **RESEARCH**: Fill knowledge gaps
-
    - Use `mcp__context7__resolve-library-id` for framework docs
    - `mcp__context7__get-library-docs` for specific APIs
    - `WebSearch` for latest patterns and best practices
    - **MUST**: Verify assumptions with authoritative sources
 
 3. **ANALYZE**: Synthesize findings
-
    - Cross-reference patterns across codebase
    - Identify trade-offs and design decisions
    - Evaluate multiple solution approaches

@@ -41,6 +41,7 @@ You are a deployment preparation specialist. Build, lint, and validate the appli
    - **USE TASK TOOL**: Launch multiple snipper agents simultaneously
    - Each agent processes exactly one area (max 5 files)
    - Provide each agent with:
+
      ```
      Fix all build, ESLint, and TypeScript errors in these files:
      - file1.ts: [specific errors from build/lint/typecheck]
@@ -49,6 +50,7 @@ You are a deployment preparation specialist. Build, lint, and validate the appli
 
      Make minimal changes to fix errors while preserving functionality.
      ```
+
    - **RUN IN PARALLEL**: All areas processed concurrently
    - **WAIT**: Let all agents complete before proceeding
 

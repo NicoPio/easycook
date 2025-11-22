@@ -21,11 +21,7 @@ export default defineEventHandler(async (event) => {
 
   try {
     // Check if recipe exists
-    const existingRecipe = await db
-      .select()
-      .from(recipes)
-      .where(eq(recipes.id, recipeId))
-      .get()
+    const existingRecipe = await db.select().from(recipes).where(eq(recipes.id, recipeId)).get()
 
     if (!existingRecipe) {
       throw createError({
@@ -46,7 +42,8 @@ export default defineEventHandler(async (event) => {
 
     throw createError({
       statusCode: 500,
-      message: error instanceof Error ? error.message : 'Erreur lors de la suppression de la recette'
+      message:
+        error instanceof Error ? error.message : 'Erreur lors de la suppression de la recette'
     })
   }
 })

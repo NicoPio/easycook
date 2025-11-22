@@ -155,18 +155,18 @@ components:
           example: 42
         title:
           type: string
-          example: "Poulet Basquaise"
+          example: 'Poulet Basquaise'
         slug:
           type: string
-          example: "poulet-basquaise"
+          example: 'poulet-basquaise'
         description:
           type: string
           nullable: true
-          example: "Un classique de la cuisine du Sud-Ouest"
+          example: 'Un classique de la cuisine du Sud-Ouest'
         difficulty:
           type: string
           enum: [facile, moyen, difficile]
-          example: "moyen"
+          example: 'moyen'
         prepTime:
           type: integer
           description: Temps de préparation en minutes
@@ -189,7 +189,7 @@ components:
         imageUrl:
           type: string
           nullable: true
-          example: "/uploads/recipes/abc123.webp"
+          example: '/uploads/recipes/abc123.webp'
 
     RecipeDetail:
       allOf:
@@ -210,11 +210,11 @@ components:
             createdAt:
               type: string
               format: date-time
-              example: "2025-01-15T10:30:00Z"
+              example: '2025-01-15T10:30:00Z'
             updatedAt:
               type: string
               format: date-time
-              example: "2025-01-20T14:22:00Z"
+              example: '2025-01-20T14:22:00Z'
 
     RobotType:
       type: object
@@ -228,13 +228,13 @@ components:
           example: 1
         name:
           type: string
-          example: "Thermomix"
+          example: 'Thermomix'
         manufacturer:
           type: string
-          example: "Vorwerk"
+          example: 'Vorwerk'
         slug:
           type: string
-          example: "thermomix"
+          example: 'thermomix'
 
     Ingredient:
       type: object
@@ -251,7 +251,7 @@ components:
           example: 101
         name:
           type: string
-          example: "Poulet"
+          example: 'Poulet'
         quantity:
           type: number
           format: float
@@ -260,7 +260,7 @@ components:
         unit:
           type: string
           enum: [g, kg, ml, l, c.à.s, c.à.c, pincée, pièce, tranche, botte, gousse]
-          example: "g"
+          example: 'g'
         order:
           type: integer
           description: Ordre d'affichage
@@ -285,7 +285,7 @@ components:
           example: 1
         description:
           type: string
-          example: "Couper le poulet en morceaux et le faire dorer 5 min à 120°C vitesse 1"
+          example: 'Couper le poulet en morceaux et le faire dorer 5 min à 120°C vitesse 1'
         duration:
           type: integer
           nullable: true
@@ -300,14 +300,14 @@ components:
           type: string
           nullable: true
           description: Vitesse du robot
-          example: "1"
+          example: '1'
         ingredients:
           type: array
           nullable: true
           description: Ingrédients utilisés dans cette étape
           items:
             type: string
-          example: ["poulet", "huile d'olive"]
+          example: ['poulet', "huile d'olive"]
 
     SearchRequest:
       type: object
@@ -315,7 +315,7 @@ components:
         query:
           type: string
           description: Recherche textuelle dans titre et description
-          example: "poulet"
+          example: 'poulet'
         robotType:
           type: string
           enum: [thermomix, cookeo, monsieur-cuisine, manuel, tous-robots]
@@ -375,7 +375,7 @@ components:
           example: 400
         message:
           type: string
-          example: "Invalid request parameters"
+          example: 'Invalid request parameters'
         errors:
           type: array
           description: Détails des erreurs de validation
@@ -384,10 +384,10 @@ components:
             properties:
               field:
                 type: string
-                example: "servings"
+                example: 'servings'
               message:
                 type: string
-                example: "Must be between 1 and 20"
+                example: 'Must be between 1 and 20'
 
   responses:
     BadRequest:
@@ -404,7 +404,7 @@ components:
             $ref: '#/components/schemas/Error'
           example:
             statusCode: 404
-            message: "Recipe not found"
+            message: 'Recipe not found'
     ServerError:
       description: Erreur serveur
       content:
@@ -413,4 +413,4 @@ components:
             $ref: '#/components/schemas/Error'
           example:
             statusCode: 500
-            message: "Internal server error"
+            message: 'Internal server error'

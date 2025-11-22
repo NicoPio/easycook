@@ -38,7 +38,7 @@ export function useWakeLock() {
 
       return true
     } catch (err) {
-      error.value = err instanceof Error ? err.message : 'Impossible d\'activer le Wake Lock'
+      error.value = err instanceof Error ? err.message : "Impossible d'activer le Wake Lock"
       isActive.value = false
       return false
     }

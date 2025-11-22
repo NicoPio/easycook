@@ -3,7 +3,10 @@
     <!-- Loading state -->
     <div v-if="loading" class="flex items-center justify-center min-h-screen">
       <div class="text-center">
-        <Icon name="heroicons:arrow-path" class="w-12 h-12 text-primary-500 animate-spin mx-auto mb-4" />
+        <Icon
+          name="heroicons:arrow-path"
+          class="w-12 h-12 text-primary-500 animate-spin mx-auto mb-4"
+        />
         <p class="text-gray-600 dark:text-gray-400">Chargement de la recette...</p>
       </div>
     </div>
@@ -14,12 +17,7 @@
         <Icon name="heroicons:exclamation-triangle" class="w-16 h-16 text-red-500 mx-auto mb-4" />
         <h2 class="text-2xl font-bold mb-2">Erreur</h2>
         <p class="text-gray-600 dark:text-gray-400 mb-6">{{ error.message }}</p>
-        <UButton
-          @click="navigateTo('/recettes')"
-          variant="soft"
-        >
-          Retour aux recettes
-        </UButton>
+        <UButton @click="navigateTo('/recettes')" variant="soft"> Retour aux recettes </UButton>
       </div>
     </div>
 
@@ -29,14 +27,17 @@
       class="bg-yellow-50 dark:bg-yellow-900 border-b border-yellow-200 dark:border-yellow-700 p-4"
     >
       <div class="max-w-3xl mx-auto flex items-start gap-4">
-        <Icon name="heroicons:exclamation-triangle" class="w-6 h-6 text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5" />
+        <Icon
+          name="heroicons:exclamation-triangle"
+          class="w-6 h-6 text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5"
+        />
         <div class="flex-1">
           <p class="text-sm text-yellow-800 dark:text-yellow-200 font-medium mb-1">
             Mode veille non désactivé
           </p>
           <p class="text-sm text-yellow-700 dark:text-yellow-300">
-            Votre appareil ne supporte pas la désactivation automatique de la mise en veille.
-            Pensez à ajuster les paramètres de veille de votre écran manuellement.
+            Votre appareil ne supporte pas la désactivation automatique de la mise en veille. Pensez
+            à ajuster les paramètres de veille de votre écran manuellement.
           </p>
         </div>
         <button
@@ -171,7 +172,9 @@ definePageMeta({
 
 // SEO
 useHead({
-  title: computed(() => recipe.value ? `${recipe.value.title} - Mode pas-à-pas` : 'Mode pas-à-pas'),
+  title: computed(() =>
+    recipe.value ? `${recipe.value.title} - Mode pas-à-pas` : 'Mode pas-à-pas'
+  ),
   meta: [
     {
       name: 'robots',

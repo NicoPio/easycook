@@ -53,9 +53,7 @@ export default defineEventHandler(async (event) => {
       .from(recipes)
       .innerJoin(recipeRobotTypes, eq(recipes.id, recipeRobotTypes.recipeId))
       .innerJoin(robotTypes, eq(recipeRobotTypes.robotTypeId, robotTypes.id))
-      .where(
-        and(...conditions, eq(robotTypes.slug, robotType))
-      )
+      .where(and(...conditions, eq(robotTypes.slug, robotType)))
       .limit(limit)
       .offset((page - 1) * limit) as any
   }

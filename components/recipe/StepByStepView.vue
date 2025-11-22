@@ -13,12 +13,11 @@
 
         <div class="text-center flex-1">
           <h1 class="text-xl font-bold">{{ recipeTitle }}</h1>
-          <p class="text-sm opacity-90">
-            Étape {{ stepNumber }} / {{ totalSteps }}
-          </p>
+          <p class="text-sm opacity-90">Étape {{ stepNumber }} / {{ totalSteps }}</p>
         </div>
 
-        <div class="w-12"></div> <!-- Spacer for centering -->
+        <div class="w-12"></div>
+        <!-- Spacer for centering -->
       </div>
 
       <!-- Progress bar -->
@@ -42,9 +41,7 @@
       <span v-if="!isCompleted">
         Étape {{ stepNumber }} sur {{ totalSteps }}: {{ currentStep?.description }}
       </span>
-      <span v-else>
-        Recette terminée ! Toutes les étapes sont complétées.
-      </span>
+      <span v-else> Recette terminée ! Toutes les étapes sont complétées. </span>
     </div>
 
     <!-- Main content - scrollable -->
@@ -57,11 +54,7 @@
           <p class="text-gray-600 dark:text-gray-400 mb-6">
             Félicitations, vous avez complété toutes les étapes.
           </p>
-          <UButton
-            size="xl"
-            @click="$emit('restart')"
-            class="touch-target"
-          >
+          <UButton size="xl" @click="$emit('restart')" class="touch-target">
             <Icon name="heroicons:arrow-path" class="w-5 h-5 mr-2" />
             Recommencer
           </UButton>
@@ -77,15 +70,15 @@
           </div>
 
           <!-- Robot parameters -->
-          <div
-            v-if="hasRobotParams"
-            class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6"
-          >
+          <div v-if="hasRobotParams" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
             <div
               v-if="currentStep.duration"
               class="bg-blue-50 dark:bg-blue-900 rounded-lg p-4 text-center"
             >
-              <Icon name="heroicons:clock" class="w-8 h-8 text-blue-600 dark:text-blue-400 mx-auto mb-2" />
+              <Icon
+                name="heroicons:clock"
+                class="w-8 h-8 text-blue-600 dark:text-blue-400 mx-auto mb-2"
+              />
               <div class="text-2xl font-bold text-blue-900 dark:text-blue-100">
                 {{ currentStep.duration }} min
               </div>
@@ -96,7 +89,10 @@
               v-if="currentStep.temperature"
               class="bg-red-50 dark:bg-red-900 rounded-lg p-4 text-center"
             >
-              <Icon name="heroicons:fire" class="w-8 h-8 text-red-600 dark:text-red-400 mx-auto mb-2" />
+              <Icon
+                name="heroicons:fire"
+                class="w-8 h-8 text-red-600 dark:text-red-400 mx-auto mb-2"
+              />
               <div class="text-2xl font-bold text-red-900 dark:text-red-100">
                 {{ currentStep.temperature }}°C
               </div>
@@ -107,7 +103,10 @@
               v-if="currentStep.speed"
               class="bg-green-50 dark:bg-green-900 rounded-lg p-4 text-center"
             >
-              <Icon name="heroicons:bolt" class="w-8 h-8 text-green-600 dark:text-green-400 mx-auto mb-2" />
+              <Icon
+                name="heroicons:bolt"
+                class="w-8 h-8 text-green-600 dark:text-green-400 mx-auto mb-2"
+              />
               <div class="text-2xl font-bold text-green-900 dark:text-green-100">
                 Vitesse {{ currentStep.speed }}
               </div>
@@ -126,7 +125,10 @@
                 :key="ingredient.id"
                 class="flex items-center bg-white dark:bg-gray-800 rounded-lg p-3 shadow-sm"
               >
-                <Icon name="heroicons:check-circle" class="w-5 h-5 text-primary-500 mr-3 flex-shrink-0" />
+                <Icon
+                  name="heroicons:check-circle"
+                  class="w-5 h-5 text-primary-500 mr-3 flex-shrink-0"
+                />
                 <span class="text-gray-900 dark:text-white">
                   {{ ingredient.quantity }} {{ ingredient.unit }} {{ ingredient.name }}
                 </span>
@@ -159,7 +161,9 @@
           size="xl"
           @click="$emit('next')"
           :disabled="!hasNext && !isCompleted"
-          :aria-label="hasNext ? `Étape suivante (${stepNumber + 1}/${totalSteps})` : 'Terminer la recette'"
+          :aria-label="
+            hasNext ? `Étape suivante (${stepNumber + 1}/${totalSteps})` : 'Terminer la recette'
+          "
           class="flex-1 touch-target min-h-[60px]"
         >
           <template v-if="!hasNext && !isCompleted">
@@ -211,11 +215,7 @@ const emit = defineEmits<{
 
 const hasRobotParams = computed(() => {
   if (!props.currentStep) return false
-  return !!(
-    props.currentStep.duration ||
-    props.currentStep.temperature ||
-    props.currentStep.speed
-  )
+  return !!(props.currentStep.duration || props.currentStep.temperature || props.currentStep.speed)
 })
 
 // Keyboard navigation

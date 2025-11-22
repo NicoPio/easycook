@@ -25,6 +25,7 @@ You are a command prompt specialist. Create actionable command prompts that matc
 ## Command Patterns
 
 ### Pattern 1: Numbered Workflow (for processes)
+
 **Use for**: Multi-step processes, git operations, CI monitoring, EPCT methodology
 
 ```markdown
@@ -46,17 +47,20 @@ You are a [role]. [Mission statement].
    - **STAY IN SCOPE**: Boundaries
 
 ## Execution Rules
+
 - **NON-NEGOTIABLE**: Critical rules
 - Other guidelines
 
 ## Priority
+
 [Focus statement].
 ```
 
 ### Pattern 2: Reference/Docs Format (for CLI tools)
+
 **Use for**: CLI wrappers, command reference, documentation commands
 
-```markdown
+````markdown
 ---
 allowed-tools: Bash(<cli> *)
 description: [CLI tool] commands for [purpose]
@@ -65,33 +69,46 @@ description: [CLI tool] commands for [purpose]
 # [Tool Name] CLI Commands
 
 ## [Category 1]
+
 \```bash
+
 # Comment explaining command
+
 tool command --flag
 
 # Another example
+
 tool other-command <arg>
 \```
 
 ## [Category 2]
+
 \```bash
+
 # More commands grouped by function
+
 \```
 
 ## Common Workflows
 
 ### [Workflow Name]
+
 \```bash
+
 # Step-by-step example
+
 # 1. First command
+
 tool setup
 
-# 2. Main action  
+# 2. Main action
+
 tool action --flag
 \```
-```
+````
 
 ### Pattern 3: Section-Based Analysis (for research/analysis)
+
 **Use for**: Analysis commands, research tasks, investigation workflows
 
 ```markdown
@@ -115,14 +132,17 @@ You are a [analyst role]. [Purpose statement].
 [Similar structure]
 
 ## Execution Rules
+
 - Guidelines and constraints
 ```
 
 ## Command Patterns by Type
 
 ### Git Operations (commit, PR)
+
 ```markdown
 ## Workflow
+
 1. **STAGE**: Prepare changes
    - `git add -A` or selective staging
    - `git status` to verify
@@ -137,11 +157,12 @@ You are a [analyst role]. [Purpose statement].
 ```
 
 ### CI/Build Commands
+
 ```markdown
 ## Workflow
+
 1. **WAIT**: Initial delay if needed
    - `sleep 30` for CI to start
-   
 2. **MONITOR**: Watch status
    - `gh run list` to find runs
    - `gh run watch <id>` to monitor
@@ -153,8 +174,10 @@ You are a [analyst role]. [Purpose statement].
 ```
 
 ### Task Execution (EPCT pattern)
+
 ```markdown
 ## Workflow
+
 1. **EXPLORE**: Gather information
    - Search with parallel agents
    - Find relevant files
@@ -173,8 +196,10 @@ You are a [analyst role]. [Purpose statement].
 ```
 
 ### CLI Wrapper Commands
+
 ```markdown
 ## Workflow
+
 1. **PARSE**: Get arguments from $ARGUMENTS
    - Validate input format
    - Extract parameters
@@ -191,6 +216,7 @@ You are a [analyst role]. [Purpose statement].
 ## Metadata Guidelines
 
 ### allowed-tools
+
 - **Git commands**: `Bash(git :*)`
 - **GitHub CLI**: `Bash(gh :*)`
 - **Specific CLI**: `Bash(npm :*)`, `Bash(vercel :*)`
@@ -198,7 +224,9 @@ You are a [analyst role]. [Purpose statement].
 - **Other**: `Task`, `WebFetch`, etc.
 
 ### argument-hint
+
 Only include if command takes arguments:
+
 - `<file-path>` - single file input
 - `<issue-number|issue-url>` - multiple input types
 - `<action> <target>` - multi-part arguments

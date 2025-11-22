@@ -81,6 +81,7 @@ pnpm install
 ```
 
 Cette commande installe toutes les dépendances définies dans `package.json` :
+
 - Nuxt 4 + modules
 - Drizzle ORM + better-sqlite3
 - Nuxt UI + Tailwind CSS 4
@@ -283,10 +284,12 @@ Dans l'interface admin :
 4. Le parsing se fait directement côté serveur Nuxt
 
 **Avantages** :
+
 - Pas besoin d'installer/configurer n8n
 - Plus simple pour le MVP
 
 **Inconvénients** :
+
 - Pas de workflow visuel
 - Pas de retry automatique
 - Moins flexible pour évolution
@@ -369,6 +372,7 @@ curl -X POST http://localhost:3000/api/admin/recipes \
 Accéder à http://localhost:3000/
 
 ✅ **Attendu** :
+
 - Page d'accueil avec le catalogue de recettes (vide si aucune recette publiée)
 - Filtres par robot et difficulté
 - Barre de recherche
@@ -380,6 +384,7 @@ Accéder à http://localhost:3000/
 3. Page détail s'affiche avec ingrédients et aperçu
 
 ✅ **Attendu** :
+
 - Affichage des ingrédients avec quantités
 - Contrôle du nombre de personnes (slider ou input)
 - Les quantités se recalculent instantanément
@@ -391,6 +396,7 @@ Accéder à http://localhost:3000/
 2. L'écran passe en fullscreen
 
 ✅ **Attendu** :
+
 - Affichage fullscreen de l'étape 1
 - Navigation suivant/précédent
 - Indicateur de progression (ex: "Étape 2/5")
@@ -403,6 +409,7 @@ Accéder à http://localhost:3000/
 3. Cliquer sur l'icône "Installer" dans la barre d'adresse
 
 ✅ **Attendu** :
+
 - Popup d'installation PWA
 - Après installation, l'app s'ouvre en mode standalone
 - Fonctionne offline pour les recettes consultées
@@ -461,6 +468,7 @@ pnpm typecheck              # Vérifier types TypeScript
 ### Problème : "Ollama connection refused"
 
 **Solution** :
+
 ```bash
 # Vérifier qu'Ollama tourne
 ollama list
@@ -476,6 +484,7 @@ systemctl status ollama
 ### Problème : "Module not found" après pnpm install
 
 **Solution** :
+
 ```bash
 # Nettoyer les caches
 rm -rf node_modules .nuxt .output
@@ -486,6 +495,7 @@ pnpm dev
 ### Problème : "Database locked" (SQLite)
 
 **Solution** :
+
 ```bash
 # SQLite en mode WAL (Write-Ahead Logging)
 sqlite3 data/recipes.db "PRAGMA journal_mode=WAL;"
@@ -503,6 +513,7 @@ rm data/recipes.db-shm data/recipes.db-wal
 ### Problème : PWA ne propose pas l'installation
 
 **Solution** :
+
 ```bash
 # Vérifier le manifest
 curl http://localhost:3000/manifest.webmanifest

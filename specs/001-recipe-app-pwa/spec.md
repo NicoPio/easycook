@@ -152,7 +152,7 @@ Un administrateur souhaite enrichir le catalogue de recettes en important rapide
 
 **Administration et Sécurité**
 
-- **FR-027**: Le système DOIT protéger toutes les routes d'administration (/api/admin/*) par authentification JWT
+- **FR-027**: Le système DOIT protéger toutes les routes d'administration (/api/admin/\*) par authentification JWT
 - **FR-028**: Le système DOIT fournir un endpoint de login (/api/auth/login) qui retourne un JWT token valide après validation des identifiants
 - **FR-029**: Le JWT token DOIT être stocké dans le localStorage côté client et inclus dans les headers des requêtes API admin
 - **FR-030**: Le JWT token DOIT avoir une durée de validité de 24 heures et être vérifié par un middleware côté serveur

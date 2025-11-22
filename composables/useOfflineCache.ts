@@ -74,7 +74,7 @@ export function useOfflineCache() {
       const index = await getCacheIndex()
 
       // Remove recipe ID if already exists (to move it to the end)
-      const recipeIds = index.recipeIds.filter(id => id !== recipe.id)
+      const recipeIds = index.recipeIds.filter((id) => id !== recipe.id)
 
       // Add recipe to the end (most recent)
       recipeIds.push(recipe.id)
