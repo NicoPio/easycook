@@ -118,6 +118,7 @@ export class OllamaClient {
    */
   async isAvailable(): Promise<boolean> {
     try {
+      console.log(`[Ollama] Checking availability at ${this.baseUrl}...`)
       const controller = new AbortController()
       const timeoutId = setTimeout(() => controller.abort(), 5000)
 
@@ -126,8 +127,21 @@ export class OllamaClient {
       })
 
       clearTimeout(timeoutId)
-      return response.ok
-    } catch {
+
+      if (response.ok) {
+        console.log('[Ollama] ✓ Service is available')
+        return true
+      } else {
+        console.error(`[Ollama] ✗ Service returned status ${response.status}`)
+        return false
+      }
+    } catch (error) {
+      console.error('[Ollama] ✗ Connection failed:', error instanceof Error ? error.message : 'Unknown error')
+      console.error(`[Ollama] ✗ Unable to reach ${this.baseUrl}`)
+      console.error('[Ollama] Please ensure:')
+      console.error('  1. Docker container is running: docker ps | grep ollama')
+      console.error('  2. Port 11434 is exposed: docker port <container-name>')
+      console.error('  3. OLLAMA_BASE_URL in .env matches your setup')
       return false
     }
   }
