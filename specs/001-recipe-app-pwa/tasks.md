@@ -173,7 +173,7 @@ This is a **fullstack Nuxt.js web application**. All paths are relative to repos
 
 ---
 
-## Phase 6: User Story 4 - Importer et Parser une Recette (Priority: P4)
+## Phase 6: User Story 4 - Importer et Parser une Recette (Priority: P4) ✅ COMPLETED
 
 **Goal**: Enable admins to import recipes by pasting raw text, automatically parse with AI (Ollama + Mistral), review parsed data, manually correct errors, and publish to catalog.
 
@@ -181,26 +181,26 @@ This is a **fullstack Nuxt.js web application**. All paths are relative to repos
 
 ### Ollama Integration
 
-- [ ] T056 [P] [US4] Create Ollama client utility in server/utils/ollama.ts to call Ollama HTTP API (POST /api/generate) with prompt
-- [ ] T057 [P] [US4] Create recipe parsing prompt template in workflows/recipe-parser/prompts/recipe-extraction.txt with JSON schema for structured extraction
-- [ ] T058 [US4] Create parsing service in server/utils/recipe-parser.ts that sends text + prompt to Ollama and validates JSON response
+- [x] T056 [P] [US4] Create Ollama client utility in server/utils/ollama.ts to call Ollama HTTP API (POST /api/generate) with prompt
+- [x] T057 [P] [US4] Create recipe parsing prompt template in workflows/recipe-parser/prompts/recipe-extraction.txt with JSON schema for structured extraction
+- [x] T058 [US4] Create parsing service in server/utils/recipe-parser.ts that sends text + prompt to Ollama and validates JSON response
 
 ### Backend API (User Story 4)
 
-- [ ] T059 [US4] Create POST /api/admin/import endpoint in server/api/admin/import.post.ts that calls recipe-parser utility and returns ParsedRecipe with status (success/partial/error) and validation errors
-- [ ] T060 [P] [US4] Create POST /api/admin/recipes endpoint in server/api/admin/recipes.post.ts to save validated recipe to database (transaction: insert recipe + ingredients + steps)
-- [ ] T061 [P] [US4] Create PUT /api/admin/recipes/[id] endpoint in server/api/admin/recipes/[id].put.ts to update existing recipe
-- [ ] T062 [P] [US4] Create DELETE /api/admin/recipes/[id] endpoint in server/api/admin/recipes/[id].delete.ts to delete recipe (cascade to ingredients and steps)
-- [ ] T063 [P] [US4] Create GET /api/admin/recipes endpoint in server/api/admin/recipes/index.get.ts to list all recipes including drafts (admin view)
+- [x] T059 [US4] Create POST /api/admin/import endpoint in server/api/admin/import.post.ts that calls recipe-parser utility and returns ParsedRecipe with status (success/partial/error) and validation errors
+- [x] T060 [P] [US4] Create POST /api/admin/recipes endpoint in server/api/admin/recipes/index.post.ts to save validated recipe to database (transaction: insert recipe + ingredients + steps)
+- [x] T061 [P] [US4] Create PUT /api/admin/recipes/[id] endpoint in server/api/admin/recipes/[id].put.ts to update existing recipe
+- [x] T062 [P] [US4] Create DELETE /api/admin/recipes/[id] endpoint in server/api/admin/recipes/[id].delete.ts to delete recipe (cascade to ingredients and steps)
+- [x] T063 [P] [US4] Create GET /api/admin/recipes endpoint in server/api/admin/recipes/index.get.ts to list all recipes including drafts (admin view)
 
 ### Admin Pages (User Story 4)
 
-- [ ] T064 [P] [US4] Create admin login page in pages/admin/login.vue with email and password form calling /api/auth/login
-- [ ] T065 [US4] Create admin dashboard in pages/admin/index.vue with recipe list (all statuses) and navigation to import page
-- [ ] T066 [US4] Create admin import page in pages/admin/import.vue with textarea for recipe text, "Parse" button, and parsed result preview
-- [ ] T067 [US4] Add editable form fields in pages/admin/import.vue for manual correction of parsed data (title, ingredients, steps, etc.)
-- [ ] T068 [US4] Add "Publish" button in pages/admin/import.vue to save recipe with status=published via POST /api/admin/recipes
-- [ ] T069 [US4] Add error display in pages/admin/import.vue to show parsing errors with clear messages indicating problematic sections
+- [x] T064 [P] [US4] Create admin login page in pages/admin/login.vue with email and password form calling /api/auth/login
+- [x] T065 [US4] Create admin dashboard in pages/admin/index.vue with recipe list (all statuses) and navigation to import page
+- [x] T066 [US4] Create admin import page in pages/admin/import.vue with textarea for recipe text, "Parse" button, and parsed result preview
+- [x] T067 [US4] Add editable form fields in pages/admin/import.vue for manual correction of parsed data (title, ingredients, steps, etc.)
+- [x] T068 [US4] Add "Publish" button in pages/admin/import.vue to save recipe with status=published via POST /api/admin/recipes
+- [x] T069 [US4] Add error display in pages/admin/import.vue to show parsing errors with clear messages indicating problematic sections
 
 **Checkpoint**: Full application is now complete - all 4 user stories (frontend + admin) are functional
 
