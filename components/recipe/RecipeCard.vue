@@ -47,9 +47,3 @@ const props = defineProps<{
 
 const totalTime = computed(() => props.recipe.prepTime + props.recipe.cookTime)
 </script>
-
-<style scoped>
-.recipe-card:hover {
-  @apply shadow-lg;
-}
-</style>

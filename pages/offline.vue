@@ -2,7 +2,7 @@
   <div class="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
     <div class="max-w-md w-full text-center">
       <UIcon
-        name="i-heroicons-wifi-slash"
+        name="i-lucide-wifi-off"
         class="w-24 h-24 mx-auto text-gray-400 dark:text-gray-600 mb-6"
       />
 

@@ -65,7 +65,7 @@
         class="mt-2 flex items-center gap-2 text-sm text-orange-600 dark:text-orange-400"
         role="alert"
       >
-        <UIcon name="i-heroicons-exclamation-triangle" class="w-4 h-4 flex-shrink-0" />
+        <UIcon name="i-lucide-alert-triangle" class="w-4 h-4 flex-shrink-0" />
         <span>{{ validationWarning }}</span>
       </div>
     </Transition>
