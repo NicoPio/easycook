@@ -5,6 +5,7 @@ Application web progressive (PWA) pour consulter et gérer des recettes optimis�
 ## 🚀 Fonctionnalités
 
 ### Pour les utilisateurs
+
 - **Catalogue de recettes** : Parcourez toutes les recettes disponibles avec filtres par robot, difficulté et temps
 - **Recherche avancée** : Trouvez rapidement des recettes par mot-clé
 - **Ajustement des portions** : Adaptez automatiquement les quantités d'ingrédients (1-20 personnes)
@@ -13,6 +14,7 @@ Application web progressive (PWA) pour consulter et gérer des recettes optimis�
 - **PWA installable** : Installez l'application sur votre appareil
 
 ### Pour les administrateurs
+
 - **Import intelligent** : Parsez automatiquement des recettes en texte brut avec IA (Ollama)
 - **Gestion CRUD** : Créez, modifiez et supprimez des recettes
 - **Workflow draft/publié** : Validez les recettes avant publication
@@ -126,16 +128,16 @@ easycook/
 
 ## 📚 Scripts Disponibles
 
-| Commande | Description |
-|----------|-------------|
-| `npm run dev` | Démarre le serveur de développement |
-| `npm run build` | Build pour production |
-| `npm run preview` | Preview du build de production |
-| `npm run lint` | Linter le code |
-| `npm run format` | Formater le code avec Prettier |
-| `npm run db:generate` | Générer les migrations Drizzle |
-| `npm run db:push` | Appliquer les migrations |
-| `npm run db:seed` | Peupler la DB avec données initiales |
+| Commande              | Description                          |
+| --------------------- | ------------------------------------ |
+| `npm run dev`         | Démarre le serveur de développement  |
+| `npm run build`       | Build pour production                |
+| `npm run preview`     | Preview du build de production       |
+| `npm run lint`        | Linter le code                       |
+| `npm run format`      | Formater le code avec Prettier       |
+| `npm run db:generate` | Générer les migrations Drizzle       |
+| `npm run db:push`     | Appliquer les migrations             |
+| `npm run db:seed`     | Peupler la DB avec données initiales |
 
 ## 🔐 Authentification Admin
 
@@ -205,18 +207,81 @@ npm run build
 # Le dossier .output/ contient l'application buildée
 ```
 
-### Docker
+### Docker avec Ollama
 
-```dockerfile
-FROM node:20-alpine
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci --only=production
-COPY . .
-RUN npm run build
-EXPOSE 3000
-CMD ["node", ".output/server/index.mjs"]
+L'application peut être déployée avec Docker Compose, incluant le service Ollama pour l'import IA.
+
+#### Démarrage rapide (CPU)
+
+```bash
+# Démarrer tous les services
+docker compose up -d
+
+# Initialiser Ollama et télécharger le modèle
+./scripts/init-ollama.sh
+
+# Vérifier les logs
+docker compose logs -f
 ```
+
+L'application sera accessible sur `http://localhost:3000`
+
+#### Avec support GPU NVIDIA
+
+Si vous avez une carte graphique NVIDIA avec Docker GPU support :
+
+```bash
+# Installer NVIDIA Container Toolkit d'abord
+# https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html
+
+# Démarrer avec le profile GPU
+docker compose --profile gpu up -d
+
+# Initialiser Ollama
+OLLAMA_HOST=http://localhost:11434 ./scripts/init-ollama.sh
+```
+
+#### Services disponibles
+
+- **easycook-app** : Application Nuxt sur `http://localhost:3000`
+- **easycook-ollama** : API Ollama sur `http://localhost:11434`
+
+#### Commandes utiles
+
+```bash
+# Arrêter les services
+docker compose down
+
+# Voir les logs
+docker compose logs -f easycook
+
+# Lister les modèles Ollama installés
+docker exec easycook-ollama ollama list
+
+# Télécharger un autre modèle
+docker exec easycook-ollama ollama pull llama3.2
+
+# Rebuild après changements de code
+docker compose up -d --build
+
+# Nettoyer tout (y compris volumes)
+docker compose down -v
+```
+
+#### Configuration des variables d'environnement
+
+Créez un fichier `.env` à la racine :
+
+```env
+# JWT
+JWT_SECRET=votre-secret-genere-avec-openssl
+
+# Admin
+ADMIN_EMAIL=admin@easycook.app
+ADMIN_PASSWORD_HASH=votre-hash-bcrypt
+```
+
+Les autres variables sont préconfigurées dans `docker-compose.yml`.
 
 ## 📖 Documentation Additionnelle
 
