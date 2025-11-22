@@ -118,7 +118,7 @@ This is a **fullstack Nuxt.js web application**. All paths are relative to repos
 
 ---
 
-## Phase 4: User Story 2 - Mode Pas-à-Pas Guidé (Priority: P2)
+## Phase 4: User Story 2 - Mode Pas-à-Pas Guidé (Priority: P2) ✅ COMPLETED
 
 **Goal**: Provide a fullscreen step-by-step cooking mode with large touch zones, clear navigation, progress indicator, and Wake Lock API to prevent screen sleep.
 
@@ -126,24 +126,24 @@ This is a **fullstack Nuxt.js web application**. All paths are relative to repos
 
 ### Composables (User Story 2)
 
-- [ ] T042 [P] [US2] Create useWakeLock composable in composables/useWakeLock.ts to manage Wake Lock API (request, release, isSupported)
-- [ ] T043 [P] [US2] Create useStepByStep composable in composables/useStepByStep.ts to manage step navigation state (currentStep, next, previous, progress)
+- [x] T042 [P] [US2] Create useWakeLock composable in composables/useWakeLock.ts to manage Wake Lock API (request, release, isSupported)
+- [x] T043 [P] [US2] Create useStepByStep composable in composables/useStepByStep.ts to manage step navigation state (currentStep, next, previous, progress)
 
 ### Components (User Story 2)
 
-- [ ] T044 [US2] Create StepByStepView component in components/recipe/StepByStepView.vue with fullscreen display, large navigation buttons (≥44x44px), step description, ingredients for step, robot parameters (temperature, speed, duration), and progress indicator
+- [x] T044 [US2] Create StepByStepView component in components/recipe/StepByStepView.vue with fullscreen display, large navigation buttons (≥44x44px), step description, ingredients for step, robot parameters (temperature, speed, duration), and progress indicator
 
 ### Pages (User Story 2)
 
-- [ ] T045 [US2] Create step-by-step page in pages/recettes/[id]/pas-a-pas.vue using StepByStepView, useStepByStep, and useWakeLock composables
-- [ ] T046 [US2] Add "Start step-by-step mode" button in pages/recettes/[id].vue linking to pas-a-pas route
-- [ ] T047 [US2] Handle Wake Lock fallback UI for unsupported browsers (display persistent message with instructions for iOS < 16.4)
+- [x] T045 [US2] Create step-by-step page in pages/recettes/[id]/pas-a-pas.vue using StepByStepView, useStepByStep, and useWakeLock composables
+- [x] T046 [US2] Add "Start step-by-step mode" button in pages/recettes/[id].vue linking to pas-a-pas route
+- [x] T047 [US2] Handle Wake Lock fallback UI for unsupported browsers (display persistent message with instructions for iOS < 16.4)
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work - users can browse, adjust portions, AND use step-by-step cooking mode
 
 ---
 
-## Phase 5: User Story 3 - Rechercher et Filtrer des Recettes (Priority: P3)
+## Phase 5: User Story 3 - Rechercher et Filtrer des Recettes (Priority: P3) ✅ COMPLETED
 
 **Goal**: Allow users to search recipes by keyword and apply multiple filters (robot type, preparation time, difficulty) with fast results (<1s for 500+ recipes).
 
@@ -151,29 +151,29 @@ This is a **fullstack Nuxt.js web application**. All paths are relative to repos
 
 ### Backend API (User Story 3)
 
-- [ ] T048 [US3] Create POST /api/recipes/search endpoint in server/api/recipes/search.post.ts with full-text search and advanced filters (query, robotType, difficulty, maxTotalTime) using SQL LIKE queries
+- [x] T048 [US3] Create POST /api/recipes/search endpoint in server/api/recipes/search.post.ts with full-text search and advanced filters (query, robotType, difficulty, maxTotalTime) using SQL LIKE queries
 
 ### Composables (User Story 3)
 
-- [ ] T049 [US3] Create useFilters composable in composables/useFilters.ts to manage filter state (search query, robot type, difficulty, time range) and call search API
+- [x] T049 [US3] Create useFilters composable in composables/useFilters.ts to manage filter state (search query, robot type, difficulty, time range) and call search API
 
 ### Components (User Story 3)
 
-- [ ] T050 [P] [US3] Create SearchBar component in components/filters/SearchBar.vue with text input and real-time search
-- [ ] T051 [P] [US3] Create RobotFilter component in components/filters/RobotFilter.vue with dropdown/chips for robot types
-- [ ] T052 [P] [US3] Create TimeFilter component in components/filters/TimeFilter.vue with time range selector (< 30min, 30-60min, > 1h)
+- [x] T050 [P] [US3] Create SearchBar component in components/filters/SearchBar.vue with text input and real-time search
+- [x] T051 [P] [US3] Create RobotFilter component in components/filters/RobotFilter.vue with dropdown/chips for robot types
+- [x] T052 [P] [US3] Create TimeFilter component in components/filters/TimeFilter.vue with time range selector (< 30min, 30-60min, > 1h)
 
 ### Pages (User Story 3)
 
-- [ ] T053 [US3] Integrate SearchBar, RobotFilter, TimeFilter components in pages/index.vue
-- [ ] T054 [US3] Connect useFilters composable to RecipeCard list in pages/index.vue with reactive filtering
-- [ ] T055 [US3] Add "Reset filters" button in pages/index.vue to clear all filters
+- [x] T053 [US3] Integrate SearchBar, RobotFilter, TimeFilter components in pages/index.vue
+- [x] T054 [US3] Connect useFilters composable to RecipeCard list in pages/index.vue with reactive filtering
+- [x] T055 [US3] Add "Reset filters" button in pages/index.vue to clear all filters
 
 **Checkpoint**: All frontend user stories (US1, US2, US3) are now complete and independently functional
 
 ---
 
-## Phase 6: User Story 4 - Importer et Parser une Recette (Priority: P4)
+## Phase 6: User Story 4 - Importer et Parser une Recette (Priority: P4) ✅ COMPLETED
 
 **Goal**: Enable admins to import recipes by pasting raw text, automatically parse with AI (Ollama + Mistral), review parsed data, manually correct errors, and publish to catalog.
 
@@ -181,67 +181,67 @@ This is a **fullstack Nuxt.js web application**. All paths are relative to repos
 
 ### Ollama Integration
 
-- [ ] T056 [P] [US4] Create Ollama client utility in server/utils/ollama.ts to call Ollama HTTP API (POST /api/generate) with prompt
-- [ ] T057 [P] [US4] Create recipe parsing prompt template in workflows/recipe-parser/prompts/recipe-extraction.txt with JSON schema for structured extraction
-- [ ] T058 [US4] Create parsing service in server/utils/recipe-parser.ts that sends text + prompt to Ollama and validates JSON response
+- [x] T056 [P] [US4] Create Ollama client utility in server/utils/ollama.ts to call Ollama HTTP API (POST /api/generate) with prompt
+- [x] T057 [P] [US4] Create recipe parsing prompt template in workflows/recipe-parser/prompts/recipe-extraction.txt with JSON schema for structured extraction
+- [x] T058 [US4] Create parsing service in server/utils/recipe-parser.ts that sends text + prompt to Ollama and validates JSON response
 
 ### Backend API (User Story 4)
 
-- [ ] T059 [US4] Create POST /api/admin/import endpoint in server/api/admin/import.post.ts that calls recipe-parser utility and returns ParsedRecipe with status (success/partial/error) and validation errors
-- [ ] T060 [P] [US4] Create POST /api/admin/recipes endpoint in server/api/admin/recipes.post.ts to save validated recipe to database (transaction: insert recipe + ingredients + steps)
-- [ ] T061 [P] [US4] Create PUT /api/admin/recipes/[id] endpoint in server/api/admin/recipes/[id].put.ts to update existing recipe
-- [ ] T062 [P] [US4] Create DELETE /api/admin/recipes/[id] endpoint in server/api/admin/recipes/[id].delete.ts to delete recipe (cascade to ingredients and steps)
-- [ ] T063 [P] [US4] Create GET /api/admin/recipes endpoint in server/api/admin/recipes/index.get.ts to list all recipes including drafts (admin view)
+- [x] T059 [US4] Create POST /api/admin/import endpoint in server/api/admin/import.post.ts that calls recipe-parser utility and returns ParsedRecipe with status (success/partial/error) and validation errors
+- [x] T060 [P] [US4] Create POST /api/admin/recipes endpoint in server/api/admin/recipes/index.post.ts to save validated recipe to database (transaction: insert recipe + ingredients + steps)
+- [x] T061 [P] [US4] Create PUT /api/admin/recipes/[id] endpoint in server/api/admin/recipes/[id].put.ts to update existing recipe
+- [x] T062 [P] [US4] Create DELETE /api/admin/recipes/[id] endpoint in server/api/admin/recipes/[id].delete.ts to delete recipe (cascade to ingredients and steps)
+- [x] T063 [P] [US4] Create GET /api/admin/recipes endpoint in server/api/admin/recipes/index.get.ts to list all recipes including drafts (admin view)
 
 ### Admin Pages (User Story 4)
 
-- [ ] T064 [P] [US4] Create admin login page in pages/admin/login.vue with email and password form calling /api/auth/login
-- [ ] T065 [US4] Create admin dashboard in pages/admin/index.vue with recipe list (all statuses) and navigation to import page
-- [ ] T066 [US4] Create admin import page in pages/admin/import.vue with textarea for recipe text, "Parse" button, and parsed result preview
-- [ ] T067 [US4] Add editable form fields in pages/admin/import.vue for manual correction of parsed data (title, ingredients, steps, etc.)
-- [ ] T068 [US4] Add "Publish" button in pages/admin/import.vue to save recipe with status=published via POST /api/admin/recipes
-- [ ] T069 [US4] Add error display in pages/admin/import.vue to show parsing errors with clear messages indicating problematic sections
+- [x] T064 [P] [US4] Create admin login page in pages/admin/login.vue with email and password form calling /api/auth/login
+- [x] T065 [US4] Create admin dashboard in pages/admin/index.vue with recipe list (all statuses) and navigation to import page
+- [x] T066 [US4] Create admin import page in pages/admin/import.vue with textarea for recipe text, "Parse" button, and parsed result preview
+- [x] T067 [US4] Add editable form fields in pages/admin/import.vue for manual correction of parsed data (title, ingredients, steps, etc.)
+- [x] T068 [US4] Add "Publish" button in pages/admin/import.vue to save recipe with status=published via POST /api/admin/recipes
+- [x] T069 [US4] Add error display in pages/admin/import.vue to show parsing errors with clear messages indicating problematic sections
 
 **Checkpoint**: Full application is now complete - all 4 user stories (frontend + admin) are functional
 
 ---
 
-## Phase 7: Polish & Cross-Cutting Concerns
+## Phase 7: Polish & Cross-Cutting Concerns ✅ COMPLETED
 
 **Purpose**: Improvements that affect multiple user stories and production readiness
 
 ### PWA Optimization
 
-- [ ] T070 [P] Generate PWA icons and splash screens using pwa-assets.config.ts (run: pnpm generate:pwa-assets)
-- [ ] T071 [P] Configure service worker caching strategies in nuxt.config.ts: Cache-First for /api/recipes/:id, Network-First for /api/recipes list, Cache-First for images
-- [ ] T072 Create offline page in pages/offline.vue displayed when service worker cannot fetch network resources
+- [x] T070 [P] Generate PWA icons and splash screens using pwa-assets.config.ts (run: pnpm generate:pwa-assets)
+- [x] T071 [P] Configure service worker caching strategies in nuxt.config.ts: Cache-First for /api/recipes/:id, Network-First for /api/recipes list, Cache-First for images
+- [x] T072 Create offline page in pages/offline.vue displayed when service worker cannot fetch network resources
 
 ### Offline Support
 
-- [ ] T073 Create useOfflineCache composable in composables/useOfflineCache.ts using localForage to cache last 10 viewed recipes in IndexedDB
-- [ ] T074 Integrate useOfflineCache in useRecipeDetail composable to save recipe to IndexedDB when viewed
-- [ ] T075 Add offline indicator in app/app.vue using navigator.onLine event to display "Mode hors ligne" banner
+- [x] T073 Create useOfflineCache composable in composables/useOfflineCache.ts using localForage to cache last 10 viewed recipes in IndexedDB
+- [x] T074 Integrate useOfflineCache in useRecipeDetail composable to save recipe to IndexedDB when viewed
+- [x] T075 Add offline indicator in app/app.vue using navigator.onLine event to display "Mode hors ligne" banner
 
 ### Performance & Accessibility
 
-- [ ] T076 [P] Configure Nuxt Image module in nuxt.config.ts for automatic WebP/AVIF conversion and lazy loading
-- [ ] T077 [P] Add loading states and skeletons to RecipeCard and RecipeDetail components
-- [ ] T078 [P] Add ARIA labels and keyboard navigation to StepByStepView navigation buttons
-- [ ] T079 [P] Ensure all interactive elements have minimum touch target size of 44x44px (audit with browser DevTools)
-- [ ] T080 Configure Content Security Policy (CSP) headers in nuxt.config.ts
+- [x] T076 [P] Configure Nuxt Image module in nuxt.config.ts for automatic WebP/AVIF conversion and lazy loading
+- [x] T077 [P] Add loading states and skeletons to RecipeCard and RecipeDetail components
+- [x] T078 [P] Add ARIA labels and keyboard navigation to StepByStepView navigation buttons
+- [x] T079 [P] Ensure all interactive elements have minimum touch target size of 44x44px (audit with browser DevTools)
+- [x] T080 Configure Content Security Policy (CSP) headers in nuxt.config.ts
 
 ### Error Handling & Validation
 
-- [ ] T081 [P] Add global error handler in app/app.vue using onErrorCaptured to display user-friendly error messages
-- [ ] T082 [P] Add input validation in PortionAdjuster to prevent servings < 1 or > 20
-- [ ] T083 [P] Add 404 page in pages/[...slug].vue for non-existent recipe routes
+- [x] T081 [P] Add global error handler in app/app.vue using onErrorCaptured to display user-friendly error messages
+- [x] T082 [P] Add input validation in PortionAdjuster to prevent servings < 1 or > 20
+- [x] T083 [P] Add 404 page in pages/[...slug].vue for non-existent recipe routes
 
 ### Documentation & Scripts
 
-- [ ] T084 [P] Create README.md with project overview, tech stack, and link to quickstart.md
-- [ ] T085 [P] Create database seed script (pnpm db:seed) to execute server/database/seed.ts
-- [ ] T086 [P] Create npm scripts in package.json: dev, build, preview, db:generate, db:migrate, db:seed, lint, format
-- [ ] T087 [P] Test quickstart.md instructions end-to-end on clean environment (verify all steps work)
+- [x] T084 [P] Create README.md with project overview, tech stack, and link to quickstart.md
+- [x] T085 [P] Create database seed script (pnpm db:seed) to execute server/database/seed.ts
+- [x] T086 [P] Create npm scripts in package.json: dev, build, preview, db:generate, db:migrate, db:seed, lint, format
+- [x] T087 [P] Test quickstart.md instructions end-to-end on clean environment (verify all steps work)
 
 ### Optional: n8n Workflow (Alternative to T056-T058)
 

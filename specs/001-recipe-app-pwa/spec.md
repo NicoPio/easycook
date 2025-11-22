@@ -5,6 +5,16 @@
 **Status**: Draft
 **Input**: User description: "J'aimerai créer une petite application pour mobile (genre pwa) qui proposerait des recettes de cuisine pas-à-pas pour les robots cuisinier du marché style thermomix, cookeo, monsieur cuisine etc. fais l'analyse du site https://www.cookomix.com car il reprend la plupart des fonctionnalités que je souhaites développer. on aurait un écran de listing des recettes, quand on sélectionne une recette, on a un récapitulatif des ingrédients, des proportions et un aperçu global de la recette. on peut ajuster la quantité de personne et les proportions s'ajustent automatiquement. Ensuite, on peut déclencher la recette pas-à-pas. on a alors un affichage simplifié en fullscreen qui nous guide au fur et à mesure. côté backend, il faudrait pouvoir gérer l'import de recette dans un champ via copier/coller. Ensuite on traite le texte pour le découper en étapes pas à pas pour l'afficher côté front. pourquoi ne pas utiliser n8n pour parser la recette importée avec IA locale (ollama avec un llm léger) puis la traiter pour avoir un format défini. Voici les grandes lignes de l'app."
 
+## Clarifications
+
+### Session 2025-11-21
+
+- Q: Admin authentication mechanism (affects backend security architecture and session management) → A: JWT tokens issued after login, stored in localStorage, verified via middleware
+- Q: AI parsing failure handling when Ollama/n8n is unavailable or times out (affects reliability and admin workflow) → A: Retry up to 3 times with 30s timeout per attempt, then show error with manual fallback
+- Q: Recipe-to-robot relationship cardinality (affects database schema and filtering logic) → A: Many-to-many: Recipes can be tagged for multiple robot types
+- Q: Rounding logic for non-divisible ingredients during portion adjustment (affects UX and calculation implementation) → A: Round to nearest whole number for discrete items (≥0.5 rounds up), keep decimals for measurable ingredients
+- Q: Recipe publication workflow and visibility rules (affects database schema, API filtering, and admin UX) → A: Two-state: Draft (admin-only) → Published (public). Explicit publish action required
+
 ## User Scenarios & Testing
 
 ### User Story 1 - Consulter et Ajuster une Recette (Priority: P1)
@@ -72,8 +82,9 @@ Un administrateur souhaite enrichir le catalogue de recettes en important rapide
 1. **Given** un administrateur est sur l'interface d'import, **When** il colle le texte d'une recette formatée, **Then** le système identifie automatiquement les sections (ingrédients, étapes, infos générales)
 2. **Given** le système a parsé une recette, **When** l'administrateur visualise le résultat, **Then** il voit les ingrédients structurés avec quantités et unités, les étapes numérotées, et les métadonnées extraites
 3. **Given** le système a parsé une recette, **When** l'administrateur corrige manuellement des erreurs de parsing, **Then** il peut éditer chaque champ individuellement avant validation
-4. **Given** une recette parsée est validée, **When** l'administrateur enregistre la recette, **Then** elle apparaît immédiatement dans le catalogue utilisateur
-5. **Given** le système parse une recette ambiguë ou mal formatée, **When** le parsing échoue, **Then** l'administrateur reçoit un message clair indiquant les sections problématiques
+4. **Given** une recette parsée est validée, **When** l'administrateur enregistre la recette, **Then** elle est créée avec le statut "draft" et visible uniquement dans l'interface admin
+5. **Given** une recette en statut "draft", **When** l'administrateur clique sur "Publier", **Then** le statut passe à "published" et la recette apparaît immédiatement dans le catalogue utilisateur public
+6. **Given** le système parse une recette ambiguë ou mal formatée, **When** le parsing échoue, **Then** l'administrateur reçoit un message clair indiquant les sections problématiques
 
 ---
 
@@ -81,11 +92,12 @@ Un administrateur souhaite enrichir le catalogue de recettes en important rapide
 
 - **Proportions zéro ou négatives** : Que se passe-t-il si l'utilisateur entre 0 ou un nombre négatif de personnes ? Le système doit bloquer la saisie ou afficher un message d'erreur.
 - **Recette sans robot spécifique** : Comment gérer les recettes compatibles avec tous les robots ou aucun robot en particulier ? Afficher un tag "Tous robots" ou "Manuel".
-- **Ingrédients non divisibles** : Comment ajuster "1 œuf" pour 1,5 personne ? Arrondir intelligemment (1 œuf pour 1-2 personnes, 2 œufs pour 3-4, etc.).
+- **Ingrédients non divisibles** : Comment ajuster "1 œuf" pour 1,5 personne ? Le système arrondit à l'entier le plus proche (≥0.5 vers le haut) pour les ingrédients discrets (œufs, pièces), et conserve 1 décimale pour les ingrédients mesurables (grammes, millilitres).
 - **Étapes longues en mode pas-à-pas** : Comment afficher une étape avec beaucoup de texte en fullscreen ? Permettre le scroll ou découper en sous-étapes.
 - **Navigation pendant la cuisson** : Que se passe-t-il si l'utilisateur quitte le mode pas-à-pas en plein milieu ? Proposer de reprendre où il en était.
 - **Mode offline** : Les recettes doivent-elles être disponibles sans connexion internet ? Le système doit mettre en cache les recettes consultées récemment.
 - **Import de formats variés** : Comment gérer des recettes avec des formats très différents (listes à puces, paragraphes, tableaux) ? Le système IA doit être assez robuste pour s'adapter.
+- **Indisponibilité du service IA** : Que se passe-t-il si Ollama/n8n est inaccessible ou ne répond pas ? Le système retry jusqu'à 3 fois avec timeout de 30s, puis propose la saisie manuelle.
 - **Unités de mesure multiples** : Comment gérer les conversions entre grammes, millilitres, cuillères à soupe, etc. ? Standardiser en unités métriques ou permettre le choix de l'utilisateur.
 
 ## Requirements
@@ -96,10 +108,12 @@ Un administrateur souhaite enrichir le catalogue de recettes en important rapide
 
 - **FR-001**: Le système DOIT afficher une liste de toutes les recettes disponibles avec pour chaque recette : titre, image, temps de préparation total, difficulté et type(s) de robot(s) compatible(s)
 - **FR-002**: Le système DOIT permettre à l'utilisateur de sélectionner une recette pour voir son détail complet
-- **FR-003**: Le système DOIT afficher pour chaque recette détaillée : titre, description, temps de préparation, temps de cuisson, difficulté, nombre de personnes par défaut, type de robot, liste des ingrédients avec quantités et unités, aperçu global des étapes
+- **FR-003**: Le système DOIT afficher pour chaque recette détaillée : titre, description, temps de préparation, temps de cuisson, difficulté, nombre de personnes par défaut, liste des types de robots compatibles, liste des ingrédients avec quantités et unités, aperçu global des étapes
 - **FR-004**: Le système DOIT permettre à l'utilisateur de modifier le nombre de personnes pour une recette (entre 1 et 20 personnes)
 - **FR-005**: Le système DOIT recalculer automatiquement toutes les quantités d'ingrédients proportionnellement au nombre de personnes sélectionné
 - **FR-006**: Le système DOIT afficher les quantités d'ingrédients avec leur unité appropriée (g, ml, c.à.s, pincée, etc.)
+- **FR-034**: Le système DOIT permettre qu'une recette soit associée à plusieurs types de robots cuisiniers simultanément (relation many-to-many)
+- **FR-035**: Le système DOIT arrondir les quantités d'ingrédients selon leur type : pour les ingrédients discrets (œufs, pièces), arrondir à l'entier le plus proche (≥0.5 arrondi vers le haut) ; pour les ingrédients mesurables (g, ml, c.à.s), conserver les décimales (1 chiffre après la virgule)
 
 **Mode Pas-à-Pas**
 
@@ -132,16 +146,35 @@ Un administrateur souhaite enrichir le catalogue de recettes en important rapide
 - **FR-024**: Le système DOIT utiliser un modèle d'IA pour structurer le texte importé selon un schéma défini
 - **FR-025**: Le système DOIT permettre à l'administrateur de visualiser et corriger le résultat du parsing avant validation
 - **FR-026**: Le système DOIT enregistrer la recette validée et la rendre immédiatement disponible dans le catalogue utilisateur
+- **FR-031**: Le système DOIT implémenter une logique de retry pour le parsing IA : maximum 3 tentatives avec timeout de 30 secondes par tentative
+- **FR-032**: En cas d'échec après 3 tentatives, le système DOIT afficher un message d'erreur clair et proposer une saisie manuelle complète comme solution de secours
+- **FR-033**: Le système DOIT indiquer visuellement la progression et les tentatives de retry pendant le parsing (ex: "Tentative 2/3...")
+
+**Administration et Sécurité**
+
+- **FR-027**: Le système DOIT protéger toutes les routes d'administration (/api/admin/*) par authentification JWT
+- **FR-028**: Le système DOIT fournir un endpoint de login (/api/auth/login) qui retourne un JWT token valide après validation des identifiants
+- **FR-029**: Le JWT token DOIT être stocké dans le localStorage côté client et inclus dans les headers des requêtes API admin
+- **FR-030**: Le JWT token DOIT avoir une durée de validité de 24 heures et être vérifié par un middleware côté serveur
+
+**Publication de Recettes**
+
+- **FR-036**: Les recettes DOIVENT avoir un statut "draft" (brouillon) ou "published" (publié)
+- **FR-037**: Les recettes avec statut "draft" DOIVENT être visibles uniquement dans l'interface d'administration
+- **FR-038**: Les recettes avec statut "published" DOIVENT être visibles dans le catalogue utilisateur public
+- **FR-039**: Les API publiques (/api/recipes) DOIVENT filtrer automatiquement pour ne retourner que les recettes avec statut "published"
+- **FR-040**: L'interface d'administration DOIT fournir un bouton "Publier" pour changer le statut d'une recette de "draft" à "published"
+- **FR-041**: L'administrateur DOIT pouvoir dépublier une recette (passer de "published" à "draft") via l'interface d'administration
 
 ### Key Entities
 
-- **Recette**: Représente une recette de cuisine complète. Attributs principaux : identifiant unique, titre, description courte, description complète, temps de préparation (minutes), temps de cuisson (minutes), difficulté (facile/moyen/difficile), nombre de personnes par défaut, type de robot compatible (Thermomix/Cookeo/Monsieur Cuisine/Manuel/Tous), image principale, date de création. Relations : contient plusieurs Ingrédients et plusieurs Étapes.
+- **Recette**: Représente une recette de cuisine complète. Attributs principaux : identifiant unique, titre, description courte, description complète, temps de préparation (minutes), temps de cuisson (minutes), difficulté (facile/moyen/difficile), nombre de personnes par défaut, image principale, date de création, statut (brouillon/publié). Relations : contient plusieurs Ingrédients, contient plusieurs Étapes, est compatible avec plusieurs RobotsCuisiniers (many-to-many via table de jointure).
 
 - **Ingrédient**: Représente un ingrédient nécessaire pour une recette. Attributs principaux : nom de l'ingrédient, quantité de base (pour le nombre de personnes par défaut de la recette), unité de mesure (g, ml, pièce, c.à.s, c.à.c, pincée, etc.), ordre d'affichage, optionnel (oui/non). Relations : appartient à une Recette, peut être associé à plusieurs Étapes.
 
 - **Étape**: Représente une étape de préparation dans une recette. Attributs principaux : numéro de l'étape (ordre), description textuelle complète, durée estimée (minutes), température (°C), vitesse du robot, paramètres spécifiques au robot, ingrédients utilisés dans cette étape. Relations : appartient à une Recette, utilise plusieurs Ingrédients.
 
-- **Robot Cuisinier**: Représente un type de robot cuisinier supporté. Attributs principaux : nom (Thermomix, Cookeo, Monsieur Cuisine), fabricant, paramètres supportés (température, vitesse, modes spécifiques). Relations : associé à plusieurs Recettes.
+- **Robot Cuisinier**: Représente un type de robot cuisinier supporté. Attributs principaux : nom (Thermomix, Cookeo, Monsieur Cuisine, Manuel, Tous), fabricant, paramètres supportés (température, vitesse, modes spécifiques). Relations : est compatible avec plusieurs Recettes (many-to-many via table de jointure).
 
 ## Success Criteria
 
@@ -162,7 +195,7 @@ Un administrateur souhaite enrichir le catalogue de recettes en important rapide
 
 1. **Format des recettes sources** : Les recettes importées proviennent de sources francophones avec un format texte relativement standard (section ingrédients suivie de section étapes).
 
-2. **Authentification** : Le MVP ne nécessite pas d'authentification utilisateur. Les fonctionnalités comme les favoris ou l'historique pourront être ajoutées dans une version ultérieure. L'interface d'administration est protégée par authentification basique.
+2. **Authentification** : Le MVP ne nécessite pas d'authentification utilisateur. Les fonctionnalités comme les favoris ou l'historique pourront être ajoutées dans une version ultérieure. L'interface d'administration est protégée par JWT tokens (stateless, stockés dans localStorage, validité 24h).
 
 3. **Hébergement IA** : Le parsing des recettes utilise un modèle IA hébergé localement (Ollama avec un LLM léger) pour garantir la confidentialité des données et réduire les coûts. L'orchestration se fait via n8n.
 
