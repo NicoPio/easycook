@@ -7,7 +7,7 @@
         </h1>
         <div class="mt-4">
           <UIcon
-            name="i-heroicons-magnifying-glass-circle"
+            name="i-lucide-search"
             class="w-24 h-24 mx-auto text-gray-400 dark:text-gray-600"
           />
         </div>
@@ -28,7 +28,7 @@
           color="primary"
           class="w-full sm:w-auto"
         >
-          <UIcon name="i-heroicons-home" class="w-5 h-5 mr-2" />
+          <UIcon name="i-lucide-home" class="w-5 h-5 mr-2" />
           Retour à l'accueil
         </UButton>
 
@@ -45,7 +45,7 @@
               class="justify-start"
               block
             >
-              <UIcon name="i-heroicons-rectangle-stack" class="w-5 h-5 mr-2" />
+              <UIcon name="i-lucide-layers" class="w-5 h-5 mr-2" />
               Catalogue de recettes
             </UButton>
 
@@ -56,7 +56,7 @@
               class="justify-start"
               block
             >
-              <UIcon name="i-heroicons-lock-closed" class="w-5 h-5 mr-2" />
+              <UIcon name="i-lucide-lock" class="w-5 h-5 mr-2" />
               Administration
             </UButton>
           </div>
