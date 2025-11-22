@@ -220,13 +220,20 @@
                 class="col-span-2 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               >
                 <option value="g">g</option>
+                <option value="kg">kg</option>
+                <option value="mg">mg</option>
                 <option value="ml">ml</option>
+                <option value="cl">cl</option>
+                <option value="dl">dl</option>
+                <option value="L">L</option>
                 <option value="pièce">pièce</option>
+                <option value="œuf">œuf</option>
+                <option value="gousse">gousse</option>
+                <option value="tranche">tranche</option>
+                <option value="botte">botte</option>
                 <option value="c.à.s">c.à.s</option>
                 <option value="c.à.c">c.à.c</option>
                 <option value="pincée">pincée</option>
-                <option value="L">L</option>
-                <option value="kg">kg</option>
               </select>
               <label
                 class="col-span-2 flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300"
