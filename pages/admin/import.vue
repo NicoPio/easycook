@@ -353,6 +353,14 @@ async function handleParse() {
   parsingAttempt.value = 0
   parsingErrors.value = []
 
+  // Generate unique request ID to prevent caching
+  const requestId = `import-${Date.now()}-${Math.random().toString(36).substring(7)}`
+
+  // Debug log
+  console.log(`[Frontend] Sending parse request ${requestId}`)
+  console.log(`[Frontend] Recipe text length: ${recipeText.value.length}`)
+  console.log(`[Frontend] First 50 chars: ${recipeText.value.substring(0, 50)}...`)
+
   try {
     const token = process.client ? localStorage.getItem('admin_token') : null
 
@@ -362,9 +370,15 @@ async function handleParse() {
         Authorization: `Bearer ${token}`
       },
       body: {
-        recipeText: recipeText.value
-      }
+        recipeText: recipeText.value,
+        requestId // Send unique ID to prevent caching
+      },
+      // CRITICAL: Disable fetch cache to prevent stale responses
+      cache: 'no-store'
     })
+
+    console.log(`[Frontend] Response received for ${requestId}:`, response.requestId)
+    console.log(`[Frontend] Parsed recipe title:`, response.data?.title || 'N/A')
 
     if (response.status === 'success') {
       parsedRecipe.value = response.data
@@ -374,6 +388,7 @@ async function handleParse() {
       parsingAttempt.value = response.attempts
     }
   } catch (err: any) {
+    console.error(`[Frontend] Parse error:`, err)
     parsingErrors.value = [err.data?.message || "Erreur de connexion au service d'IA"]
   } finally {
     parsing.value = false
