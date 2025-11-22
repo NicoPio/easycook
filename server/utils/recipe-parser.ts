@@ -15,7 +15,32 @@ import { ollama } from './ollama'
 const IngredientSchema = z.object({
   name: z.string().min(1),
   quantity: z.number().positive(),
-  unit: z.enum(['g', 'ml', 'pièce', 'c.à.s', 'c.à.c', 'pincée', 'L', 'kg']),
+  unit: z.enum([
+    'g',
+    'ml',
+    'pièce',
+    'c.à.s',
+    'c.à.c',
+    'pincée',
+    'L',
+    'kg',
+    // Variations anglophones courantes
+    'egg',
+    'unit',
+    'piece',
+    'tbsp',
+    'tsp',
+    'pinch',
+    'l',
+    'cc', // cubic centimeter = ml
+    // Autres variations françaises
+    'cl',
+    'dl',
+    'mg',
+    'gousse',
+    'tranche',
+    'botte',
+  ]),
   isOptional: z.boolean().default(false)
 })
 

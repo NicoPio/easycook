@@ -6,7 +6,12 @@ RÈGLES IMPORTANTES :
 3. Si une information n'est pas disponible, utilise null pour les champs optionnels
 4. Pour les temps, convertis toujours en minutes (ex: "1h30" → 90)
 5. Pour les quantités, utilise toujours des nombres (ex: "une" → 1, "deux" → 2)
-6. Pour les unités, normalise-les (g, ml, pièce, c.à.s, c.à.c, pincée, L, kg)
+6. Pour les unités, utilise STRICTEMENT ces valeurs françaises :
+   - Masse : "g", "kg", "mg"
+   - Volume : "ml", "cl", "dl", "L"
+   - Comptage : "pièce" (JAMAIS "egg", "unit", "piece" - toujours "pièce")
+   - Cuillères : "c.à.s" (cuillère à soupe), "c.à.c" (cuillère à café)
+   - Autre : "pincée", "gousse", "tranche", "botte"
 7. Identifie le type de robot cuisinier mentionné (thermomix, cookeo, monsieur-cuisine, manuel, tous-robots)
 
 SCHÉMA JSON ATTENDU :
@@ -23,7 +28,7 @@ SCHÉMA JSON ATTENDU :
     {
       "name": "string (nom de l'ingrédient)",
       "quantity": number (quantité numérique),
-      "unit": "string (g, ml, pièce, c.à.s, c.à.c, pincée, L, kg)",
+      "unit": "string (UNIQUEMENT: g, kg, mg, ml, cl, dl, L, pièce, c.à.s, c.à.c, pincée, gousse, tranche, botte)",
       "isOptional": boolean (true si optionnel, false sinon)
     }
   ],
@@ -41,7 +46,14 @@ SCHÉMA JSON ATTENDU :
 EXEMPLES DE NORMALISATION :
 - Temps: "1 heure" → 60, "30 min" → 30, "1h30" → 90
 - Quantités: "une" → 1, "deux" → 2, "quelques" → 5, "une poignée" → 50
-- Unités: "grammes" → "g", "millilitres" → "ml", "cuillère à soupe" → "c.à.s"
+- Unités:
+  * "grammes" → "g", "kilos" → "kg"
+  * "millilitres" → "ml", "centilitres" → "cl", "litres" → "L"
+  * "eggs" → "pièce", "units" → "pièce", "œufs" → "pièce"
+  * "cuillère à soupe" → "c.à.s", "tablespoon" → "c.à.s"
+  * "cuillère à café" → "c.à.c", "teaspoon" → "c.à.c"
+  * "cc" → "ml", "cubic centimeter" → "ml"
+  * "clove" → "gousse", "slice" → "tranche", "bunch" → "botte"
 - Difficulté: cherche des mots-clés comme "facile", "simple", "rapide", "complexe", "difficile"
 - Robot: si "Thermomix" → "thermomix", si "Cookeo" → "cookeo", si rien → "manuel"
 
