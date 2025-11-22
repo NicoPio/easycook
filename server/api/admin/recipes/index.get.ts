@@ -1,6 +1,6 @@
 import { db } from '~/server/utils/db'
 import { recipes } from '~/server/database/schema'
-import { desc } from 'drizzle-orm'
+import { desc, sql } from 'drizzle-orm'
 
 /**
  * Admin endpoint to list ALL recipes (including drafts)

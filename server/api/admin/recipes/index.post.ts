@@ -1,7 +1,7 @@
 import { db } from '~/server/utils/db'
 import { recipes, ingredients, steps, robotTypes, recipeRobotTypes } from '~/server/database/schema'
 import { generateSlug } from '~/server/utils/slug'
-import { eq } from 'drizzle-orm'
+import { eq, sql } from 'drizzle-orm'
 
 /**
  * Admin endpoint to create a new recipe

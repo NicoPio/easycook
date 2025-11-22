@@ -45,3 +45,4 @@ docs: update readme
 ## Priority
 
 Speed > Detail. Keep commits atomic and history clean.
+reply in french

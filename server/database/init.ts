@@ -3,10 +3,16 @@ import { drizzle } from 'drizzle-orm/better-sqlite3'
 import { migrate } from 'drizzle-orm/better-sqlite3/migrator'
 import { sql } from 'drizzle-orm'
 import * as schema from './schema'
+import { mkdirSync } from 'node:fs'
+import { dirname } from 'node:path'
 
 const DATABASE_PATH = process.env.DATABASE_PATH || './data/easycook.db'
 
 console.log(`Initializing database at ${DATABASE_PATH}...`)
+
+// Ensure the directory exists before creating the database
+const dbDir = dirname(DATABASE_PATH)
+mkdirSync(dbDir, { recursive: true })
 
 const sqlite = new Database(DATABASE_PATH)
 const db = drizzle(sqlite, { schema })

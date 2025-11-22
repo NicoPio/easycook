@@ -11,6 +11,7 @@
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
     "format": "prettier --write .",
+    "db:init": "tsx server/database/init.ts",
     "db:generate": "drizzle-kit generate:sqlite",
     "db:push": "drizzle-kit push:sqlite",
     "db:seed": "tsx server/database/seed.ts"
@@ -19,6 +20,7 @@
     "@nuxt/ui": "^3.0.0-alpha.6",
     "@vite-pwa/nuxt": "^0.10.5",
     "@vueuse/core": "^11.3.0",
+    "bcryptjs": "^3.0.3",
     "better-sqlite3": "^11.7.0",
     "drizzle-orm": "^0.36.4",
     "h3": "^1.13.0",
