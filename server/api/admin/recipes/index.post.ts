@@ -1,6 +1,6 @@
 import { db } from '~/server/utils/db'
 import { recipes, ingredients, steps, robotTypes, recipeRobotTypes } from '~/server/database/schema'
-import { generateSlug } from '~/server/utils/slug'
+import { generateSlug, makeSlugUnique } from '~/server/utils/slug'
 import { eq, sql } from 'drizzle-orm'
 
 /**
@@ -52,8 +52,19 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    // Generate slug from title
-    const slug = await generateSlug(title)
+    // Generate base slug from title
+    const baseSlug = generateSlug(title)
+
+    // Check if slug already exists and make it unique if needed
+    const existingRecipes = await db
+      .select({ slug: recipes.slug })
+      .from(recipes)
+      .where(sql`${recipes.slug} LIKE ${baseSlug} || '%'`)
+
+    const existingSlugs = existingRecipes.map((r) => r.slug)
+    const slug = makeSlugUnique(baseSlug, existingSlugs)
+
+    console.log(`Generated unique slug: ${slug} (base: ${baseSlug})`)
 
     const now = new Date()
 
