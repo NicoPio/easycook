@@ -143,7 +143,7 @@ This is a **fullstack Nuxt.js web application**. All paths are relative to repos
 
 ---
 
-## Phase 5: User Story 3 - Rechercher et Filtrer des Recettes (Priority: P3)
+## Phase 5: User Story 3 - Rechercher et Filtrer des Recettes (Priority: P3) ✅ COMPLETED
 
 **Goal**: Allow users to search recipes by keyword and apply multiple filters (robot type, preparation time, difficulty) with fast results (<1s for 500+ recipes).
 
@@ -151,23 +151,23 @@ This is a **fullstack Nuxt.js web application**. All paths are relative to repos
 
 ### Backend API (User Story 3)
 
-- [ ] T048 [US3] Create POST /api/recipes/search endpoint in server/api/recipes/search.post.ts with full-text search and advanced filters (query, robotType, difficulty, maxTotalTime) using SQL LIKE queries
+- [x] T048 [US3] Create POST /api/recipes/search endpoint in server/api/recipes/search.post.ts with full-text search and advanced filters (query, robotType, difficulty, maxTotalTime) using SQL LIKE queries
 
 ### Composables (User Story 3)
 
-- [ ] T049 [US3] Create useFilters composable in composables/useFilters.ts to manage filter state (search query, robot type, difficulty, time range) and call search API
+- [x] T049 [US3] Create useFilters composable in composables/useFilters.ts to manage filter state (search query, robot type, difficulty, time range) and call search API
 
 ### Components (User Story 3)
 
-- [ ] T050 [P] [US3] Create SearchBar component in components/filters/SearchBar.vue with text input and real-time search
-- [ ] T051 [P] [US3] Create RobotFilter component in components/filters/RobotFilter.vue with dropdown/chips for robot types
-- [ ] T052 [P] [US3] Create TimeFilter component in components/filters/TimeFilter.vue with time range selector (< 30min, 30-60min, > 1h)
+- [x] T050 [P] [US3] Create SearchBar component in components/filters/SearchBar.vue with text input and real-time search
+- [x] T051 [P] [US3] Create RobotFilter component in components/filters/RobotFilter.vue with dropdown/chips for robot types
+- [x] T052 [P] [US3] Create TimeFilter component in components/filters/TimeFilter.vue with time range selector (< 30min, 30-60min, > 1h)
 
 ### Pages (User Story 3)
 
-- [ ] T053 [US3] Integrate SearchBar, RobotFilter, TimeFilter components in pages/index.vue
-- [ ] T054 [US3] Connect useFilters composable to RecipeCard list in pages/index.vue with reactive filtering
-- [ ] T055 [US3] Add "Reset filters" button in pages/index.vue to clear all filters
+- [x] T053 [US3] Integrate SearchBar, RobotFilter, TimeFilter components in pages/index.vue
+- [x] T054 [US3] Connect useFilters composable to RecipeCard list in pages/index.vue with reactive filtering
+- [x] T055 [US3] Add "Reset filters" button in pages/index.vue to clear all filters
 
 **Checkpoint**: All frontend user stories (US1, US2, US3) are now complete and independently functional
 
