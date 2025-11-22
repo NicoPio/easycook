@@ -106,7 +106,18 @@ export class RecipeParser {
     if (!isAvailable) {
       return {
         success: false,
-        errors: ["Service d'IA non disponible. Veuillez vérifier qu'Ollama est démarré."],
+        errors: [
+          "❌ Service d'IA Ollama non disponible",
+          '',
+          '🔧 Vérifiez que le container Docker est démarré :',
+          '   docker ps | grep ollama',
+          '',
+          '📋 Ou exécutez le script de diagnostic :',
+          '   bash scripts/check-ollama.sh',
+          '',
+          '🚀 Pour démarrer Ollama :',
+          '   docker-compose up -d ollama',
+        ],
         attempts: 0
       }
     }

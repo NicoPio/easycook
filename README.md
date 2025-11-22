@@ -149,6 +149,8 @@ easycook/
 
 Pour utiliser l'import automatique de recettes :
 
+### Mode Local (développement)
+
 ```bash
 # Installer Ollama
 curl https://ollama.ai/install.sh | sh
@@ -160,7 +162,22 @@ ollama pull mistral
 ollama serve
 ```
 
+### Mode Docker (recommandé)
+
+```bash
+# Démarrer le container Ollama
+docker-compose up -d ollama
+
+# Télécharger le modèle Mistral
+docker exec easycook-ollama ollama pull mistral
+
+# Vérifier l'installation
+bash scripts/check-ollama.sh
+```
+
 L'import sera disponible sur `/admin/import`
+
+> **⚠️ Problèmes de connexion ?** Consultez le [Guide de diagnostic Ollama](./OLLAMA_SETUP.md)
 
 ## 🧪 Tests
 
@@ -289,6 +306,8 @@ Les autres variables sont préconfigurées dans `docker-compose.yml`.
 - [Spécifications](./specs/001-recipe-app-pwa/spec.md)
 - [Plan d'implémentation](./specs/001-recipe-app-pwa/plan.md)
 - [Modèle de données](./specs/001-recipe-app-pwa/data-model.md)
+- [Guide de configuration Ollama](./OLLAMA_SETUP.md) - Diagnostic et troubleshooting
+- [Optimisation Ollama](./OLLAMA_OPTIMIZATION.md) - Conseils de performance
 
 ## 🤝 Contribution
 

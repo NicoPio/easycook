@@ -37,7 +37,7 @@ export class OllamaClient {
   constructor(
     baseUrl: string = process.env.OLLAMA_BASE_URL || 'http://localhost:11434',
     model: string = process.env.OLLAMA_MODEL || 'mistral',
-    timeout: number = 30000, // 30 seconds
+    timeout: number = 180000, // 180 seconds (3 minutes) - increased for CPU mode and model loading
     maxRetries: number = 3
   ) {
     this.baseUrl = baseUrl
@@ -91,12 +91,17 @@ export class OllamaClient {
       } catch (error) {
         lastError = error as Error
 
-        // Don't retry on abort (timeout)
+        // Don't retry on abort (timeout) - if it times out once, it will likely timeout again
         if (error instanceof Error && error.name === 'AbortError') {
-          console.error(`Ollama request timeout (attempt ${attempt}/${this.maxRetries})`)
-        } else {
-          console.error(`Ollama generation failed (attempt ${attempt}/${this.maxRetries}):`, error)
+          console.error(`Ollama request timeout after ${this.timeout / 1000}s - model may be loading or generation is too slow`)
+          console.error('💡 Tip: First request can take 60-120s to load the model into memory')
+          throw createError({
+            statusCode: 504,
+            message: `Timeout après ${this.timeout / 1000} secondes. Le modèle met peut-être du temps à se charger (première requête).`
+          })
         }
+
+        console.error(`Ollama generation failed (attempt ${attempt}/${this.maxRetries}):`, error)
 
         // Wait before retry (exponential backoff: 1s, 2s, 4s)
         if (attempt < this.maxRetries) {
@@ -118,6 +123,7 @@ export class OllamaClient {
    */
   async isAvailable(): Promise<boolean> {
     try {
+      console.log(`[Ollama] Checking availability at ${this.baseUrl}...`)
       const controller = new AbortController()
       const timeoutId = setTimeout(() => controller.abort(), 5000)
 
@@ -126,8 +132,21 @@ export class OllamaClient {
       })
 
       clearTimeout(timeoutId)
-      return response.ok
-    } catch {
+
+      if (response.ok) {
+        console.log('[Ollama] ✓ Service is available')
+        return true
+      } else {
+        console.error(`[Ollama] ✗ Service returned status ${response.status}`)
+        return false
+      }
+    } catch (error) {
+      console.error('[Ollama] ✗ Connection failed:', error instanceof Error ? error.message : 'Unknown error')
+      console.error(`[Ollama] ✗ Unable to reach ${this.baseUrl}`)
+      console.error('[Ollama] Please ensure:')
+      console.error('  1. Docker container is running: docker ps | grep ollama')
+      console.error('  2. Port 11434 is exposed: docker port <container-name>')
+      console.error('  3. OLLAMA_BASE_URL in .env matches your setup')
       return false
     }
   }
