@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Background -->
+  <rect width="512" height="512" fill="#16a34a" rx="96"/>
+
+  <!-- Chef hat -->
+  <g fill="#ffffff">
+    <!-- Hat top -->
+    <circle cx="256" cy="180" r="80"/>
+    <circle cx="200" cy="170" r="50"/>
+    <circle cx="312" cy="170" r="50"/>
+
+    <!-- Hat base -->
+    <rect x="160" y="200" width="192" height="80" rx="8"/>
+
+    <!-- Pot -->
+    <path d="M 180 300 L 170 420 Q 170 440 190 440 L 322 440 Q 342 440 342 420 L 332 300 Z" fill="#ffffff" opacity="0.9"/>
+
+    <!-- Pot handles -->
+    <ellipse cx="160" cy="340" rx="20" ry="25" fill="none" stroke="#ffffff" stroke-width="12"/>
+    <ellipse cx="352" cy="340" rx="20" ry="25" fill="none" stroke="#ffffff" stroke-width="12"/>
+
+    <!-- Steam -->
+    <path d="M 220 280 Q 215 260 220 240" fill="none" stroke="#ffffff" stroke-width="8" stroke-linecap="round" opacity="0.7"/>
+    <path d="M 256 270 Q 251 250 256 230" fill="none" stroke="#ffffff" stroke-width="8" stroke-linecap="round" opacity="0.7"/>
+    <path d="M 292 280 Q 287 260 292 240" fill="none" stroke="#ffffff" stroke-width="8" stroke-linecap="round" opacity="0.7"/>
+  </g>
+</svg>

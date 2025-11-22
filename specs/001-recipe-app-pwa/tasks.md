@@ -206,42 +206,42 @@ This is a **fullstack Nuxt.js web application**. All paths are relative to repos
 
 ---
 
-## Phase 7: Polish & Cross-Cutting Concerns
+## Phase 7: Polish & Cross-Cutting Concerns ✅ COMPLETED
 
 **Purpose**: Improvements that affect multiple user stories and production readiness
 
 ### PWA Optimization
 
-- [ ] T070 [P] Generate PWA icons and splash screens using pwa-assets.config.ts (run: pnpm generate:pwa-assets)
-- [ ] T071 [P] Configure service worker caching strategies in nuxt.config.ts: Cache-First for /api/recipes/:id, Network-First for /api/recipes list, Cache-First for images
-- [ ] T072 Create offline page in pages/offline.vue displayed when service worker cannot fetch network resources
+- [x] T070 [P] Generate PWA icons and splash screens using pwa-assets.config.ts (run: pnpm generate:pwa-assets)
+- [x] T071 [P] Configure service worker caching strategies in nuxt.config.ts: Cache-First for /api/recipes/:id, Network-First for /api/recipes list, Cache-First for images
+- [x] T072 Create offline page in pages/offline.vue displayed when service worker cannot fetch network resources
 
 ### Offline Support
 
-- [ ] T073 Create useOfflineCache composable in composables/useOfflineCache.ts using localForage to cache last 10 viewed recipes in IndexedDB
-- [ ] T074 Integrate useOfflineCache in useRecipeDetail composable to save recipe to IndexedDB when viewed
-- [ ] T075 Add offline indicator in app/app.vue using navigator.onLine event to display "Mode hors ligne" banner
+- [x] T073 Create useOfflineCache composable in composables/useOfflineCache.ts using localForage to cache last 10 viewed recipes in IndexedDB
+- [x] T074 Integrate useOfflineCache in useRecipeDetail composable to save recipe to IndexedDB when viewed
+- [x] T075 Add offline indicator in app/app.vue using navigator.onLine event to display "Mode hors ligne" banner
 
 ### Performance & Accessibility
 
-- [ ] T076 [P] Configure Nuxt Image module in nuxt.config.ts for automatic WebP/AVIF conversion and lazy loading
-- [ ] T077 [P] Add loading states and skeletons to RecipeCard and RecipeDetail components
-- [ ] T078 [P] Add ARIA labels and keyboard navigation to StepByStepView navigation buttons
-- [ ] T079 [P] Ensure all interactive elements have minimum touch target size of 44x44px (audit with browser DevTools)
-- [ ] T080 Configure Content Security Policy (CSP) headers in nuxt.config.ts
+- [x] T076 [P] Configure Nuxt Image module in nuxt.config.ts for automatic WebP/AVIF conversion and lazy loading
+- [x] T077 [P] Add loading states and skeletons to RecipeCard and RecipeDetail components
+- [x] T078 [P] Add ARIA labels and keyboard navigation to StepByStepView navigation buttons
+- [x] T079 [P] Ensure all interactive elements have minimum touch target size of 44x44px (audit with browser DevTools)
+- [x] T080 Configure Content Security Policy (CSP) headers in nuxt.config.ts
 
 ### Error Handling & Validation
 
-- [ ] T081 [P] Add global error handler in app/app.vue using onErrorCaptured to display user-friendly error messages
-- [ ] T082 [P] Add input validation in PortionAdjuster to prevent servings < 1 or > 20
-- [ ] T083 [P] Add 404 page in pages/[...slug].vue for non-existent recipe routes
+- [x] T081 [P] Add global error handler in app/app.vue using onErrorCaptured to display user-friendly error messages
+- [x] T082 [P] Add input validation in PortionAdjuster to prevent servings < 1 or > 20
+- [x] T083 [P] Add 404 page in pages/[...slug].vue for non-existent recipe routes
 
 ### Documentation & Scripts
 
-- [ ] T084 [P] Create README.md with project overview, tech stack, and link to quickstart.md
-- [ ] T085 [P] Create database seed script (pnpm db:seed) to execute server/database/seed.ts
-- [ ] T086 [P] Create npm scripts in package.json: dev, build, preview, db:generate, db:migrate, db:seed, lint, format
-- [ ] T087 [P] Test quickstart.md instructions end-to-end on clean environment (verify all steps work)
+- [x] T084 [P] Create README.md with project overview, tech stack, and link to quickstart.md
+- [x] T085 [P] Create database seed script (pnpm db:seed) to execute server/database/seed.ts
+- [x] T086 [P] Create npm scripts in package.json: dev, build, preview, db:generate, db:migrate, db:seed, lint, format
+- [x] T087 [P] Test quickstart.md instructions end-to-end on clean environment (verify all steps work)
 
 ### Optional: n8n Workflow (Alternative to T056-T058)
 

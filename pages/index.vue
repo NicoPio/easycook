@@ -41,10 +41,14 @@
       </div>
     </div>
 
-    <!-- Loading state -->
-    <div v-if="filters.loading.value" class="text-center py-12">
-      <Icon name="heroicons:arrow-path" class="w-12 h-12 text-primary-500 animate-spin mx-auto mb-4" />
-      <p class="text-gray-600 dark:text-gray-400">Chargement des recettes...</p>
+    <!-- Loading state with skeletons -->
+    <div v-if="filters.loading.value">
+      <div class="mb-4">
+        <Skeleton height="h-4" width="w-32" />
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <RecipeCardSkeleton v-for="i in 6" :key="i" />
+      </div>
     </div>
 
     <!-- Error state -->

@@ -8,10 +8,7 @@
       Retour au catalogue
     </NuxtLink>
 
-    <div v-if="loading" class="text-center py-12">
-      <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-      <p class="mt-2 text-gray-600">Chargement de la recette...</p>
-    </div>
+    <RecipeDetailSkeleton v-if="loading" />
 
     <div v-else-if="error" class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg">
       <p class="font-semibold">Erreur lors du chargement</p>

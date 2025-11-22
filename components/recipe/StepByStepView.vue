@@ -22,7 +22,14 @@
       </div>
 
       <!-- Progress bar -->
-      <div class="w-full bg-primary-800 dark:bg-primary-900 rounded-full h-2">
+      <div
+        class="w-full bg-primary-800 dark:bg-primary-900 rounded-full h-2"
+        role="progressbar"
+        :aria-valuenow="progress"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        :aria-label="`Progression: ${progress}% complété`"
+      >
         <div
           class="bg-white h-2 rounded-full transition-all duration-300"
           :style="{ width: `${progress}%` }"
@@ -30,8 +37,18 @@
       </div>
     </header>
 
+    <!-- Screen reader announcements -->
+    <div class="sr-only" role="status" aria-live="polite" aria-atomic="true">
+      <span v-if="!isCompleted">
+        Étape {{ stepNumber }} sur {{ totalSteps }}: {{ currentStep?.description }}
+      </span>
+      <span v-else>
+        Recette terminée ! Toutes les étapes sont complétées.
+      </span>
+    </div>
+
     <!-- Main content - scrollable -->
-    <main class="flex-1 overflow-y-auto p-6">
+    <main class="flex-1 overflow-y-auto p-6" role="main">
       <div class="max-w-3xl mx-auto space-y-6">
         <!-- Completion message -->
         <div v-if="isCompleted" class="text-center py-12">
@@ -130,9 +147,10 @@
           variant="soft"
           @click="$emit('previous')"
           :disabled="!hasPrevious"
+          :aria-label="`Étape précédente (${stepNumber - 1}/${totalSteps})`"
           class="flex-1 touch-target min-h-[60px]"
         >
-          <Icon name="heroicons:arrow-left" class="w-6 h-6 mr-2" />
+          <Icon name="heroicons:arrow-left" class="w-6 h-6 mr-2" aria-hidden="true" />
           Précédent
         </UButton>
 
@@ -141,15 +159,16 @@
           size="xl"
           @click="$emit('next')"
           :disabled="!hasNext && !isCompleted"
+          :aria-label="hasNext ? `Étape suivante (${stepNumber + 1}/${totalSteps})` : 'Terminer la recette'"
           class="flex-1 touch-target min-h-[60px]"
         >
           <template v-if="!hasNext && !isCompleted">
             Terminer
-            <Icon name="heroicons:check" class="w-6 h-6 ml-2" />
+            <Icon name="heroicons:check" class="w-6 h-6 ml-2" aria-hidden="true" />
           </template>
           <template v-else>
             Suivant
-            <Icon name="heroicons:arrow-right" class="w-6 h-6 ml-2" />
+            <Icon name="heroicons:arrow-right" class="w-6 h-6 ml-2" aria-hidden="true" />
           </template>
         </UButton>
       </div>
@@ -183,7 +202,7 @@ interface Props {
 
 const props = defineProps<Props>()
 
-defineEmits<{
+const emit = defineEmits<{
   next: []
   previous: []
   exit: []
@@ -197,6 +216,35 @@ const hasRobotParams = computed(() => {
     props.currentStep.temperature ||
     props.currentStep.speed
   )
+})
+
+// Keyboard navigation
+onMounted(() => {
+  const handleKeydown = (event: KeyboardEvent) => {
+    // Left arrow - previous step
+    if (event.key === 'ArrowLeft' && props.hasPrevious) {
+      event.preventDefault()
+      emit('previous')
+    }
+
+    // Right arrow - next step
+    if (event.key === 'ArrowRight' && (props.hasNext || !props.isCompleted)) {
+      event.preventDefault()
+      emit('next')
+    }
+
+    // Escape - exit step-by-step mode
+    if (event.key === 'Escape') {
+      event.preventDefault()
+      emit('exit')
+    }
+  }
+
+  window.addEventListener('keydown', handleKeydown)
+
+  onUnmounted(() => {
+    window.removeEventListener('keydown', handleKeydown)
+  })
 })
 </script>
 
