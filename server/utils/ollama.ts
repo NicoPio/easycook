@@ -37,7 +37,7 @@ export class OllamaClient {
   constructor(
     baseUrl: string = process.env.OLLAMA_BASE_URL || 'http://localhost:11434',
     model: string = process.env.OLLAMA_MODEL || 'mistral',
-    timeout: number = 30000, // 30 seconds
+    timeout: number = 180000, // 180 seconds (3 minutes) - increased for CPU mode and model loading
     maxRetries: number = 3
   ) {
     this.baseUrl = baseUrl
@@ -91,12 +91,17 @@ export class OllamaClient {
       } catch (error) {
         lastError = error as Error
 
-        // Don't retry on abort (timeout)
+        // Don't retry on abort (timeout) - if it times out once, it will likely timeout again
         if (error instanceof Error && error.name === 'AbortError') {
-          console.error(`Ollama request timeout (attempt ${attempt}/${this.maxRetries})`)
-        } else {
-          console.error(`Ollama generation failed (attempt ${attempt}/${this.maxRetries}):`, error)
+          console.error(`Ollama request timeout after ${this.timeout / 1000}s - model may be loading or generation is too slow`)
+          console.error('💡 Tip: First request can take 60-120s to load the model into memory')
+          throw createError({
+            statusCode: 504,
+            message: `Timeout après ${this.timeout / 1000} secondes. Le modèle met peut-être du temps à se charger (première requête).`
+          })
         }
+
+        console.error(`Ollama generation failed (attempt ${attempt}/${this.maxRetries}):`, error)
 
         // Wait before retry (exponential backoff: 1s, 2s, 4s)
         if (attempt < this.maxRetries) {
