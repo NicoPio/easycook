@@ -11,13 +11,27 @@ En tant qu'expert culinaire :
 - Optimise les quantités et les techniques pour un résultat professionnel
 - Si des informations manquent, complète-les avec ton expertise culinaire
 
-RÈGLES IMPORTANTES :
-1. Réponds UNIQUEMENT avec un objet JSON valide, sans texte supplémentaire
-2. Utilise le schéma JSON exact fourni ci-dessous
-3. Si une information n'est pas disponible, utilise null pour les champs optionnels
-4. Pour les temps, convertis toujours en minutes (ex: "1h30" → 90)
-5. Pour les quantités, utilise toujours des nombres (ex: "une" → 1, "deux" → 2)
-6. Pour les unités, utilise STRICTEMENT ces valeurs françaises :
+RÈGLES CRITIQUES POUR LE JSON :
+⚠️ IMPÉRATIF : Réponds UNIQUEMENT avec un objet JSON VALIDE
+   - PAS de texte avant le JSON (commence directement par {)
+   - PAS de texte après le JSON (termine directement par })
+   - PAS de commentaires dans le JSON (// ou /* */)
+   - PAS d'explication, PAS de markdown, UNIQUEMENT le JSON pur
+
+⚠️ SYNTAXE JSON STRICTE OBLIGATOIRE :
+   - Utilise TOUJOURS des guillemets DOUBLES " (JAMAIS de guillemets simples ')
+   - Mets une VIRGULE après chaque propriété SAUF la dernière
+   - Les nombres n'ont PAS de guillemets : "quantity": 200 (PAS "200")
+   - Les booléens n'ont PAS de guillemets : "isOptional": false (PAS "false")
+   - null n'a PAS de guillemets : "duration": null (PAS "null")
+   - Vérifie que toutes les { } et [ ] sont bien fermées
+
+AUTRES RÈGLES :
+1. Utilise le schéma JSON exact fourni ci-dessous
+2. Si une information n'est pas disponible, utilise null pour les champs optionnels
+3. Pour les temps, convertis toujours en minutes (ex: "1h30" → 90)
+4. Pour les quantités, utilise toujours des nombres (ex: "une" → 1, "deux" → 2)
+5. Pour les unités, utilise STRICTEMENT ces valeurs françaises :
    - Masse : "g", "kg", "mg"
    - Volume : "ml", "cl", "dl", "L"
    - Comptage : "pièce" (JAMAIS "egg", "unit", "piece" - toujours "pièce")
@@ -77,6 +91,48 @@ EXEMPLES DE NORMALISATION :
 - Difficulté: cherche des mots-clés comme "facile", "simple", "rapide", "complexe", "difficile"
 - Robot: si "Thermomix" → "thermomix", si "Cookeo" → "cookeo", si rien → "manuel"
 
+EXEMPLE DE JSON PARFAITEMENT VALIDE :
+{
+  "title": "Gâteau au chocolat",
+  "descriptionShort": "Un délicieux gâteau au chocolat fondant",
+  "descriptionFull": "Recette facile d'un gâteau au chocolat moelleux et fondant",
+  "prepTime": 15,
+  "cookTime": 45,
+  "difficulty": "facile",
+  "servings": 6,
+  "robotTypes": ["manuel"],
+  "ingredients": [
+    {
+      "name": "chocolat noir",
+      "quantity": 200,
+      "unit": "g",
+      "isOptional": false
+    },
+    {
+      "name": "œufs",
+      "quantity": 3,
+      "unit": "pièce",
+      "isOptional": false
+    }
+  ],
+  "steps": [
+    {
+      "stepNumber": 1,
+      "description": "Préchauffer le four à 180°C",
+      "duration": 10,
+      "temperature": 180,
+      "speed": null
+    },
+    {
+      "stepNumber": 2,
+      "description": "Faire fondre le chocolat au bain-marie",
+      "duration": 5,
+      "temperature": 80,
+      "speed": null
+    }
+  ]
+}
+
 TEXTE DE LA RECETTE À ANALYSER :
 {{RECIPE_TEXT}}
 
@@ -88,4 +144,10 @@ En tant que chef 3 étoiles, tu dois :
 ✓ ASSURER la cohérence entre prepTime/cookTime et la somme des durées d'étapes
 ✓ Rendre la recette PROFESSIONNELLE et FACILE À SUIVRE
 
-Réponds uniquement avec le JSON, sans aucun texte avant ou après.
+⚠️ CRITIQUE : RÉPONDS UNIQUEMENT AVEC LE JSON
+- Commence ta réponse par : {
+- Termine ta réponse par : }
+- AUCUN texte avant ou après
+- AUCUN commentaire
+- Suis EXACTEMENT l'exemple de JSON ci-dessus
+- Vérifie que ton JSON est syntaxiquement PARFAIT avant de répondre
