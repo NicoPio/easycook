@@ -177,7 +177,7 @@ bash scripts/check-ollama.sh
 
 L'import sera disponible sur `/admin/import`
 
-> **⚠️ Problèmes de connexion ?** Consultez le [Guide de diagnostic Ollama](./OLLAMA_SETUP.md)
+> **⚠️ Problèmes d'import ? Erreur 404 ?** Consultez le [Guide de dépannage Ollama](./docs/OLLAMA_TROUBLESHOOTING.md)
 
 ## 🧪 Tests
 
@@ -306,7 +306,7 @@ Les autres variables sont préconfigurées dans `docker-compose.yml`.
 - [Spécifications](./specs/001-recipe-app-pwa/spec.md)
 - [Plan d'implémentation](./specs/001-recipe-app-pwa/plan.md)
 - [Modèle de données](./specs/001-recipe-app-pwa/data-model.md)
-- [Guide de configuration Ollama](./OLLAMA_SETUP.md) - Diagnostic et troubleshooting
+- **[Guide de dépannage Ollama](./docs/OLLAMA_TROUBLESHOOTING.md)** - Résoudre les erreurs 404 et autres problèmes
 - [Optimisation Ollama](./OLLAMA_OPTIMIZATION.md) - Conseils de performance
 
 ## 🤝 Contribution

@@ -123,7 +123,18 @@ export class OllamaClient {
               // Keep default statusText
             }
           }
-          throw new Error(`Ollama API error: ${response.status} - ${errorDetails}`)
+
+          // Special handling for 404 - model not found
+          if (response.status === 404) {
+            console.error(`[Ollama] ❌ ERREUR 404: Le modèle "${this.model}" n'existe pas dans Ollama`)
+            console.error(`[Ollama] 💡 Vérifiez les modèles disponibles avec:`)
+            console.error(`[Ollama]    docker exec <container> ollama list`)
+            console.error(`[Ollama] 💡 Puis mettez à jour OLLAMA_MODEL dans votre .env`)
+            console.error(`[Ollama] 💡 Ou lancez le script de diagnostic:`)
+            console.error(`[Ollama]    bash scripts/diagnose-ollama-model.sh`)
+          }
+
+          throw new Error(`Ollama API error: ${response.status} ${errorDetails}`)
         }
 
         const data = (await response.json()) as OllamaGenerateResponse

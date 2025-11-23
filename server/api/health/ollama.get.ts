@@ -46,27 +46,55 @@ export default defineEventHandler(async (event) => {
     // Get list of models
     const models = await ollama.listModels()
     const requiredModel = process.env.OLLAMA_MODEL || 'mistral'
-    const hasRequiredModel = models.some((m) => m.includes(requiredModel))
+
+    // Check exact match first, then partial match
+    const exactMatch = models.some((m) => m === requiredModel || m === `${requiredModel}:latest`)
+    const partialMatch = models.find((m) => m.includes(requiredModel))
+    const hasRequiredModel = exactMatch
 
     return {
       status: hasRequiredModel ? 'healthy' : 'model_missing',
       healthy: hasRequiredModel,
       message: hasRequiredModel
         ? `✅ Ollama is healthy and ready with model "${requiredModel}"`
-        : `⚠️ Model "${requiredModel}" not found`,
+        : partialMatch
+        ? `⚠️ Model "${requiredModel}" not found - Did you mean "${partialMatch}"?`
+        : `❌ Model "${requiredModel}" not found`,
       details: {
         baseUrl: process.env.OLLAMA_BASE_URL || 'http://localhost:11434',
         model: requiredModel,
         availableModels: models,
+        exactMatch,
+        partialMatch: partialMatch || null,
         responseTime: Date.now() - startTime,
       },
       troubleshooting: hasRequiredModel
         ? []
+        : partialMatch
+        ? [
+            `🔧 The model name doesn't match exactly.`,
+            ``,
+            `Your OLLAMA_MODEL: "${requiredModel}"`,
+            `Closest match found: "${partialMatch}"`,
+            ``,
+            `Solution 1: Update .env to use the exact name:`,
+            `  OLLAMA_MODEL=${partialMatch}`,
+            ``,
+            `Solution 2: Create an alias (if needed):`,
+            `  docker exec easycook-ollama ollama cp ${partialMatch} ${requiredModel}`,
+          ]
         : [
-            `Pull the required model:`,
+            `❌ Model "${requiredModel}" not found in Ollama`,
+            ``,
+            `Available models: ${models.join(', ') || 'none'}`,
+            ``,
+            `Solution 1: Pull the required model:`,
             `  docker exec easycook-ollama ollama pull ${requiredModel}`,
-            '',
-            'Or use an available model by updating OLLAMA_MODEL in .env',
+            ``,
+            `Solution 2: Use an available model by updating OLLAMA_MODEL in .env`,
+            ``,
+            `Solution 3: Run the diagnostic script:`,
+            `  bash scripts/diagnose-ollama-model.sh`,
           ],
     }
   } catch (error) {
