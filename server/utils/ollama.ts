@@ -41,7 +41,7 @@ export class OllamaClient {
     model: string = process.env.OLLAMA_MODEL || 'mistral',
     timeout: number = parseInt(process.env.OLLAMA_TIMEOUT || '180000'), // 180 seconds (3 minutes)
     maxRetries: number = parseInt(process.env.OLLAMA_MAX_RETRIES || '3'),
-    numPredict: number = parseInt(process.env.OLLAMA_NUM_PREDICT || '4096'),
+    numPredict: number = parseInt(process.env.OLLAMA_NUM_PREDICT || '2048'), // Réduit de 4096 à 2048 pour compatibilité
     defaultTemperature: number = parseFloat(process.env.OLLAMA_TEMPERATURE || '0.1')
   ) {
     this.baseUrl = baseUrl
@@ -59,6 +59,14 @@ export class OllamaClient {
       numPredict: this.numPredict,
       defaultTemperature: this.defaultTemperature
     })
+
+    // Avertissement si numPredict est trop élevé
+    if (this.numPredict > 3000) {
+      console.warn('[Ollama] ⚠️  ATTENTION: OLLAMA_NUM_PREDICT est élevé (' + this.numPredict + ')')
+      console.warn('[Ollama] ⚠️  Certains modèles ont un contexte limité (ex: Lucie-7B = 2048 tokens max)')
+      console.warn('[Ollama] ⚠️  Si vous rencontrez des erreurs 404 ou des crashes, réduisez cette valeur')
+      console.warn('[Ollama] 💡 Recommandation: OLLAMA_NUM_PREDICT=1500 pour la plupart des modèles')
+    }
   }
 
   /**
@@ -124,14 +132,24 @@ export class OllamaClient {
             }
           }
 
-          // Special handling for 404 - model not found
+          // Special handling for 404 - model not found OR context size issue
           if (response.status === 404) {
-            console.error(`[Ollama] ❌ ERREUR 404: Le modèle "${this.model}" n'existe pas dans Ollama`)
-            console.error(`[Ollama] 💡 Vérifiez les modèles disponibles avec:`)
-            console.error(`[Ollama]    docker exec <container> ollama list`)
-            console.error(`[Ollama] 💡 Puis mettez à jour OLLAMA_MODEL dans votre .env`)
-            console.error(`[Ollama] 💡 Ou lancez le script de diagnostic:`)
-            console.error(`[Ollama]    bash scripts/diagnose-ollama-model.sh`)
+            console.error(`[Ollama] ❌ ERREUR 404: Deux causes possibles:`)
+            console.error(`[Ollama]`)
+            console.error(`[Ollama] 1️⃣ Le modèle "${this.model}" n'existe pas dans Ollama`)
+            console.error(`[Ollama]    💡 Vérifiez: docker exec <container> ollama list`)
+            console.error(`[Ollama]    💡 Script: bash scripts/diagnose-ollama-model.sh`)
+            console.error(`[Ollama]`)
+            console.error(`[Ollama] 2️⃣ OU le modèle crash (dépassement de capacité)`)
+            console.error(`[Ollama]    💡 Certains modèles ont un contexte limité:`)
+            console.error(`[Ollama]       • Lucie-7B: 2048 tokens max`)
+            console.error(`[Ollama]       • Mistral: 8192 tokens`)
+            console.error(`[Ollama]       • Qwen2.5: 32768 tokens`)
+            console.error(`[Ollama]    💡 Votre config actuelle: OLLAMA_NUM_PREDICT=${this.numPredict}`)
+            console.error(`[Ollama]    💡 Solution: Réduire à 1500 dans .env`)
+            console.error(`[Ollama]       OLLAMA_NUM_PREDICT=1500`)
+            console.error(`[Ollama]`)
+            console.error(`[Ollama] 📖 Guide complet: docs/OLLAMA_TROUBLESHOOTING.md`)
           }
 
           throw new Error(`Ollama API error: ${response.status} ${errorDetails}`)

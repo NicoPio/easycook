@@ -17,9 +17,97 @@ Ce guide vous aide à résoudre les problèmes courants avec l'intégration Olla
 }
 ```
 
-### Cause
+### Causes possibles
 
-L'erreur 404 signifie que le modèle spécifié dans `OLLAMA_MODEL` **n'existe pas** dans votre instance Ollama.
+L'erreur 404 a **DEUX causes possibles** :
+
+1. **Le modèle n'existe pas** dans votre instance Ollama (nom incorrect)
+2. **Le modèle crash** à cause d'un dépassement de capacité (contexte trop grand)
+
+---
+
+## ⚠️ CAUSE #1 : Dépassement de capacité (TRÈS FRÉQUENT)
+
+### Symptôme dans les logs Docker
+
+Si vous voyez ceci dans `docker logs <container-ollama>` :
+
+```
+level=WARN msg="requested context size too large for model" num_ctx=4096 n_ctx_train=2048
+terminate called after throwing an instance of 'std::out_of_range'
+SIGABRT: abort
+```
+
+**C'est un problème de taille de contexte !**
+
+### Explication
+
+Chaque modèle a une **capacité de contexte maximale** :
+
+| Modèle | Contexte max | OLLAMA_NUM_PREDICT recommandé |
+|--------|--------------|-------------------------------|
+| Lucie-7B | **2048 tokens** | **1500** |
+| Mistral | 8192 tokens | 2048-4000 |
+| Qwen2.5 | 32768 tokens | 4000-8000 |
+
+Si vous configurez `OLLAMA_NUM_PREDICT` trop élevé, le modèle **crash** et retourne une erreur 404.
+
+### Solution immédiate
+
+**Étape 1 : Vérifier les logs Ollama**
+
+```bash
+docker logs $(docker ps -q --filter "name=ollama") | grep -E "context size|SIGABRT|out_of_range"
+```
+
+Si vous voyez ces erreurs, c'est bien un problème de capacité.
+
+**Étape 2 : Ajuster OLLAMA_NUM_PREDICT**
+
+Créez ou modifiez `.env` :
+
+```bash
+# Pour Lucie-7B (contexte 2048)
+OLLAMA_NUM_PREDICT=1500
+
+# Pour Mistral (contexte 8192)
+OLLAMA_NUM_PREDICT=4000
+
+# Pour Qwen2.5 (contexte 32768)
+OLLAMA_NUM_PREDICT=8000
+```
+
+**Étape 3 : Redémarrer l'application**
+
+```bash
+# Arrêter (Ctrl+C si déjà lancé)
+npm run dev
+```
+
+**Étape 4 : Tester**
+
+Essayez d'importer une recette. Ça devrait fonctionner maintenant ! ✅
+
+### Pourquoi ça arrive ?
+
+- Le **prompt de recette** (instructions + texte) prend environ 400-500 tokens
+- Si `OLLAMA_NUM_PREDICT=4096` et contexte max = 2048, ça dépasse
+- Le modèle crash avec `std::out_of_range`
+- L'API retourne 404 car le runner est mort
+
+### Note importante
+
+**Valeur par défaut changée :** Depuis cette correction, `OLLAMA_NUM_PREDICT` par défaut est **2048** (au lieu de 4096) pour éviter ce problème.
+
+Si vous aviez une ancienne installation avec `OLLAMA_NUM_PREDICT=4096` dans votre `.env`, c'est ce qui cause le crash avec Lucie-7B.
+
+---
+
+## 📝 CAUSE #2 : Modèle n'existe pas
+
+### Explication
+
+Le modèle spécifié dans `OLLAMA_MODEL` **n'existe pas** dans votre instance Ollama (problème de nom).
 
 ### Solution rapide
 
